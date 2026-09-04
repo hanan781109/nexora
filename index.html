@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nexora - Modern digital platform">
+  <title>Nexora | Home</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #07111f;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      padding: 18px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(7, 17, 31, 0.92);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(15px);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #dbe7f5;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #00e5ff;
+    }
+
+    .nav-btn {
+      padding: 11px 20px;
+      border-radius: 30px;
+      background: linear-gradient(90deg, #00c6ff, #7c4dff);
+      color: white !important;
+      font-weight: bold;
+    }
+
+    .menu {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px 7%;
+      gap: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: #00c6ff;
+      filter: blur(180px);
+      opacity: 0.15;
+      top: -200px;
+      left: -150px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 450px;
+      height: 450px;
+      background: #ff4081;
+      filter: blur(180px);
+      opacity: 0.14;
+      bottom: -200px;
+      right: -100px;
+    }
+
+    .hero-content {
+      max-width: 650px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 9px 17px;
+      border-radius: 30px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      color: #00e5ff;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: clamp(45px, 7vw, 82px);
+      line-height: 1;
+      margin-bottom: 25px;
+      font-weight: 900;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      color: #aebed1;
+      font-size: 18px;
+      line-height: 1.7;
+      max-width: 570px;
+      margin-bottom: 35px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 15px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      display: inline-block;
+      transition: 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #00c6ff, #7c4dff);
+      box-shadow: 0 10px 35px rgba(0,198,255,0.18);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    /* HERO CARD */
+    .hero-card {
+      width: 390px;
+      min-height: 400px;
+      padding: 30px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, #101e35, #0a1425);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      color: #9db0c8;
+      margin-bottom: 35px;
+    }
+
+    .balance-label {
+      color: #9db0c8;
+      font-size: 14px;
+    }
+
+    .balance {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 8px 0 25px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .mini-card {
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .mini-card span {
+      color: #91a5bd;
+      font-size: 12px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 19px;
+    }
+
+    /* FEATURES */
+    .section {
+      padding: 90px 7%;
+    }
+
+    .section-title {
+      text-align: center;
+      max-width: 700px;
+      margin: auto;
+      margin-bottom: 55px;
+    }
+
+    .section-title span {
+      color: #00e5ff;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section-title h2 {
+      font-size: 42px;
+      margin: 12px 0;
+    }
+
+    .section-title p {
+      color: #94a8bf;
+      line-height: 1.7;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .feature {
+      padding: 30px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, #101d32, #0b1627);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: 0.3s;
+    }
+
+    .feature:hover {
+      transform: translateY(-7px);
+      border-color: rgba(0,229,255,0.3);
+    }
+
+    .icon {
+      width: 55px;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      font-size: 25px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #00c6ff, #7c4dff);
+    }
+
+    .feature h3 {
+      margin-bottom: 12px;
+      font-size: 21px;
+    }
+
+    .feature p {
+      color: #91a5bd;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    /* PLANS */
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .plan {
+      padding: 27px;
+      border-radius: 22px;
+      background: #0d192b;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: 0.3s;
+    }
+
+    .plan:hover {
+      transform: translateY(-5px);
+      border-color: #7c4dff;
+    }
+
+    .plan:nth-child(2) {
+      background: linear-gradient(145deg, #111c38, #15132e);
+    }
+
+    .plan:nth-child(3) {
+      background: linear-gradient(145deg, #102936, #101a32);
+    }
+
+    .plan:nth-child(4) {
+      background: linear-gradient(145deg, #29182e, #15142d);
+    }
+
+    .plan h3 {
+      color: #b5c5d8;
+      margin-bottom: 15px;
+    }
+
+    .price {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .plan ul {
+      list-style: none;
+      color: #9db0c7;
+      line-height: 2;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .plan li::before {
+      content: "✓";
+      color: #00e5ff;
+      margin-right: 8px;
+    }
+
+    .plan-btn {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #00c6ff, #7c4dff);
+      font-weight: bold;
+    }
+
+    /* CTA */
+    .cta {
+      margin: 20px 7% 90px;
+      padding: 70px 30px;
+      border-radius: 30px;
+      text-align: center;
+      background:
+        linear-gradient(120deg, rgba(0,198,255,0.15), rgba(124,77,255,0.2), rgba(255,64,129,0.15)),
+        #0c182b;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .cta p {
+      color: #9db0c7;
+      margin-bottom: 28px;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 35px 7%;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    footer p {
+      color: #71859d;
+      font-size: 13px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      color: #9eb0c3;
+      font-size: 13px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1000px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .plans {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        width: 100%;
+        padding: 25px;
+        flex-direction: column;
+        background: #081321;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu {
+        display: block;
+      }
+
+      .hero {
+        padding-top: 55px;
+      }
+
+      .hero-card {
+        width: 100%;
+      }
+
+      .features,
+      .plans {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title h2,
+      .cta h2 {
+        font-size: 32px;
+      }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="logo">NEXORA</a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="plans.html">Plans</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="login.html">Login</a>
+      <a href="register.html" class="nav-btn">Register</a>
+    </nav>
+
+    <div class="menu" onclick="toggleMenu()">☰</div>
+  </header>
+
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <div class="badge">✦ Welcome to Nexora</div>
+
+      <h1>
+        Your Digital Journey
+        <span class="gradient-text">Starts Here.</span>
+      </h1>
+
+      <p>
+        A modern digital platform built with a clean experience,
+        powerful dashboard tools and simple account management.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="register.html" class="btn btn-primary">
+          Create Account →
+        </a>
+
+        <a href="plans.html" class="btn btn-secondary">
+          Explore Plans
+        </a>
+      </div>
+
+    </div>
+
+
+    <div class="hero-card">
+
+      <div class="card-top">
+        <span>NEXORA WALLET</span>
+        <span>● LIVE</span>
+      </div>
+
+      <div class="balance-label">Account Balance</div>
+      <div class="balance">$0.00</div>
+
+      <div class="mini-grid">
+
+        <div class="mini-card">
+          <span>Active Plan</span>
+          <strong>—</strong>
+        </div>
+
+        <div class="mini-card">
+          <span>Referrals</span>
+          <strong>0</strong>
+        </div>
+
+        <div class="mini-card">
+          <span>Deposits</span>
+          <strong>$0.00</strong>
+        </div>
+
+        <div class="mini-card">
+          <span>Withdrawals</span>
+          <strong>$0.00</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- FEATURES -->
+  <section class="section">
+
+    <div class="section-title">
+      <span>Why Nexora</span>
+      <h2>Everything in One Place</h2>
+      <p>
+        Manage your account, plans, transactions and referrals
+        through a simple and modern dashboard.
+      </p>
+    </div>
+
+    <div class="features">
+
+      <div class="feature">
+        <div class="icon">💳</div>
+        <h3>Easy Deposits</h3>
+        <p>
+          Submit your deposit request through a simple and organized interface.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">💸</div>
+        <h3>Withdrawals</h3>
+        <p>
+          Manage eligible withdrawal requests and track their status.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">👥</div>
+        <h3>Referral System</h3>
+        <p>
+          Get your personal referral link and monitor your referral activity.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">📊</div>
+        <h3>Smart Dashboard</h3>
+        <p>
+          View your wallet, account activity and transaction information.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">🔐</div>
+        <h3>Secure Account</h3>
+        <p>
+          Account authentication and database security will protect your data.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">⚡</div>
+        <h3>Real-Time Updates</h3>
+        <p>
+          Your account information can update instantly through the connected
+          database.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PLANS -->
+  <section class="section">
+
+    <div class="section-title">
+      <span>Plans</span>
+      <h2>Choose Your Plan</h2>
+      <p>
+        Explore the available Nexora plans and select the option
+        that fits your account.
+      </p>
+    </div>
+
+    <div class="plans">
+
+      <div class="plan">
+        <h3>Starter</h3>
+        <div class="price">$5</div>
+        <ul>
+          <li>Account access</li>
+          <li>Plan dashboard</li>
+          <li>Transaction tracking</li>
+        </ul>
+        <a href="plans.html" class="plan-btn">View Plan</a>
+      </div>
+
+      <div class="plan">
+        <h3>Basic</h3>
+        <div class="price">$10</div>
+        <ul>
+          <li>Account access</li>
+          <li>Plan dashboard</li>
+          <li>Referral tools</li>
+        </ul>
+        <a href="plans.html" class="plan-btn">View Plan</a>
+      </div>
+
+      <div class="plan">
+        <h3>Growth</h3>
+        <div class="price">$20</div>
+        <ul>
+          <li>Account access</li>
+          <li>Plan dashboard</li>
+          <li>Transaction tracking</li>
+        </ul>
+        <a href="plans.html" class="plan-btn">View Plan</a>
+      </div>
+
+      <div class="plan">
+        <h3>Premium</h3>
+        <div class="price">$50</div>
+        <ul>
+          <li>Account access</li>
+          <li>Plan dashboard</li>
+          <li>Referral tools</li>
+        </ul>
+        <a href="plans.html" class="plan-btn">View Plan</a>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CTA -->
+  <section class="cta">
+
+    <h2>Ready to Join Nexora?</h2>
+
+    <p>
+      Create your account and explore the platform.
+    </p>
+
+    <a href="register.html" class="btn btn-primary">
+      Get Started →
+    </a>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+
+    <p>© 2026 Nexora. All rights reserved.</p>
+
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="plans.html">Plans</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </div>
+
+  </footer>
+
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("navLinks").classList.toggle("active");
+    }
+  </script>
+
+</body>
+</html>
