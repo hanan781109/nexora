@@ -39,7 +39,6 @@
       box-shadow: 0 30px 90px rgba(0,0,0,0.45);
     }
 
-    /* LEFT */
     .left {
       padding: 60px;
       display: flex;
@@ -106,7 +105,6 @@
       flex-shrink: 0;
     }
 
-    /* RIGHT */
     .right {
       padding: 55px 50px;
       display: flex;
@@ -146,7 +144,7 @@
       position: relative;
     }
 
-    .input-box span {
+    .input-box > span:first-child {
       position: absolute;
       left: 15px;
       top: 50%;
@@ -185,13 +183,15 @@
     }
 
     .show-password {
-      position: absolute;
+      position: absolute !important;
       right: 15px;
+      left: auto !important;
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
       color: #8094ab;
       user-select: none;
+      opacity: 1 !important;
     }
 
     .terms {
@@ -233,6 +233,12 @@
       box-shadow: 0 15px 35px rgba(124,77,255,0.3);
     }
 
+    .register-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .login-text {
       text-align: center;
       color: #8094aa;
@@ -257,6 +263,22 @@
 
     .back-home a:hover {
       color: white;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 18px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .message.error {
+      display: block;
+      background: rgba(255, 64, 129, 0.12);
+      border: 1px solid rgba(255, 64, 129, 0.3);
+      color: #ff9fbd;
     }
 
     @media (max-width: 850px) {
@@ -363,6 +385,8 @@
           Join Nexora by creating your account.
         </p>
 
+        <div id="message" class="message"></div>
+
         <form id="registerForm">
 
           <div class="input-group">
@@ -370,6 +394,7 @@
 
             <div class="input-box">
               <span>👤</span>
+
               <input
                 type="text"
                 id="name"
@@ -385,6 +410,7 @@
 
             <div class="input-box">
               <span>✉️</span>
+
               <input
                 type="email"
                 id="email"
@@ -399,6 +425,7 @@
             <label>Password</label>
 
             <div class="input-box password-wrap">
+
               <span>🔒</span>
 
               <input
@@ -411,17 +438,21 @@
 
               <span
                 class="show-password"
-                onclick="togglePassword()"
+                id="showPassword"
               >👁</span>
+
             </div>
           </div>
 
 
           <div class="input-group">
-            <label>Referral Code <small>(Optional)</small></label>
+            <label>
+              Referral Code <small>(Optional)</small>
+            </label>
 
             <div class="input-box">
               <span>🔗</span>
+
               <input
                 type="text"
                 id="referral"
@@ -432,7 +463,12 @@
 
 
           <label class="terms">
-            <input type="checkbox" id="terms" required>
+
+            <input
+              type="checkbox"
+              id="terms"
+              required
+            >
 
             <span>
               I agree to the
@@ -440,12 +476,14 @@
               and
               <a href="#">Privacy Policy</a>.
             </span>
+
           </label>
 
 
           <button
             type="submit"
             class="register-btn"
+            id="registerBtn"
           >
             Create Account →
           </button>
@@ -470,30 +508,234 @@
   </div>
 
 
-  <script>
+  <!-- FIREBASE -->
+  <script type="module">
 
-    function togglePassword() {
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-      const password = document.getElementById("password");
-
-      if (password.type === "password") {
-        password.type = "text";
-      } else {
-        password.type = "password";
-      }
-
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      updateProfile
     }
+      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      set
+    }
+      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+      authDomain: "nexora-adef3.firebaseapp.com",
+      projectId: "nexora-adef3",
+      storageBucket: "nexora-adef3.firebasestorage.app",
+      messagingSenderId: "318277373899",
+      appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+      measurementId: "G-WN2V48SC4T"
+    };
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getDatabase(app);
+
+
+    // Password Show / Hide
+    document
+      .getElementById("showPassword")
+      .addEventListener("click", function () {
+
+        const password =
+          document.getElementById("password");
+
+        if (password.type === "password") {
+
+          password.type = "text";
+          this.textContent = "🙈";
+
+        } else {
+
+          password.type = "password";
+          this.textContent = "👁";
+
+        }
+
+      });
+
+
+    // Registration
     document
       .getElementById("registerForm")
-      .addEventListener("submit", function(event) {
+      .addEventListener("submit", async function (event) {
 
         event.preventDefault();
 
-        alert(
-          "Registration form ready. Firebase Authentication will be connected in the next step."
-        );
+
+        const name =
+          document.getElementById("name").value.trim();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        const referral =
+          document.getElementById("referral").value.trim();
+
+        const terms =
+          document.getElementById("terms").checked;
+
+        const button =
+          document.getElementById("registerBtn");
+
+        const message =
+          document.getElementById("message");
+
+
+        message.className = "message";
+        message.textContent = "";
+
+
+        if (!terms) {
+
+          message.className = "message error";
+          message.textContent =
+            "Please accept the Terms & Conditions.";
+
+          return;
+        }
+
+
+        if (password.length < 6) {
+
+          message.className = "message error";
+          message.textContent =
+            "Password must be at least 6 characters.";
+
+          return;
+        }
+
+
+        try {
+
+          button.disabled = true;
+          button.textContent = "Creating Account...";
+
+
+          // Create Firebase Auth account
+          const userCredential =
+            await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+
+          const user =
+            userCredential.user;
+
+
+          // Save name in Firebase Auth
+          await updateProfile(user, {
+            displayName: name
+          });
+
+
+          // Create user data in Realtime Database
+          await set(
+            ref(db, "users/" + user.uid),
+            {
+              uid: user.uid,
+              name: name,
+              email: email,
+
+              referralCode: referral,
+
+              wallet: 0,
+
+              totalDeposit: 0,
+
+              totalWithdrawal: 0,
+
+              activePlans: {},
+
+              createdAt: Date.now()
+            }
+          );
+
+
+          alert("Account created successfully! 🎉");
+
+
+          // Go to dashboard
+          window.location.href =
+            "dashboard.html";
+
+
+        } catch (error) {
+
+          console.error("Registration Error:", error);
+
+
+          message.className = "message error";
+
+
+          if (
+            error.code ===
+            "auth/email-already-in-use"
+          ) {
+
+            message.textContent =
+              "This email is already registered.";
+
+          } else if (
+            error.code ===
+            "auth/invalid-email"
+          ) {
+
+            message.textContent =
+              "Please enter a valid email.";
+
+          } else if (
+            error.code ===
+            "auth/weak-password"
+          ) {
+
+            message.textContent =
+              "Password must be at least 6 characters.";
+
+          } else if (
+            error.code ===
+            "auth/network-request-failed"
+          ) {
+
+            message.textContent =
+              "Network error. Please check your internet connection.";
+
+          } else {
+
+            message.textContent =
+              error.message ||
+              "Registration failed. Please try again.";
+
+          }
+
+
+          button.disabled = false;
+          button.textContent =
+            "Create Account →";
+
+        }
 
       });
 
