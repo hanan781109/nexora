@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora - Withdraw</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#08111f;
+    color:#fff;
+    min-height:100vh;
+}
+
+header{
+    padding:18px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#0d1728;
+    border-bottom:1px solid #26344a;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#22d3ee;
+}
+
+.back{
+    color:#fff;
+    text-decoration:none;
+    background:#17243a;
+    padding:10px 16px;
+    border-radius:10px;
+}
+
+.container{
+    width:92%;
+    max-width:700px;
+    margin:40px auto;
+}
+
+.card{
+    background:#101d31;
+    border:1px solid #293a55;
+    border-radius:18px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+h1{
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#9caec5;
+    margin-bottom:25px;
+}
+
+.balance{
+    background:linear-gradient(135deg,#153b58,#32205c);
+    padding:22px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.balance small{
+    color:#b9c7d9;
+}
+
+.balance h2{
+    margin-top:7px;
+    font-size:30px;
+    color:#67e8f9;
+}
+
+label{
+    display:block;
+    margin:15px 0 7px;
+    color:#cbd5e1;
+}
+
+input,select{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #334862;
+    background:#0b1627;
+    color:#fff;
+    outline:none;
+}
+
+input:focus,select:focus{
+    border-color:#22d3ee;
+}
+
+.info{
+    background:#0c1829;
+    border:1px solid #263950;
+    border-radius:12px;
+    padding:15px;
+    margin-top:18px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:7px 0;
+    color:#b8c5d6;
+}
+
+.row strong{
+    color:#fff;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    border-radius:11px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    color:#06111e;
+    background:linear-gradient(90deg,#22d3ee,#a855f7);
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.notice{
+    padding:14px;
+    border-radius:10px;
+    background:#241b08;
+    border:1px solid #6b5117;
+    color:#facc15;
+    margin-top:18px;
+    line-height:1.5;
+}
+
+.success{
+    background:#09261d;
+    border-color:#176b4d;
+    color:#6ee7b7;
+}
+
+.error{
+    background:#2a1115;
+    border-color:#7f2635;
+    color:#fca5a5;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">NEXORA</div>
+    <a href="dashboard.html" class="back">Dashboard</a>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h1>Withdraw</h1>
+        <p class="subtitle">Request your available USDT balance</p>
+
+        <div class="balance">
+            <small>Available Wallet</small>
+            <h2 id="wallet">$0.00</h2>
+        </div>
+
+        <div id="requirements" class="notice">
+            Checking withdrawal requirements...
+        </div>
+    </div>
+
+    <div id="withdrawCard" class="card hidden">
+
+        <label>Withdrawal Method</label>
+        <select id="method">
+            <option value="Easypaisa">Easypaisa</option>
+            <option value="JSK">JSK</option>
+        </select>
+
+        <label>Account Number</label>
+        <input
+            type="text"
+            id="accountNumber"
+            placeholder="Enter account number"
+        >
+
+        <label>Account Name</label>
+        <input
+            type="text"
+            id="accountName"
+            placeholder="Enter account name"
+        >
+
+        <label>Withdrawal Amount (USDT)</label>
+        <input
+            type="number"
+            id="amount"
+            min="1"
+            step="0.01"
+            placeholder="Enter USDT amount"
+        >
+
+        <div class="info">
+
+            <div class="row">
+                <span>Withdrawal Amount</span>
+                <strong id="usdtAmount">$0.00</strong>
+            </div>
+
+            <div class="row">
+                <span>Exchange Rate</span>
+                <strong>1 USDT = 280 PKR</strong>
+            </div>
+
+            <div class="row">
+                <span>PKR Equivalent</span>
+                <strong id="pkrAmount">PKR 0</strong>
+            </div>
+
+            <div class="row">
+                <span>Withdrawal Fee</span>
+                <strong>$2.00</strong>
+            </div>
+
+            <div class="row">
+                <span>Total Deduction</span>
+                <strong id="totalDeduction">$0.00</strong>
+            </div>
+
+        </div>
+
+        <button id="withdrawBtn">
+            Submit Withdrawal
+        </button>
+
+        <div id="message" class="notice hidden"></div>
+
+    </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+    getDatabase,
+    ref,
+    get,
+    push,
+    set
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+    authDomain: "nexora-adef3.firebaseapp.com",
+    projectId: "nexora-adef3",
+    storageBucket: "nexora-adef3.firebasestorage.app",
+    messagingSenderId: "318277373899",
+    appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+    measurementId: "G-WN2V48SC4T"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+const walletEl = document.getElementById("wallet");
+const amountEl = document.getElementById("amount");
+const usdtAmountEl = document.getElementById("usdtAmount");
+const pkrAmountEl = document.getElementById("pkrAmount");
+const totalDeductionEl = document.getElementById("totalDeduction");
+const requirementsEl = document.getElementById("requirements");
+const withdrawCard = document.getElementById("withdrawCard");
+const withdrawBtn = document.getElementById("withdrawBtn");
+const messageEl = document.getElementById("message");
+
+let currentUser = null;
+let userData = null;
+let wallet = 0;
+let directReferrals = 0;
+
+const RATE = 280;
+const FEE = 2;
+
+
+// -----------------------------
+// AUTH CHECK
+// -----------------------------
+
+onAuthStateChanged(auth, async (user) => {
+
+    if(!user){
+        location.href = "login.html";
+        return;
+    }
+
+    currentUser = user;
+
+    try{
+
+        const userSnap = await get(ref(db, "users/" + user.uid));
+
+        if(!userSnap.exists()){
+            showError("User account data not found.");
+            return;
+        }
+
+        userData = userSnap.val();
+
+        wallet = Number(userData.wallet || 0);
+
+        walletEl.textContent = "$" + wallet.toFixed(2);
+
+        // Count direct referrals
+        const usersSnap = await get(ref(db, "users"));
+
+        if(usersSnap.exists()){
+
+            const users = usersSnap.val();
+
+            Object.values(users).forEach(u => {
+
+                if(
+                    u.referredBy &&
+                    userData.referralCode &&
+                    u.referredBy === userData.referralCode
+                ){
+                    directReferrals++;
+                }
+
+            });
+        }
+
+
+        // -----------------------------------
+        // CHECK PLAN PURCHASE
+        // -----------------------------------
+
+        const activePlans = userData.activePlans || {};
+        const hasPlan = Object.keys(activePlans).length > 0;
+
+
+        if(!hasPlan){
+
+            requirementsEl.innerHTML =
+                "🔒 Withdrawal is locked.<br><br>" +
+                "You need to purchase a plan before withdrawal becomes available.";
+
+            return;
+        }
+
+
+        // -----------------------------------
+        // CHECK DIRECT REFERRALS
+        // -----------------------------------
+
+        if(directReferrals < 2){
+
+            requirementsEl.innerHTML =
+                "🔒 Withdrawal is locked.<br><br>" +
+                "You need at least <strong>2 direct referrals</strong>.";
+
+            return;
+        }
+
+
+        // -----------------------------------
+        // PLAN 2X REQUIREMENT
+        // -----------------------------------
+
+        let qualifyingRequired = 0;
+
+        Object.values(activePlans).forEach(plan => {
+
+            const planAmount = Number(
+                plan.amountUSDT ||
+                plan.amount ||
+                plan.price ||
+                0
+            );
+
+            qualifyingRequired += planAmount * 2;
+        });
+
+
+        const totalDeposits = Number(userData.totalDeposit || 0);
+
+
+        if(
+            qualifyingRequired > 0 &&
+            totalDeposits < qualifyingRequired
+        ){
+
+            requirementsEl.innerHTML =
+                "🔒 Withdrawal is locked.<br><br>" +
+                "Required qualifying purchases: <strong>$" +
+                qualifyingRequired.toFixed(2) +
+                "</strong><br>" +
+                "Current qualifying deposits: <strong>$" +
+                totalDeposits.toFixed(2) +
+                "</strong>";
+
+            return;
+        }
+
+
+        // -----------------------------------
+        // UNLOCK
+        // -----------------------------------
+
+        requirementsEl.classList.add("success");
+
+        requirementsEl.innerHTML =
+            "✅ Withdrawal requirements completed.<br>" +
+            "You can now submit a withdrawal request.";
+
+        withdrawCard.classList.remove("hidden");
+
+    }catch(error){
+
+        console.error(error);
+
+        requirementsEl.innerHTML =
+            "Unable to load withdrawal information.";
+
+    }
+
+});
+
+
+// -----------------------------
+// CALCULATIONS
+// -----------------------------
+
+amountEl.addEventListener("input", () => {
+
+    let amount = Number(amountEl.value || 0);
+
+    if(amount < 0){
+        amount = 0;
+    }
+
+    const pkr = amount * RATE;
+    const total = amount + FEE;
+
+    usdtAmountEl.textContent =
+        "$" + amount.toFixed(2);
+
+    pkrAmountEl.textContent =
+        "PKR " + pkr.toLocaleString();
+
+    totalDeductionEl.textContent =
+        "$" + total.toFixed(2);
+
+});
+
+
+// -----------------------------
+// SUBMIT WITHDRAWAL
+// -----------------------------
+
+withdrawBtn.addEventListener("click", async () => {
+
+    const method =
+        document.getElementById("method").value;
+
+    const accountNumber =
+        document.getElementById("accountNumber").value.trim();
+
+    const accountName =
+        document.getElementById("accountName").value.trim();
+
+    const amount =
+        Number(amountEl.value);
+
+
+    if(!accountNumber){
+        showError("Please enter your account number.");
+        return;
+    }
+
+    if(!accountName){
+        showError("Please enter your account name.");
+        return;
+    }
+
+    if(!amount || amount <= 0){
+        showError("Please enter a valid withdrawal amount.");
+        return;
+    }
+
+
+    const totalDeduction = amount + FEE;
+
+
+    if(totalDeduction > wallet){
+
+        showError(
+            "Insufficient wallet balance. " +
+            "Your withdrawal amount + $2 fee cannot exceed your wallet."
+        );
+
+        return;
+    }
+
+
+    withdrawBtn.disabled = true;
+    withdrawBtn.textContent = "Submitting...";
+
+
+    try{
+
+        const withdrawalRef =
+            push(ref(db, "withdrawals"));
+
+        await set(withdrawalRef, {
+
+            id: withdrawalRef.key,
+
+            uid: currentUser.uid,
+
+            email: currentUser.email,
+
+            name: userData.name || currentUser.displayName || "",
+
+            method: method,
+
+            accountNumber: accountNumber,
+
+            accountName: accountName,
+
+            amountUSDT: amount,
+
+            amountPKR: amount * RATE,
+
+            exchangeRate: RATE,
+
+            feeUSDT: FEE,
+
+            totalDeductionUSDT: totalDeduction,
+
+            status: "pending",
+
+            createdAt: Date.now()
+
+        });
+
+
+        showSuccess(
+            "Withdrawal request submitted successfully. " +
+            "It is now pending admin approval."
+        );
+
+
+        amountEl.value = "";
+
+        document.getElementById("accountNumber").value = "";
+
+        document.getElementById("accountName").value = "";
+
+        usdtAmountEl.textContent = "$0.00";
+
+        pkrAmountEl.textContent = "PKR 0";
+
+        totalDeductionEl.textContent = "$0.00";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showError(
+            "Withdrawal request failed. Please try again."
+        );
+
+    }
+
+
+    withdrawBtn.disabled = false;
+    withdrawBtn.textContent = "Submit Withdrawal";
+
+});
+
+
+// -----------------------------
+// MESSAGE FUNCTIONS
+// -----------------------------
+
+function showError(text){
+
+    messageEl.classList.remove("hidden");
+    messageEl.classList.remove("success");
+
+    messageEl.classList.add("error");
+
+    messageEl.textContent = text;
+
+}
+
+
+function showSuccess(text){
+
+    messageEl.classList.remove("hidden");
+    messageEl.classList.remove("error");
+
+    messageEl.classList.add("success");
+
+    messageEl.textContent = text;
+
+}
+
+</script>
+
+</body>
+</html>
