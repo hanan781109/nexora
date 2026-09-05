@@ -148,6 +148,21 @@
       opacity: .65;
     }
 
+    .reject {
+      color: #fff;
+      background: #dc2626;
+      margin-left: 6px;
+    }
+
+    .reject:hover {
+      opacity: .85;
+    }
+
+    .reject:disabled {
+      cursor: wait;
+      opacity: .65;
+    }
+
     .status {
       display: inline-block;
       padding: 5px 9px;
@@ -231,7 +246,7 @@
     </p>
 
     <p id="notice" class="notice">
-      Checking admin access…
+      Checking admin access...
     </p>
 
     <section class="cards">
@@ -257,7 +272,6 @@
       </div>
 
     </section>
-
 
     <!-- USERS -->
 
@@ -285,7 +299,7 @@
 
             <tr>
               <td colspan="7" class="empty">
-                Loading users…
+                Loading users...
               </td>
             </tr>
 
@@ -296,7 +310,6 @@
       </div>
 
     </section>
-
 
     <!-- DEPOSITS -->
 
@@ -323,7 +336,7 @@
 
             <tr>
               <td colspan="6" class="empty">
-                Loading deposits…
+                Loading deposits...
               </td>
             </tr>
 
@@ -334,7 +347,6 @@
       </div>
 
     </section>
-
 
     <!-- WITHDRAWALS -->
 
@@ -361,7 +373,7 @@
 
             <tr>
               <td colspan="6" class="empty">
-                Loading withdrawals…
+                Loading withdrawals...
               </td>
             </tr>
 
@@ -392,9 +404,7 @@
       getDatabase,
       ref,
       get,
-      set,
-      update,
-      serverTimestamp
+      update
     }
       from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
@@ -433,11 +443,14 @@
       document.getElementById(id);
 
 
-    const usersTable = $("usersTable");
+    const usersTable =
+      $("usersTable");
 
-    const depositsTable = $("depositsTable");
+    const depositsTable =
+      $("depositsTable");
 
-    const withdrawalsTable = $("withdrawalsTable");
+    const withdrawalsTable =
+      $("withdrawalsTable");
 
 
     /* =========================
@@ -511,52 +524,12 @@
 
       } catch (error) {
 
-        console.warn(
-          `Cannot read ${path}`,
+        console.error(
+          `Cannot read ${path}:`,
           error
         );
 
         return {};
-
-      }
-
-    }
-
-
-    /* =========================
-       ENSURE ADMIN PROFILE
-    ========================= */
-
-    async function ensureProfile(user) {
-
-      const profileRef =
-        ref(db, `users/${user.uid}`);
-
-      const snapshot =
-        await get(profileRef);
-
-
-      if (!snapshot.exists()) {
-
-        await set(profileRef, {
-
-          uid: user.uid,
-
-          email: user.email || "",
-
-          name: "Admin",
-
-          wallet: 0,
-
-          totalDeposit: 0,
-
-          totalWithdrawal: 0,
-
-          active: true,
-
-          createdAt: serverTimestamp()
-
-        });
 
       }
 
@@ -581,8 +554,7 @@
       try {
 
         /*
-          IMPORTANT:
-          Admin permission is checked using:
+          Admin permission:
 
           admins/USER_UID = true
         */
@@ -616,13 +588,9 @@
 
 
         /*
-          Create admin profile if it doesn't exist.
-          This prevents "User does not exist"
-          when the admin profile is missing.
+          Admin verified.
+          Now load dashboard.
         */
-
-        await ensureProfile(user);
-
 
         await loadAdminData();
 
@@ -630,12 +598,12 @@
       } catch (error) {
 
         console.error(
-          "Admin verification error:",
+          "Admin dashboard error:",
           error
         );
 
         showNotice(
-          "Admin verification failed. Check Firebase Realtime Database Rules.",
+          "Unable to load dashboard. Please check Firebase Database Rules.",
           true
         );
 
@@ -651,23 +619,30 @@
     async function loadAdminData() {
 
       showNotice(
-        "Loading dashboard…"
+        "Loading dashboard..."
       );
 
 
-      const [
-        users,
-        depositGroups,
-        withdrawals
-      ] = await Promise.all([
+      /*
+        IMPORTANT:
 
-        safeRead("users"),
+        Deposit page saves data here:
 
-        safeRead("depositRequests"),
+        /deposits/{depositId}
 
-        safeRead("withdrawals")
+        NOT:
 
-      ]);
+        /depositRequests/{uid}/{id}
+      */
+
+      const users =
+        await safeRead("users");
+
+      const depositsData =
+        await safeRead("deposits");
+
+      const withdrawals =
+        await safeRead("withdrawals");
 
 
       /* =========================
@@ -678,7 +653,7 @@
         Object.entries(users)
           .map(([uid, user]) => ({
             uid,
-            ...user
+            ...(user || {})
           }));
 
 
@@ -686,14 +661,16 @@
         userArray.length;
 
 
-      $("totalWallet").textContent =
-        amount(
-          userArray.reduce(
-            (sum, user) =>
-              sum + Number(user.wallet || 0),
-            0
-          )
+      const walletTotal =
+        userArray.reduce(
+          (sum, user) =>
+            sum + Number(user.wallet || 0),
+          0
         );
+
+
+      $("totalWallet").textContent =
+        amount(walletTotal);
 
 
       usersTable.innerHTML =
@@ -756,57 +733,61 @@
 
 
       /* =========================
-         DEPOSIT REQUESTS
+         DEPOSITS
       ========================= */
 
+      /*
+        Current deposit.html creates:
+
+        deposits/{id}
+
+        Fields include:
+
+        uid
+        email
+        amountUSDT
+        amountPKR
+        method
+        transactionId
+        plan
+        status
+        createdAt
+      */
+
       const deposits =
-        Object.entries(depositGroups)
+        Object.entries(depositsData)
+          .map(([id, item]) => ({
 
-          .flatMap(
-            ([uid, requests]) =>
+            id,
 
-              Object.entries(requests || {})
-                .map(([id, item]) => ({
+            uid:
+              item?.uid || "",
 
-                  id,
+            path:
+              `deposits/${id}`,
 
-                  uid:
-                    item.userId || uid,
+            email:
+              item?.email || "-",
 
-                  path:
-                    `depositRequests/${uid}/${id}`,
+            amount:
+              item?.amountUSDT || 0,
 
-                  email:
-                    item.userEmail ||
-                    item.email ||
-                    "-",
+            method:
+              item?.method || "-",
 
-                  amount:
-                    item.amount ||
-                    item.amountUSDT ||
-                    0,
+            status:
+              item?.status || "pending",
 
-                  method:
-                    item.method ||
-                    "-",
+            createdAt:
+              item?.createdAt || 0
 
-                  status:
-                    item.status ||
-                    "pending",
-
-                  createdAt:
-                    item.createdAt ||
-                    0
-
-                }))
-
-          );
+          }));
 
 
       deposits.sort(
         (a, b) =>
-          Number(b.createdAt) -
-          Number(a.createdAt)
+          Number(b.createdAt || 0) -
+          Number(a.createdAt || 0)
       );
 
 
@@ -897,8 +878,11 @@
 
         Object.entries(withdrawals)
           .map(([id, item]) => ({
+
             id,
-            ...item
+
+            ...(item || {})
+
           }));
 
 
@@ -936,8 +920,9 @@
 
                 <td>
                   ${amount(
+                    item.amountUSDT ||
                     item.amount ||
-                    item.amountUSDT
+                    0
                   )}
                 </td>
 
@@ -994,8 +979,12 @@
           );
 
 
+        if (!button) {
+          return;
+        }
+
+
         if (
-          !button ||
           !confirm(
             "Approve this deposit?"
           )
@@ -1009,10 +998,14 @@
 
         try {
 
+          const depositPath =
+            button.dataset.depositPath;
+
+
           const depositRef =
             ref(
               db,
-              button.dataset.depositPath
+              depositPath
             );
 
 
@@ -1048,8 +1041,20 @@
           }
 
 
+          /*
+            IMPORTANT FIX:
+
+            Deposit page uses:
+
+            uid
+
+            NOT:
+
+            userId
+          */
+
           const uid =
-            deposit.userId;
+            deposit.uid;
 
 
           if (!uid) {
@@ -1062,65 +1067,32 @@
 
 
           const userRef =
-            ref(db, `users/${uid}`);
+            ref(
+              db,
+              `users/${uid}`
+            );
 
 
           const userSnapshot =
             await get(userRef);
 
 
-          /*
-            If the user exists in Authentication
-            but does not yet have a Database profile,
-            create a basic profile.
-          */
-
           if (!userSnapshot.exists()) {
 
-            await set(
-              userRef,
-              {
-
-                uid,
-
-                email:
-                  deposit.userEmail ||
-                  "",
-
-                name:
-                  "User",
-
-                wallet: 0,
-
-                totalDeposit: 0,
-
-                totalWithdrawal: 0,
-
-                active: true,
-
-                createdAt:
-                  serverTimestamp()
-
-              }
+            throw new Error(
+              "User profile not found."
             );
 
           }
 
 
           const user =
-            userSnapshot.exists()
-
-              ? userSnapshot.val()
-
-              : {
-                  wallet: 0,
-                  totalDeposit: 0
-                };
+            userSnapshot.val();
 
 
           const depositAmount =
             Number(
-              deposit.amount || 0
+              deposit.amountUSDT || 0
             );
 
 
@@ -1138,14 +1110,23 @@
           }
 
 
+          /*
+            Update:
+
+            1. Deposit status
+            2. Approval time
+            3. User wallet
+            4. User totalDeposit
+          */
+
           await update(
             ref(db),
             {
 
-              [`${button.dataset.depositPath}/status`]:
+              [`${depositPath}/status`]:
                 "approved",
 
-              [`${button.dataset.depositPath}/approvedAt`]:
+              [`${depositPath}/approvedAt`]:
                 Date.now(),
 
               [`users/${uid}/wallet`]:
@@ -1171,6 +1152,7 @@
         } catch (error) {
 
           console.error(
+            "Deposit approval error:",
             error
           );
 
