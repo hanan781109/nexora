@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora - History</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#08111f;
+    color:#fff;
+    min-height:100vh;
+}
+
+header{
+    padding:18px 7%;
+    background:#0d1728;
+    border-bottom:1px solid #26344a;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#22d3ee;
+}
+
+.back{
+    color:#fff;
+    text-decoration:none;
+    background:#17243a;
+    padding:10px 16px;
+    border-radius:10px;
+}
+
+.container{
+    width:94%;
+    max-width:1100px;
+    margin:35px auto;
+}
+
+h1{
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#9caec5;
+    margin-bottom:25px;
+}
+
+.card{
+    background:#101d31;
+    border:1px solid #293a55;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:25px;
+    overflow:hidden;
+}
+
+.card h2{
+    margin-bottom:18px;
+}
+
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:750px;
+}
+
+th,td{
+    padding:14px 12px;
+    text-align:left;
+    border-bottom:1px solid #26364d;
+}
+
+th{
+    color:#67e8f9;
+    background:#0c1829;
+}
+
+td{
+    color:#d5deea;
+}
+
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.pending{
+    background:#3b2e0b;
+    color:#facc15;
+}
+
+.approved{
+    background:#083b2b;
+    color:#6ee7b7;
+}
+
+.rejected{
+    background:#42151d;
+    color:#fca5a5;
+}
+
+.empty{
+    text-align:center;
+    color:#94a3b8;
+    padding:25px;
+}
+
+.loading{
+    text-align:center;
+    color:#67e8f9;
+    padding:25px;
+}
+
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.summary-box{
+    background:#101d31;
+    border:1px solid #293a55;
+    border-radius:15px;
+    padding:20px;
+}
+
+.summary-box small{
+    color:#94a3b8;
+}
+
+.summary-box h3{
+    margin-top:8px;
+    font-size:22px;
+}
+
+@media(max-width:700px){
+    .summary{
+        grid-template-columns:1fr;
+    }
+
+    header{
+        padding:16px 5%;
+    }
+
+    .container{
+        width:94%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">NEXORA</div>
+    <a href="dashboard.html" class="back">Dashboard</a>
+</header>
+
+<div class="container">
+
+    <h1>Transaction History</h1>
+    <p class="subtitle">
+        View all your deposits and withdrawal requests.
+    </p>
+
+    <div class="summary">
+
+        <div class="summary-box">
+            <small>Total Deposits</small>
+            <h3 id="totalDeposits">$0.00</h3>
+        </div>
+
+        <div class="summary-box">
+            <small>Total Withdrawals</small>
+            <h3 id="totalWithdrawals">$0.00</h3>
+        </div>
+
+        <div class="summary-box">
+            <small>Total Transactions</small>
+            <h3 id="totalTransactions">0</h3>
+        </div>
+
+    </div>
+
+
+    <!-- DEPOSITS -->
+
+    <div class="card">
+
+        <h2>💰 Deposit History</h2>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Plan</th>
+                        <th>USDT</th>
+                        <th>PKR</th>
+                        <th>Method</th>
+                        <th>Transaction ID</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="depositHistory">
+
+                    <tr>
+                        <td colspan="7" class="loading">
+                            Loading deposits...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- WITHDRAWALS -->
+
+    <div class="card">
+
+        <h2>💸 Withdrawal History</h2>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>USDT</th>
+                        <th>PKR</th>
+                        <th>Fee</th>
+                        <th>Method</th>
+                        <th>Account</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="withdrawHistory">
+
+                    <tr>
+                        <td colspan="7" class="loading">
+                            Loading withdrawals...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+    getDatabase,
+    ref,
+    get
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+
+    authDomain: "nexora-adef3.firebaseapp.com",
+
+    projectId: "nexora-adef3",
+
+    storageBucket: "nexora-adef3.firebasestorage.app",
+
+    messagingSenderId: "318277373899",
+
+    appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+
+    measurementId: "G-WN2V48SC4T"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+
+const depositHistory =
+    document.getElementById("depositHistory");
+
+const withdrawHistory =
+    document.getElementById("withdrawHistory");
+
+const totalDeposits =
+    document.getElementById("totalDeposits");
+
+const totalWithdrawals =
+    document.getElementById("totalWithdrawals");
+
+const totalTransactions =
+    document.getElementById("totalTransactions");
+
+
+function formatDate(timestamp){
+
+    if(!timestamp){
+        return "-";
+    }
+
+    return new Date(timestamp).toLocaleString();
+
+}
+
+
+function statusHTML(status){
+
+    status = String(status || "pending").toLowerCase();
+
+    let className = "pending";
+
+    if(status === "approved"){
+        className = "approved";
+    }
+
+    if(status === "rejected"){
+        className = "rejected";
+    }
+
+    return `
+        <span class="status ${className}">
+            ${status.toUpperCase()}
+        </span>
+    `;
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+onAuthStateChanged(auth, async (user) => {
+
+    if(!user){
+
+        location.href = "login.html";
+
+        return;
+    }
+
+
+    try{
+
+        const uid = user.uid;
+
+
+        // -----------------------------
+        // LOAD DEPOSITS
+        // -----------------------------
+
+        const depositsSnap =
+            await get(ref(db,"deposits"));
+
+
+        let depositTotal = 0;
+
+        let depositCount = 0;
+
+
+        if(depositsSnap.exists()){
+
+            const deposits =
+                depositsSnap.val();
+
+
+            const rows = [];
+
+
+            Object.entries(deposits).forEach(
+                ([id,deposit]) => {
+
+                if(deposit.uid !== uid){
+                    return;
+                }
+
+
+                depositCount++;
+
+
+                const amount =
+                    Number(deposit.amountUSDT || 0);
+
+                depositTotal += amount;
+
+
+                rows.push({
+
+                    id:id,
+
+                    ...deposit
+
+                });
+
+            });
+
+
+            rows.sort(
+                (a,b) =>
+                Number(b.createdAt || 0) -
+                Number(a.createdAt || 0)
+            );
+
+
+            if(rows.length === 0){
+
+                depositHistory.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty">
+                            No deposit history found.
+                        </td>
+                    </tr>
+                `;
+
+            }else{
+
+                depositHistory.innerHTML =
+                    rows.map(deposit => `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHTML(
+                                formatDate(deposit.createdAt)
+                            )}
+                        </td>
+
+                        <td>
+                            ${
+                                deposit.plan
+                                ? "$" + Number(deposit.plan).toFixed(2)
+                                : "-"
+                            }
+                        </td>
+
+                        <td>
+                            $${Number(
+                                deposit.amountUSDT || 0
+                            ).toFixed(2)}
+                        </td>
+
+                        <td>
+                            PKR ${Number(
+                                deposit.amountPKR || 0
+                            ).toLocaleString()}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                deposit.method || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                deposit.transactionId || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusHTML(deposit.status)}
+                        </td>
+
+                    </tr>
+
+                `).join("");
+
+            }
+
+        }else{
+
+            depositHistory.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        No deposit history found.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+
+        // -----------------------------
+        // LOAD WITHDRAWALS
+        // -----------------------------
+
+        const withdrawalsSnap =
+            await get(ref(db,"withdrawals"));
+
+
+        let withdrawalTotal = 0;
+
+        let withdrawalCount = 0;
+
+
+        if(withdrawalsSnap.exists()){
+
+            const withdrawals =
+                withdrawalsSnap.val();
+
+
+            const rows = [];
+
+
+            Object.entries(withdrawals).forEach(
+                ([id,withdrawal]) => {
+
+                if(withdrawal.uid !== uid){
+                    return;
+                }
+
+
+                withdrawalCount++;
+
+
+                const amount =
+                    Number(
+                        withdrawal.amountUSDT || 0
+                    );
+
+
+                withdrawalTotal += amount;
+
+
+                rows.push({
+
+                    id:id,
+
+                    ...withdrawal
+
+                });
+
+            });
+
+
+            rows.sort(
+                (a,b) =>
+                Number(b.createdAt || 0) -
+                Number(a.createdAt || 0)
+            );
+
+
+            if(rows.length === 0){
+
+                withdrawHistory.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty">
+                            No withdrawal history found.
+                        </td>
+                    </tr>
+                `;
+
+            }else{
+
+                withdrawHistory.innerHTML =
+                    rows.map(withdrawal => `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHTML(
+                                formatDate(
+                                    withdrawal.createdAt
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            $${Number(
+                                withdrawal.amountUSDT || 0
+                            ).toFixed(2)}
+                        </td>
+
+                        <td>
+                            PKR ${Number(
+                                withdrawal.amountPKR || 0
+                            ).toLocaleString()}
+                        </td>
+
+                        <td>
+                            $${Number(
+                                withdrawal.feeUSDT || 0
+                            ).toFixed(2)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                withdrawal.method || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                withdrawal.accountNumber || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusHTML(
+                                withdrawal.status
+                            )}
+                        </td>
+
+                    </tr>
+
+                `).join("");
+
+            }
+
+        }else{
+
+            withdrawHistory.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        No withdrawal history found.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+
+        // -----------------------------
+        // SUMMARY
+        // -----------------------------
+
+        totalDeposits.textContent =
+            "$" + depositTotal.toFixed(2);
+
+
+        totalWithdrawals.textContent =
+            "$" + withdrawalTotal.toFixed(2);
+
+
+        totalTransactions.textContent =
+            depositCount + withdrawalCount;
+
+
+    }catch(error){
+
+        console.error(error);
+
+        depositHistory.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    Unable to load deposit history.
+                </td>
+            </tr>
+        `;
+
+
+        withdrawHistory.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    Unable to load withdrawal history.
+                </td>
+            </tr>
+        `;
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
