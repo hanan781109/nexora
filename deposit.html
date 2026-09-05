@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexora - Deposit</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#07111f;
+      color:#fff;
+      min-height:100vh;
+    }
+
+    .navbar{
+      height:70px;
+      padding:0 6%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#081528;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .logo{
+      font-size:25px;
+      font-weight:800;
+      background:linear-gradient(90deg,#00eaff,#8b5cf6,#ff3cac);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .back{
+      color:#fff;
+      text-decoration:none;
+      background:#16263f;
+      padding:10px 17px;
+      border-radius:9px;
+    }
+
+    .container{
+      width:92%;
+      max-width:850px;
+      margin:35px auto;
+    }
+
+    .heading{
+      text-align:center;
+      margin-bottom:25px;
+    }
+
+    .heading h1{
+      font-size:32px;
+      margin-bottom:8px;
+    }
+
+    .heading p{
+      color:#94a3b8;
+    }
+
+    .card{
+      background:linear-gradient(145deg,#0c1b31,#101e36);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      padding:25px;
+      margin-bottom:20px;
+    }
+
+    .card h2{
+      font-size:20px;
+      margin-bottom:18px;
+    }
+
+    .payment-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+    }
+
+    .payment{
+      background:#07111f;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:18px;
+    }
+
+    .payment h3{
+      color:#00eaff;
+      margin-bottom:12px;
+    }
+
+    .payment p{
+      color:#cbd5e1;
+      margin:7px 0;
+      font-size:14px;
+    }
+
+    .number{
+      font-size:18px;
+      font-weight:bold;
+      color:#fff !important;
+    }
+
+    label{
+      display:block;
+      color:#cbd5e1;
+      margin:15px 0 7px;
+      font-size:14px;
+    }
+
+    input{
+      width:100%;
+      padding:13px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#07111f;
+      color:#fff;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:#00eaff;
+    }
+
+    .calculation{
+      margin-top:15px;
+      padding:16px;
+      border-radius:12px;
+      background:#07111f;
+      border:1px solid rgba(0,234,255,.15);
+    }
+
+    .calc-row{
+      display:flex;
+      justify-content:space-between;
+      padding:8px 0;
+      color:#94a3b8;
+    }
+
+    .calc-row strong{
+      color:#fff;
+    }
+
+    .plan-box{
+      padding:15px;
+      background:#07111f;
+      border-radius:12px;
+      margin-bottom:15px;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .plan-box span{
+      color:#94a3b8;
+    }
+
+    .submit{
+      width:100%;
+      border:none;
+      padding:14px;
+      border-radius:11px;
+      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
+      color:#fff;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-top:20px;
+    }
+
+    .submit:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
+    .note{
+      color:#94a3b8;
+      font-size:13px;
+      line-height:1.6;
+      margin-top:12px;
+    }
+
+    .success{
+      display:none;
+      background:#0b2b1b;
+      border:1px solid #22c55e;
+      color:#86efac;
+      padding:15px;
+      border-radius:10px;
+      margin-top:15px;
+    }
+
+    @media(max-width:650px){
+      .payment-grid{
+        grid-template-columns:1fr;
+      }
+
+      .heading h1{
+        font-size:27px;
+      }
+
+      .container{
+        width:94%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">NEXORA</div>
+  <a href="dashboard.html" class="back">← Dashboard</a>
+</nav>
+
+<main class="container">
+
+  <div class="heading">
+    <h1>Make a Deposit</h1>
+    <p>Submit your payment details for verification.</p>
+  </div>
+
+
+  <!-- PAYMENT DETAILS -->
+
+  <div class="card">
+
+    <h2>Payment Methods</h2>
+
+    <div class="payment-grid">
+
+      <div class="payment">
+        <h3>Easypaisa</h3>
+
+        <p>Account Name</p>
+        <p class="number">Sohail Ahmed Janweri</p>
+
+        <p>Account Number</p>
+        <p class="number">03002205686</p>
+      </div>
+
+
+      <div class="payment">
+        <h3>SadaPay</h3>
+
+        <p>Account Name</p>
+        <p class="number">Sohail Ahmed Janweri</p>
+
+        <p>Account Number</p>
+        <p class="number">03002205686</p>
+      </div>
+
+    </div>
+
+    <div class="note">
+      Payment karne ke baad apni transaction/reference ID neeche enter karein.
+    </div>
+
+  </div>
+
+
+  <!-- DEPOSIT FORM -->
+
+  <div class="card">
+
+    <h2>Deposit Request</h2>
+
+    <div class="plan-box">
+      <span>Selected Plan:</span>
+      <strong id="selectedPlan">Not selected</strong>
+    </div>
+
+
+    <label for="amount">
+      Deposit Amount (USDT)
+    </label>
+
+    <input
+      type="number"
+      id="amount"
+      min="5"
+      step="0.01"
+      placeholder="Enter USDT amount"
+    >
+
+
+    <div class="calculation">
+
+      <div class="calc-row">
+        <span>USDT Amount</span>
+        <strong id="usdtAmount">0.00 USDT</strong>
+      </div>
+
+      <div class="calc-row">
+        <span>Exchange Rate</span>
+        <strong>1 USDT = 280 PKR</strong>
+      </div>
+
+      <div class="calc-row">
+        <span>PKR Amount</span>
+        <strong id="pkrAmount">0 PKR</strong>
+      </div>
+
+    </div>
+
+
+    <label for="method">
+      Payment Method
+    </label>
+
+    <select
+      id="method"
+      style="
+        width:100%;
+        padding:13px;
+        border-radius:10px;
+        border:1px solid rgba(255,255,255,.12);
+        background:#07111f;
+        color:#fff;
+        outline:none;
+      "
+    >
+      <option value="">Select payment method</option>
+      <option value="Easypaisa">Easypaisa</option>
+      <option value="SadaPay">SadaPay</option>
+    </select>
+
+
+    <label for="transactionId">
+      Transaction / Reference ID
+    </label>
+
+    <input
+      type="text"
+      id="transactionId"
+      placeholder="Enter transaction ID"
+      maxlength="100"
+    >
+
+
+    <button
+      class="submit"
+      id="submitBtn"
+    >
+      Submit Deposit Request
+    </button>
+
+
+    <div class="success" id="successBox">
+      Deposit request submitted successfully. Status: Pending.
+    </div>
+
+  </div>
+
+</main>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  set
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+
+  authDomain: "nexora-adef3.firebaseapp.com",
+
+  projectId: "nexora-adef3",
+
+  storageBucket: "nexora-adef3.firebasestorage.app",
+
+  messagingSenderId: "318277373899",
+
+  appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+
+  measurementId: "G-WN2V48SC4T"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+
+let currentUser = null;
+
+
+// CHECK LOGIN
+
+onAuthStateChanged(auth, (user) => {
+
+  if (!user) {
+
+    window.location.href = "login.html";
+
+    return;
+
+  }
+
+  currentUser = user;
+
+});
+
+
+// GET PLAN FROM URL
+
+const params = new URLSearchParams(window.location.search);
+
+const plan = params.get("plan");
+
+
+if (plan) {
+
+  document.getElementById("selectedPlan").textContent =
+    "$" + Number(plan).toFixed(2);
+
+  document.getElementById("amount").value = plan;
+
+  updateCalculation();
+
+}
+
+
+// CALCULATE PKR
+
+const amountInput =
+  document.getElementById("amount");
+
+
+amountInput.addEventListener(
+  "input",
+  updateCalculation
+);
+
+
+function updateCalculation() {
+
+  const usdt =
+    Number(amountInput.value || 0);
+
+  const pkr =
+    usdt * 280;
+
+
+  document.getElementById("usdtAmount")
+    .textContent =
+    usdt.toFixed(2) + " USDT";
+
+
+  document.getElementById("pkrAmount")
+    .textContent =
+    pkr.toLocaleString("en-PK") + " PKR";
+
+}
+
+
+// SUBMIT DEPOSIT
+
+document
+  .getElementById("submitBtn")
+  .addEventListener("click", async () => {
+
+    if (!currentUser) {
+
+      alert("Please login first.");
+
+      return;
+
+    }
+
+
+    const amount =
+      Number(
+        document.getElementById("amount").value
+      );
+
+
+    const method =
+      document.getElementById("method").value;
+
+
+    const transactionId =
+      document
+        .getElementById("transactionId")
+        .value
+        .trim();
+
+
+    if (!amount || amount <= 0) {
+
+      alert("Please enter a valid USDT amount.");
+
+      return;
+
+    }
+
+
+    if (!method) {
+
+      alert("Please select a payment method.");
+
+      return;
+
+    }
+
+
+    if (!transactionId) {
+
+      alert("Please enter your transaction/reference ID.");
+
+      return;
+
+    }
+
+
+    const pkrAmount =
+      amount * 280;
+
+
+    const depositRef =
+      push(ref(db, "deposits"));
+
+
+    const depositData = {
+
+      id: depositRef.key,
+
+      uid: currentUser.uid,
+
+      email: currentUser.email || "",
+
+      amountUSDT: amount,
+
+      amountPKR: pkrAmount,
+
+      exchangeRate: 280,
+
+      method: method,
+
+      transactionId: transactionId,
+
+      plan: plan ? Number(plan) : null,
+
+      status: "pending",
+
+      createdAt: Date.now()
+
+    };
+
+
+    const button =
+      document.getElementById("submitBtn");
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "Submitting...";
+
+
+    try {
+
+      await set(
+        depositRef,
+        depositData
+      );
+
+
+      document
+        .getElementById("successBox")
+        .style.display = "block";
+
+
+      button.textContent =
+        "Request Submitted";
+
+
+      alert(
+        "Deposit request submitted successfully!"
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Deposit request failed. Please try again."
+      );
+
+      button.disabled = false;
+
+      button.textContent =
+        "Submit Deposit Request";
+
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
