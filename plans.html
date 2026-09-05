@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexora - Plans</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#07111f;
+      color:#fff;
+      min-height:100vh;
+    }
+
+    .navbar{
+      height:70px;
+      padding:0 6%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#081528;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .logo{
+      font-size:25px;
+      font-weight:800;
+      background:linear-gradient(90deg,#00eaff,#8b5cf6,#ff3cac);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .back{
+      color:#fff;
+      text-decoration:none;
+      background:#16263f;
+      padding:10px 17px;
+      border-radius:9px;
+      font-size:14px;
+    }
+
+    .container{
+      width:90%;
+      max-width:1200px;
+      margin:40px auto;
+    }
+
+    .heading{
+      text-align:center;
+      margin-bottom:35px;
+    }
+
+    .heading h1{
+      font-size:36px;
+      margin-bottom:10px;
+    }
+
+    .heading p{
+      color:#94a3b8;
+      font-size:15px;
+    }
+
+    .plans{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:20px;
+    }
+
+    .plan{
+      position:relative;
+      padding:27px 22px;
+      border-radius:20px;
+      background:linear-gradient(145deg,#0c1b31,#101e36);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 12px 35px rgba(0,0,0,.25);
+      transition:.25s;
+      overflow:hidden;
+    }
+
+    .plan:hover{
+      transform:translateY(-6px);
+      border-color:#00eaff;
+    }
+
+    .plan.featured{
+      border:1px solid #8b5cf6;
+    }
+
+    .badge{
+      position:absolute;
+      top:13px;
+      right:13px;
+      background:linear-gradient(90deg,#8b5cf6,#ff3cac);
+      padding:5px 9px;
+      border-radius:20px;
+      font-size:10px;
+      font-weight:bold;
+    }
+
+    .plan h2{
+      font-size:18px;
+      color:#cbd5e1;
+      margin-bottom:15px;
+    }
+
+    .price{
+      font-size:35px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .daily{
+      color:#22c55e;
+      font-size:14px;
+      font-weight:bold;
+      margin-bottom:22px;
+    }
+
+    .details{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:15px;
+      margin-bottom:20px;
+    }
+
+    .detail{
+      display:flex;
+      justify-content:space-between;
+      margin:10px 0;
+      font-size:13px;
+      color:#94a3b8;
+    }
+
+    .detail span:last-child{
+      color:#fff;
+      font-weight:bold;
+    }
+
+    .select-btn{
+      width:100%;
+      border:none;
+      padding:12px;
+      border-radius:10px;
+      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .select-btn:hover{
+      opacity:.9;
+    }
+
+    .note{
+      margin-top:30px;
+      padding:18px;
+      border-radius:14px;
+      background:#0b192c;
+      border:1px solid rgba(255,255,255,.07);
+      color:#94a3b8;
+      font-size:13px;
+      line-height:1.6;
+      text-align:center;
+    }
+
+    @media(max-width:1000px){
+      .plans{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:600px){
+      .container{
+        width:92%;
+      }
+
+      .plans{
+        grid-template-columns:1fr;
+      }
+
+      .heading h1{
+        font-size:29px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">NEXORA</div>
+    <a href="dashboard.html" class="back">← Dashboard</a>
+  </nav>
+
+  <main class="container">
+
+    <div class="heading">
+      <h1>Choose Your Plan</h1>
+      <p>Select a plan that fits your account.</p>
+    </div>
+
+    <div class="plans">
+
+      <!-- $5 -->
+      <div class="plan">
+        <h2>Starter</h2>
+        <div class="price">$5</div>
+        <div class="daily">0.60% daily rate</div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Plan Value</span>
+            <span>$5</span>
+          </div>
+          <div class="detail">
+            <span>Withdrawal Requirement</span>
+            <span>$10</span>
+          </div>
+          <div class="detail">
+            <span>Referral</span>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <button class="select-btn" data-plan="5">
+          Select Plan
+        </button>
+      </div>
+
+
+      <!-- $10 -->
+      <div class="plan">
+        <h2>Basic</h2>
+        <div class="price">$10</div>
+        <div class="daily">0.60% daily rate</div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Plan Value</span>
+            <span>$10</span>
+          </div>
+          <div class="detail">
+            <span>Withdrawal Requirement</span>
+            <span>$20</span>
+          </div>
+          <div class="detail">
+            <span>Referral</span>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <button class="select-btn" data-plan="10">
+          Select Plan
+        </button>
+      </div>
+
+
+      <!-- $20 -->
+      <div class="plan">
+        <h2>Growth</h2>
+        <div class="price">$20</div>
+        <div class="daily">0.60% daily rate</div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Plan Value</span>
+            <span>$20</span>
+          </div>
+          <div class="detail">
+            <span>Withdrawal Requirement</span>
+            <span>$40</span>
+          </div>
+          <div class="detail">
+            <span>Referral</span>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <button class="select-btn" data-plan="20">
+          Select Plan
+        </button>
+      </div>
+
+
+      <!-- $50 -->
+      <div class="plan featured">
+        <div class="badge">POPULAR</div>
+
+        <h2>Pro</h2>
+        <div class="price">$50</div>
+        <div class="daily">0.60% daily rate</div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Plan Value</span>
+            <span>$50</span>
+          </div>
+          <div class="detail">
+            <span>Withdrawal Requirement</span>
+            <span>$100</span>
+          </div>
+          <div class="detail">
+            <span>Referral</span>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <button class="select-btn" data-plan="50">
+          Select Plan
+        </button>
+      </div>
+
+
+      <!-- $100 -->
+      <div class="plan">
+        <h2>Premium</h2>
+        <div class="price">$100</div>
+        <div class="daily">0.60% daily rate</div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Plan Value</span>
+            <span>$100</span>
+          </div>
+          <div class="detail">
+            <span>Withdrawal Requirement</span>
+            <span>$200</span>
+          </div>
+          <div class="detail">
+            <span>Referral</span>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <button class="select-btn" data-plan="100">
+          Select Plan
+        </button>
+      </div>
+
+
+      <!-- $200 -->
+      <div class="plan">
+        <h2>Business</h2>
+        <div class="price">$200</div>
+        <div class="daily">0.60% daily rate</div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Plan Value</span>
+            <span>$200</span>
+          </div>
+          <div class="detail">
+            <span>Withdrawal Requirement</span>
+            <span>$400</span>
+          </div>
+          <div class="detail">
+            <span>Referral</span>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <button class="select-btn" data-plan="200">
+          Select Plan
+        </button>
+      </div>
+
+
+      <!-- $500 -->
+      <div class="plan featured">
+        <div class="badge">MAX</div>
+
+        <h2>Elite</h2>
+        <div class="price">$500</div>
+        <div class="daily">0.60% daily rate</div>
+
+        <div class="details">
+          <div class="detail">
+            <span>Plan Value</span>
+            <span>$500</span>
+          </div>
+          <div class="detail">
+            <span>Withdrawal Requirement</span>
+            <span>$1,000</span>
+          </div>
+          <div class="detail">
+            <span>Referral</span>
+            <span>20%</span>
+          </div>
+        </div>
+
+        <button class="select-btn" data-plan="500">
+          Select Plan
+        </button>
+      </div>
+
+    </div>
+
+
+    <div class="note">
+      Plan selection will be connected to the Nexora deposit and
+      Firebase transaction system in the next step.
+    </div>
+
+  </main>
+
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+
+      authDomain: "nexora-adef3.firebaseapp.com",
+
+      projectId: "nexora-adef3",
+
+      storageBucket: "nexora-adef3.firebasestorage.app",
+
+      messagingSenderId: "318277373899",
+
+      appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+
+      measurementId: "G-WN2V48SC4T"
+
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (!user) {
+        window.location.href = "login.html";
+      }
+
+    });
+
+
+    document.querySelectorAll(".select-btn").forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        const plan = button.dataset.plan;
+
+        window.location.href =
+          "deposit.html?plan=" + encodeURIComponent(plan);
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
