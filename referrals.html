@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexora - Referrals</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#07111f;
+      color:#fff;
+      min-height:100vh;
+    }
+
+    .navbar{
+      height:70px;
+      padding:0 6%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#081528;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .logo{
+      font-size:25px;
+      font-weight:800;
+      background:linear-gradient(90deg,#00eaff,#8b5cf6,#ff3cac);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .back{
+      color:#fff;
+      text-decoration:none;
+      background:#16263f;
+      padding:10px 17px;
+      border-radius:9px;
+    }
+
+    .container{
+      width:90%;
+      max-width:1100px;
+      margin:40px auto;
+    }
+
+    .heading{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    .heading h1{
+      font-size:34px;
+      margin-bottom:10px;
+    }
+
+    .heading p{
+      color:#94a3b8;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-bottom:25px;
+    }
+
+    .card{
+      background:linear-gradient(145deg,#0c1b31,#101e36);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:25px;
+    }
+
+    .label{
+      color:#94a3b8;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    .value{
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    .purple{color:#a78bfa;}
+    .green{color:#22c55e;}
+    .pink{color:#ff4fa3;}
+
+    .ref-card{
+      background:#0c192d;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      padding:28px;
+      margin-bottom:25px;
+    }
+
+    .ref-card h2{
+      margin-bottom:20px;
+    }
+
+    .code-box{
+      display:flex;
+      gap:10px;
+    }
+
+    .code{
+      flex:1;
+      background:#07111f;
+      border:1px solid rgba(255,255,255,.1);
+      padding:15px;
+      border-radius:10px;
+      color:#00eaff;
+      font-weight:bold;
+      font-size:16px;
+    }
+
+    button{
+      border:none;
+      border-radius:10px;
+      padding:0 20px;
+      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .link-box{
+      margin-top:15px;
+      display:flex;
+      gap:10px;
+    }
+
+    .link{
+      flex:1;
+      background:#07111f;
+      border:1px solid rgba(255,255,255,.1);
+      padding:15px;
+      border-radius:10px;
+      color:#cbd5e1;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+
+    .notice{
+      color:#94a3b8;
+      font-size:13px;
+      margin-top:12px;
+    }
+
+    .table-wrap{
+      overflow-x:auto;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th,td{
+      padding:14px 10px;
+      text-align:left;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+
+    th{
+      color:#94a3b8;
+      font-size:13px;
+    }
+
+    td{
+      color:#e2e8f0;
+      font-size:14px;
+    }
+
+    .loading{
+      text-align:center;
+      color:#94a3b8;
+      padding:30px;
+    }
+
+    @media(max-width:700px){
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+      .code-box,
+      .link-box{
+        flex-direction:column;
+      }
+
+      button{
+        height:45px;
+      }
+
+      .heading h1{
+        font-size:28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">NEXORA</div>
+  <a href="dashboard.html" class="back">← Dashboard</a>
+</nav>
+
+<main class="container">
+
+  <div class="heading">
+    <h1>Referral Program</h1>
+    <p>Invite users and track your referral activity.</p>
+  </div>
+
+  <div class="stats">
+
+    <div class="card">
+      <div class="label">Direct Referrals</div>
+      <div class="value purple" id="directCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Referral Earnings</div>
+      <div class="value green">$<span id="earnings">0.00</span></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Commission</div>
+      <div class="value pink">20%</div>
+    </div>
+
+  </div>
+
+
+  <div class="ref-card">
+
+    <h2>Your Referral Code</h2>
+
+    <div class="code-box">
+      <div class="code" id="refCode">Loading...</div>
+      <button id="copyCode">Copy Code</button>
+    </div>
+
+    <div class="link-box">
+      <div class="link" id="refLink">Loading...</div>
+      <button id="copyLink">Copy Link</button>
+    </div>
+
+    <div class="notice">
+      Share your referral link with people you invite to Nexora.
+    </div>
+
+  </div>
+
+
+  <div class="ref-card">
+
+    <h2>My Direct Referrals</h2>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="referralsTable">
+          <tr>
+            <td colspan="3" class="loading">
+              Loading referrals...
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  get
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+
+  authDomain: "nexora-adef3.firebaseapp.com",
+
+  projectId: "nexora-adef3",
+
+  storageBucket: "nexora-adef3.firebasestorage.app",
+
+  messagingSenderId: "318277373899",
+
+  appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+
+  measurementId: "G-WN2V48SC4T"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+
+    window.location.href = "login.html";
+
+    return;
+
+  }
+
+
+  try {
+
+    const currentUserRef =
+      ref(db, "users/" + user.uid);
+
+    const currentSnapshot =
+      await get(currentUserRef);
+
+
+    if (!currentSnapshot.exists()) {
+
+      alert("User data not found.");
+
+      return;
+
+    }
+
+
+    const currentData =
+      currentSnapshot.val();
+
+
+    const referralCode =
+      currentData.referralCode || "";
+
+
+    const referralEarnings =
+      Number(currentData.referralEarnings || 0);
+
+
+    document.getElementById("refCode")
+      .textContent = referralCode;
+
+
+    document.getElementById("earnings")
+      .textContent =
+      referralEarnings.toFixed(2);
+
+
+    const referralLink =
+      window.location.origin +
+      window.location.pathname
+        .replace("referrals.html", "register.html") +
+      "?ref=" +
+      encodeURIComponent(referralCode);
+
+
+    document.getElementById("refLink")
+      .textContent = referralLink;
+
+
+    /*
+      Load all users and find users whose
+      referredBy matches this user's code.
+    */
+
+    const usersRef = ref(db, "users");
+
+    const usersSnapshot = await get(usersRef);
+
+    const table =
+      document.getElementById("referralsTable");
+
+    table.innerHTML = "";
+
+
+    let count = 0;
+
+
+    if (usersSnapshot.exists()) {
+
+      const users =
+        usersSnapshot.val();
+
+
+      Object.values(users).forEach((u) => {
+
+        if (
+          u &&
+          u.referredBy === referralCode
+        ) {
+
+          count++;
+
+
+          const row =
+            document.createElement("tr");
+
+
+          row.innerHTML = `
+            <td>${escapeHtml(u.name || "User")}</td>
+            <td>${escapeHtml(u.email || "-")}</td>
+            <td>Active</td>
+          `;
+
+
+          table.appendChild(row);
+
+        }
+
+      });
+
+    }
+
+
+    if (count === 0) {
+
+      table.innerHTML = `
+        <tr>
+          <td colspan="3" class="loading">
+            No direct referrals yet.
+          </td>
+        </tr>
+      `;
+
+    }
+
+
+    document.getElementById("directCount")
+      .textContent = count;
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    document.getElementById("referralsTable")
+      .innerHTML = `
+        <tr>
+          <td colspan="3" class="loading">
+            Unable to load referrals.
+          </td>
+        </tr>
+      `;
+
+  }
+
+});
+
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replaceAll("&", "&amp;")
+
+    .replaceAll("<", "&lt;")
+
+    .replaceAll(">", "&gt;")
+
+    .replaceAll('"', "&quot;")
+
+    .replaceAll("'", "&#039;");
+
+}
+
+
+document.getElementById("copyCode")
+  .addEventListener("click", async () => {
+
+    const code =
+      document.getElementById("refCode").textContent;
+
+    if (!code || code === "Loading...") return;
+
+    await navigator.clipboard.writeText(code);
+
+    alert("Referral code copied!");
+
+  });
+
+
+document.getElementById("copyLink")
+  .addEventListener("click", async () => {
+
+    const link =
+      document.getElementById("refLink").textContent;
+
+    if (!link || link === "Loading...") return;
+
+    await navigator.clipboard.writeText(link);
+
+    alert("Referral link copied!");
+
+  });
+
+</script>
+
+</body>
+</html>
