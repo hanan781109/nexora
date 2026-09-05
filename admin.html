@@ -1,1215 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexora - Admin Panel</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#08111f;
-    color:#fff;
-}
-
-header{
-    background:#0d1728;
-    border-bottom:1px solid #293a55;
-    padding:18px 6%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.logo{
-    font-size:26px;
-    font-weight:bold;
-    color:#22d3ee;
-}
-
-.admin{
-    color:#94a3b8;
-    font-size:14px;
-}
-
-.container{
-    width:94%;
-    max-width:1400px;
-    margin:30px auto;
-}
-
-h1{
-    margin-bottom:7px;
-}
-
-.subtitle{
-    color:#94a3b8;
-    margin-bottom:25px;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-    margin-bottom:25px;
-}
-
-.card{
-    background:#101d31;
-    border:1px solid #293a55;
-    border-radius:16px;
-    padding:20px;
-}
-
-.card small{
-    color:#94a3b8;
-}
-
-.card h2{
-    margin-top:8px;
-    color:#67e8f9;
-}
-
-.section{
-    background:#101d31;
-    border:1px solid #293a55;
-    border-radius:18px;
-    padding:22px;
-    margin-bottom:25px;
-}
-
-.section h2{
-    margin-bottom:18px;
-}
-
-.table-wrap{
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    min-width:850px;
-    border-collapse:collapse;
-}
-
-th,td{
-    padding:13px 12px;
-    text-align:left;
-    border-bottom:1px solid #293a55;
-}
-
-th{
-    background:#0c1829;
-    color:#67e8f9;
-}
-
-td{
-    color:#dbe5f0;
-}
-
-button{
-    border:0;
-    border-radius:8px;
-    padding:9px 13px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.approve{
-    background:#22c55e;
-    color:#06120a;
-}
-
-.approve:hover{
-    opacity:.85;
-}
-
-.logout{
-    background:#17243a;
-    color:#fff;
-    margin-left:12px;
-}
-
-.status{
-    padding:5px 9px;
-    border-radius:15px;
-    font-size:11px;
-    font-weight:bold;
-}
-
-.pending{
-    background:#3b2e0b;
-    color:#facc15;
-}
-
-.approved{
-    background:#083b2b;
-    color:#6ee7b7;
-}
-
-.rejected{
-    background:#42151d;
-    color:#fca5a5;
-}
-
-.empty{
-    text-align:center;
-    color:#94a3b8;
-    padding:25px;
-}
-
-@media(max-width:900px){
-    .cards{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
-
-@media(max-width:550px){
-    .cards{
-        grid-template-columns:1fr;
-    }
-
-    header{
-        padding:15px 4%;
-    }
-
-    .admin{
-        display:none;
-    }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexora | Admin Panel</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { margin: 0; background: #08111f; color: #fff; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 6%; border-bottom:1px solid #293a55; background:#0d1728; }
+    .logo { color:#22d3ee; font-size:26px; font-weight:800; }.admin { color:#94a3b8; font-size:14px; }.logout { margin-left:12px; background:#17243a; color:#fff; }
+    .container { width:94%; max-width:1400px; margin:30px auto; } h1 { margin:0 0 7px; }.subtitle,.empty,.muted { color:#94a3b8; }.subtitle { margin:0 0 25px; }
+    .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:25px; }.card,.section { border:1px solid #293a55; background:#101d31; border-radius:16px; }.card { padding:20px; }.card small { color:#94a3b8; }.card h2 { margin:8px 0 0; color:#67e8f9; }
+    .section { padding:22px; margin-bottom:25px; }.section h2 { margin:0 0 18px; }.table-wrap { overflow-x:auto; } table { width:100%; min-width:800px; border-collapse:collapse; } th,td { padding:13px 12px; border-bottom:1px solid #293a55; text-align:left; } th { color:#67e8f9; background:#0c1829; } td { color:#dbe5f0; }
+    button { border:0; border-radius:8px; padding:9px 13px; cursor:pointer; font-weight:700; }.approve { color:#06120a; background:#22c55e; }.approve:hover { opacity:.85; }.approve:disabled { cursor:wait; opacity:.65; }
+    .status { display:inline-block; padding:5px 9px; border-radius:15px; font-size:11px; font-weight:700; }.pending { color:#facc15; background:#3b2e0b; }.approved { color:#6ee7b7; background:#083b2b; }.rejected { color:#fca5a5; background:#42151d; }.empty { padding:25px; text-align:center; }.notice { margin-bottom:20px; padding:12px 14px; border-radius:10px; color:#bfeeff; background:#0d2b43; }.error { color:#fecaca; background:#42151d; }
+    @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}} @media(max-width:550px){.cards{grid-template-columns:1fr}.admin{display:none}header{padding:15px 4%}}
+  </style>
 </head>
-
 <body>
-
-<header>
-
-    <div class="logo">NEXORA ADMIN</div>
-
-    <div>
-        <span class="admin" id="adminEmail"></span>
-        <button class="logout" id="logoutBtn">Logout</button>
-    </div>
-
-</header>
-
-
-<div class="container">
-
-    <h1>Admin Dashboard</h1>
-
-    <p class="subtitle">
-        Manage users, deposits and withdrawal requests.
-    </p>
-
-
-    <!-- SUMMARY -->
-
-    <div class="cards">
-
-        <div class="card">
-            <small>Total Users</small>
-            <h2 id="usersCount">0</h2>
-        </div>
-
-        <div class="card">
-            <small>Pending Deposits</small>
-            <h2 id="pendingDeposits">0</h2>
-        </div>
-
-        <div class="card">
-            <small>Pending Withdrawals</small>
-            <h2 id="pendingWithdrawals">0</h2>
-        </div>
-
-        <div class="card">
-            <small>Total Wallet</small>
-            <h2 id="totalWallet">$0.00</h2>
-        </div>
-
-    </div>
-
-
-    <!-- USERS -->
-
-    <div class="section">
-
-        <h2>👥 Users</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Referral Code</th>
-                        <th>Wallet</th>
-                        <th>Total Deposit</th>
-                        <th>Total Withdrawal</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="usersTable">
-
-                    <tr>
-                        <td colspan="7" class="empty">
-                            Loading users...
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <!-- DEPOSITS -->
-
-    <div class="section">
-
-        <h2>💰 Deposit Requests</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>User</th>
-                        <th>Amount</th>
-                        <th>PKR</th>
-                        <th>Method</th>
-                        <th>Transaction ID</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody id="depositsTable">
-
-                    <tr>
-                        <td colspan="8" class="empty">
-                            Loading deposits...
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-
-    <!-- WITHDRAWALS -->
-
-    <div class="section">
-
-        <h2>💸 Withdrawal Requests</h2>
-
-        <div class="table-wrap">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>User</th>
-                        <th>Amount</th>
-                        <th>PKR</th>
-                        <th>Fee</th>
-                        <th>Method</th>
-                        <th>Account</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody id="withdrawalsTable">
-
-                    <tr>
-                        <td colspan="9" class="empty">
-                            Loading withdrawals...
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script type="module">
-
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-} from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-
-import {
-    getDatabase,
-    ref,
-    get,
-    update
-} from
-"https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-
-
-const firebaseConfig = {
-
-    apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
-
-    authDomain: "nexora-adef3.firebaseapp.com",
-
-    projectId: "nexora-adef3",
-
-    storageBucket: "nexora-adef3.firebasestorage.app",
-
-    messagingSenderId: "318277373899",
-
-    appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
-
-    measurementId: "G-WN2V48SC4T"
-};
-
-
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getDatabase(app);
-
-
-// Your admin email
-const ADMIN_EMAIL =
-    "hanandanger7810@gmail.com";
-
-
-const usersTable =
-    document.getElementById("usersTable");
-
-const depositsTable =
-    document.getElementById("depositsTable");
-
-const withdrawalsTable =
-    document.getElementById("withdrawalsTable");
-
-
-const usersCount =
-    document.getElementById("usersCount");
-
-const pendingDeposits =
-    document.getElementById("pendingDeposits");
-
-const pendingWithdrawals =
-    document.getElementById("pendingWithdrawals");
-
-const totalWallet =
-    document.getElementById("totalWallet");
-
-const adminEmail =
-    document.getElementById("adminEmail");
-
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-function formatDate(timestamp){
-
-    if(!timestamp) return "-";
-
-    return new Date(timestamp).toLocaleString();
-
-}
-
-
-function statusHTML(status){
-
-    const s =
-        String(status || "pending").toLowerCase();
-
-    return `
-        <span class="status ${s}">
-            ${escapeHTML(s.toUpperCase())}
-        </span>
-    `;
-
-}
-
-
-// --------------------------------
-// AUTH + ADMIN CHECK
-// --------------------------------
-
-onAuthStateChanged(auth, async (user) => {
-
-    if(!user){
-
-        location.href = "login.html";
-
-        return;
+  <header><div class="logo">NEXORA ADMIN</div><div><span class="admin" id="adminEmail"></span><button class="logout" id="logoutBtn">Logout</button></div></header>
+  <main class="container">
+    <h1>Admin Dashboard</h1><p class="subtitle">Manage users, deposit requests, and withdrawal requests.</p>
+    <p id="notice" class="notice">Loading dashboard…</p>
+    <section class="cards">
+      <div class="card"><small>Total Users</small><h2 id="usersCount">0</h2></div>
+      <div class="card"><small>Pending Deposits</small><h2 id="pendingDeposits">0</h2></div>
+      <div class="card"><small>Pending Withdrawals</small><h2 id="pendingWithdrawals">0</h2></div>
+      <div class="card"><small>Total Wallet</small><h2 id="totalWallet">$0.00</h2></div>
+    </section>
+    <section class="section"><h2>👥 Users</h2><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Referral Code</th><th>Wallet</th><th>Total Deposit</th><th>Total Withdrawal</th><th>Status</th></tr></thead><tbody id="usersTable"><tr><td colspan="7" class="empty">Loading users…</td></tr></tbody></table></div></section>
+    <section class="section"><h2>💰 Deposit Requests</h2><div class="table-wrap"><table><thead><tr><th>Date</th><th>User</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></tr></thead><tbody id="depositsTable"><tr><td colspan="6" class="empty">Loading deposits…</td></tr></tbody></table></div></section>
+    <section class="section"><h2>💸 Withdrawal Requests</h2><div class="table-wrap"><table><thead><tr><th>Date</th><th>User</th><th>Amount</th><th>Method</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalsTable"><tr><td colspan="6" class="empty">Loading withdrawals…</td></tr></tbody></table></div></section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    import { getDatabase, ref, get, set, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+      authDomain: "nexora-adef3.firebaseapp.com",
+      projectId: "nexora-adef3",
+      storageBucket: "nexora-adef3.firebasestorage.app",
+      messagingSenderId: "318277373899",
+      appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+      measurementId: "G-WN2V48SC4T"
+    };
+    const ADMIN_EMAIL = "hanandanger7810@gmail.com";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const $ = (id) => document.getElementById(id);
+    const usersTable = $("usersTable"), depositsTable = $("depositsTable"), withdrawalsTable = $("withdrawalsTable");
+
+    function text(value) { return String(value ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+    function amount(value) { return `$${Number(value || 0).toFixed(2)}`; }
+    function date(value) { return value ? new Date(value).toLocaleString() : "-"; }
+    function status(value) { const valueText = String(value || "pending").toLowerCase(); return `<span class="status ${text(valueText)}">${text(valueText.toUpperCase())}</span>`; }
+    function showNotice(message, isError = false) { $("notice").textContent = message; $("notice").className = isError ? "notice error" : "notice"; }
+    async function safeRead(path) { try { const snapshot = await get(ref(db, path)); return snapshot.exists() ? snapshot.val() : {}; } catch (error) { console.warn(`Cannot read ${path}`, error); return {}; } }
+
+    // Firebase Auth users are not automatically copied into Realtime Database.
+    // This creates the admin's missing /users/UID profile once without overwriting an existing wallet.
+    async function ensureProfile(user) {
+      const profileRef = ref(db, `users/${user.uid}`);
+      const snapshot = await get(profileRef);
+      if (!snapshot.exists()) {
+        await set(profileRef, { uid: user.uid, email: user.email || "", name: "Admin", wallet: 0, totalDeposit: 0, totalWithdrawal: 0, active: true, createdAt: serverTimestamp() });
+      }
     }
 
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { location.href = "login.html"; return; }
+      if ((user.email || "").toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+        alert("Access denied. Admin only."); await signOut(auth); location.href = "login.html"; return;
+      }
+      $("adminEmail").textContent = user.email;
+      try { await ensureProfile(user); await loadAdminData(); }
+      catch (error) { console.error(error); showNotice("Profile could not be created. Check Realtime Database Rules.", true); }
+    });
 
-    /*
-       Email is used only as the initial
-       admin identification in the UI.
+    async function loadAdminData() {
+      showNotice("Loading dashboard…");
+      const [users, depositGroups, withdrawals] = await Promise.all([safeRead("users"), safeRead("depositRequests"), safeRead("withdrawals")]);
+      const userArray = Object.entries(users).map(([uid, user]) => ({ uid, ...user }));
+      $("usersCount").textContent = userArray.length;
+      $("totalWallet").textContent = amount(userArray.reduce((sum, user) => sum + Number(user.wallet || 0), 0));
+      usersTable.innerHTML = userArray.length ? userArray.map((user) => `<tr><td>${text(user.name || "-")}</td><td>${text(user.email || "-")}</td><td>${text(user.referralCode || "-")}</td><td>${amount(user.wallet)}</td><td>${amount(user.totalDeposit)}</td><td>${amount(user.totalWithdrawal)}</td><td>${user.active === false ? "Inactive" : "Active"}</td></tr>`).join("") : `<tr><td colspan="7" class="empty">No users found.</td></tr>`;
 
-       Firebase Database Rules should also
-       protect the admin data before launch.
-    */
+      // Deposit page saves data at /depositRequests/USER_UID/REQUEST_ID.
+      const deposits = Object.entries(depositGroups).flatMap(([uid, requests]) => Object.entries(requests || {}).map(([id, item]) => ({ id, uid: item.userId || uid, path: `depositRequests/${uid}/${id}`, email: item.userEmail || item.email || "-", amount: item.amount || item.amountUSDT || 0, method: item.method || "-", status: item.status || "pending", createdAt: item.createdAt || 0 })));
+      deposits.sort((a, b) => Number(b.createdAt) - Number(a.createdAt));
+      $("pendingDeposits").textContent = deposits.filter((item) => String(item.status).toLowerCase() === "pending").length;
+      depositsTable.innerHTML = deposits.length ? deposits.map((item) => `<tr><td>${text(date(item.createdAt))}</td><td>${text(item.email)}</td><td>${amount(item.amount)}</td><td>${text(item.method)}</td><td>${status(item.status)}</td><td>${String(item.status).toLowerCase() === "pending" ? `<button class="approve" data-deposit-path="${text(item.path)}">Approve</button>` : "-"}</td></tr>`).join("") : `<tr><td colspan="6" class="empty">No deposit requests.</td></tr>`;
 
-    if(
-        user.email.toLowerCase() !==
-        ADMIN_EMAIL.toLowerCase()
-    ){
-
-        alert("Access denied. Admin only.");
-
-        await signOut(auth);
-
-        location.href = "login.html";
-
-        return;
+      const withdrawalArray = Object.entries(withdrawals).map(([id, item]) => ({ id, ...item }));
+      withdrawalArray.sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
+      $("pendingWithdrawals").textContent = withdrawalArray.filter((item) => String(item.status || "").toLowerCase() === "pending").length;
+      withdrawalsTable.innerHTML = withdrawalArray.length ? withdrawalArray.map((item) => `<tr><td>${text(date(item.createdAt))}</td><td>${text(item.email || "-")}</td><td>${amount(item.amount || item.amountUSDT)}</td><td>${text(item.method || "-")}</td><td>${status(item.status)}</td><td>-</td></tr>`).join("") : `<tr><td colspan="6" class="empty">No withdrawal requests.</td></tr>`;
+      showNotice("Dashboard updated.");
     }
 
-
-    adminEmail.textContent = user.email;
-
-
-    await loadAdminData();
-
-});
-
-
-// --------------------------------
-// LOAD ALL ADMIN DATA
-// --------------------------------
-
-async function loadAdminData(){
-
-    try{
-
-        const usersSnap =
-            await get(ref(db,"users"));
-
-        const depositsSnap =
-            await get(ref(db,"deposits"));
-
-        const withdrawalsSnap =
-            await get(ref(db,"withdrawals"));
-
-
-        const users =
-            usersSnap.exists()
-            ? usersSnap.val()
-            : {};
-
-        const deposits =
-            depositsSnap.exists()
-            ? depositsSnap.val()
-            : {};
-
-        const withdrawals =
-            withdrawalsSnap.exists()
-            ? withdrawalsSnap.val()
-            : {};
-
-
-        // --------------------------
-        // USERS
-        // --------------------------
-
-        const userArray =
-            Object.entries(users).map(
-                ([uid,user]) => ({
-                    uid,
-                    ...user
-                })
-            );
-
-
-        usersCount.textContent =
-            userArray.length;
-
-
-        let walletTotal = 0;
-
-
-        userArray.forEach(user => {
-
-            walletTotal +=
-                Number(user.wallet || 0);
-
-        });
-
-
-        totalWallet.textContent =
-            "$" + walletTotal.toFixed(2);
-
-
-        if(userArray.length === 0){
-
-            usersTable.innerHTML = `
-                <tr>
-                    <td colspan="7" class="empty">
-                        No users found.
-                    </td>
-                </tr>
-            `;
-
-        }else{
-
-            usersTable.innerHTML =
-                userArray.map(user => `
-
-                <tr>
-
-                    <td>
-                        ${escapeHTML(user.name || "-")}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(user.email || "-")}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            user.referralCode || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        $${Number(
-                            user.wallet || 0
-                        ).toFixed(2)}
-                    </td>
-
-                    <td>
-                        $${Number(
-                            user.totalDeposit || 0
-                        ).toFixed(2)}
-                    </td>
-
-                    <td>
-                        $${Number(
-                            user.totalWithdrawal || 0
-                        ).toFixed(2)}
-                    </td>
-
-                    <td>
-                        ${user.active !== false
-                            ? "Active"
-                            : "Inactive"}
-                    </td>
-
-                </tr>
-
-            `).join("");
-
+    depositsTable.addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-deposit-path]");
+      if (!button || !confirm("Approve this deposit?")) return;
+      button.disabled = true;
+      try {
+        const depositRef = ref(db, button.dataset.depositPath);
+        const snapshot = await get(depositRef);
+        if (!snapshot.exists()) throw new Error("Deposit not found.");
+        const deposit = snapshot.val();
+        if (String(deposit.status || "pending").toLowerCase() !== "pending") throw new Error("This deposit is already processed.");
+        const uid = deposit.userId;
+        if (!uid) throw new Error("Deposit user ID is missing.");
+        const userRef = ref(db, `users/${uid}`);
+        const userSnapshot = await get(userRef);
+        // Older accounts can exist in Firebase Authentication without a matching
+        // Realtime Database profile. Create that missing profile before approval.
+        if (!userSnapshot.exists()) {
+          await set(userRef, { uid, email: deposit.userEmail || "", name: "User", wallet: 0, totalDeposit: 0, totalWithdrawal: 0, active: true, createdAt: serverTimestamp() });
         }
-
-
-        // --------------------------
-        // DEPOSITS
-        // --------------------------
-
-        const depositArray =
-            Object.entries(deposits).map(
-                ([id,deposit]) => ({
-                    id,
-                    ...deposit
-                })
-            );
-
-
-        const pendingDepositArray =
-            depositArray.filter(
-                d =>
-                String(d.status || "")
-                    .toLowerCase() === "pending"
-            );
-
-
-        pendingDeposits.textContent =
-            pendingDepositArray.length;
-
-
-        depositArray.sort(
-            (a,b) =>
-            Number(b.createdAt || 0) -
-            Number(a.createdAt || 0)
-        );
-
-
-        if(depositArray.length === 0){
-
-            depositsTable.innerHTML = `
-                <tr>
-                    <td colspan="8" class="empty">
-                        No deposit requests.
-                    </td>
-                </tr>
-            `;
-
-        }else{
-
-            depositsTable.innerHTML =
-                depositArray.map(deposit => `
-
-                <tr>
-
-                    <td>
-                        ${escapeHTML(
-                            formatDate(deposit.createdAt)
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            deposit.email || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        $${Number(
-                            deposit.amountUSDT || 0
-                        ).toFixed(2)}
-                    </td>
-
-                    <td>
-                        PKR ${Number(
-                            deposit.amountPKR || 0
-                        ).toLocaleString()}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            deposit.method || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            deposit.transactionId || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${statusHTML(deposit.status)}
-                    </td>
-
-                    <td>
-
-                        ${
-                            String(deposit.status)
-                                .toLowerCase() === "pending"
-
-                            ?
-
-                            `<button
-                                class="approve"
-                                onclick="approveDeposit('${escapeHTML(deposit.id)}')">
-                                Approve
-                            </button>`
-
-                            :
-
-                            "-"
-                        }
-
-                    </td>
-
-                </tr>
-
-            `).join("");
-
-        }
-
-
-        // --------------------------
-        // WITHDRAWALS
-        // --------------------------
-
-        const withdrawalArray =
-            Object.entries(withdrawals).map(
-                ([id,withdrawal]) => ({
-                    id,
-                    ...withdrawal
-                })
-            );
-
-
-        const pendingWithdrawalArray =
-            withdrawalArray.filter(
-                w =>
-                String(w.status || "")
-                    .toLowerCase() === "pending"
-            );
-
-
-        pendingWithdrawals.textContent =
-            pendingWithdrawalArray.length;
-
-
-        withdrawalArray.sort(
-            (a,b) =>
-            Number(b.createdAt || 0) -
-            Number(a.createdAt || 0)
-        );
-
-
-        if(withdrawalArray.length === 0){
-
-            withdrawalsTable.innerHTML = `
-                <tr>
-                    <td colspan="9" class="empty">
-                        No withdrawal requests.
-                    </td>
-                </tr>
-            `;
-
-        }else{
-
-            withdrawalsTable.innerHTML =
-                withdrawalArray.map(withdrawal => `
-
-                <tr>
-
-                    <td>
-                        ${escapeHTML(
-                            formatDate(
-                                withdrawal.createdAt
-                            )
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            withdrawal.email || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        $${Number(
-                            withdrawal.amountUSDT || 0
-                        ).toFixed(2)}
-                    </td>
-
-                    <td>
-                        PKR ${Number(
-                            withdrawal.amountPKR || 0
-                        ).toLocaleString()}
-                    </td>
-
-                    <td>
-                        $${Number(
-                            withdrawal.feeUSDT || 0
-                        ).toFixed(2)}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            withdrawal.method || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            withdrawal.accountNumber || "-"
-                        )}
-                    </td>
-
-                    <td>
-                        ${statusHTML(
-                            withdrawal.status
-                        )}
-                    </td>
-
-                    <td>
-
-                        ${
-                            String(withdrawal.status)
-                                .toLowerCase() === "pending"
-
-                            ?
-
-                            `<button
-                                class="approve"
-                                onclick="approveWithdrawal('${escapeHTML(withdrawal.id)}')">
-                                Approve
-                            </button>`
-
-                            :
-
-                            "-"
-                        }
-
-                    </td>
-
-                </tr>
-
-            `).join("");
-
-        }
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Unable to load admin data."
-        );
-
-    }
-
-}
-
-
-// --------------------------------
-// APPROVE DEPOSIT
-// --------------------------------
-
-window.approveDeposit =
-async function(id){
-
-    if(!confirm(
-        "Approve this deposit?"
-    )){
-        return;
-    }
-
-
-    try{
-
-        const depositSnap =
-            await get(
-                ref(db,"deposits/" + id)
-            );
-
-
-        if(!depositSnap.exists()){
-
-            alert("Deposit not found.");
-
-            return;
-        }
-
-
-        const deposit =
-            depositSnap.val();
-
-
-        if(
-            String(deposit.status)
-                .toLowerCase() !== "pending"
-        ){
-
-            alert(
-                "This deposit has already been processed."
-            );
-
-            return;
-        }
-
-
-        const userRef =
-            ref(
-                db,
-                "users/" + deposit.uid
-            );
-
-
-        const userSnap =
-            await get(userRef);
-
-
-        if(!userSnap.exists()){
-
-            alert("User not found.");
-
-            return;
-        }
-
-
-        const user =
-            userSnap.val();
-
-
-        const depositAmount =
-            Number(deposit.amountUSDT || 0);
-
-
-        const currentWallet =
-            Number(user.wallet || 0);
-
-
-        const currentDeposit =
-            Number(user.totalDeposit || 0);
-
-
-        const updates = {};
-
-
-        updates[
-            "deposits/" + id + "/status"
-        ] = "approved";
-
-
-        updates[
-            "deposits/" + id + "/approvedAt"
-        ] = Date.now();
-
-
-        updates[
-            "users/" + deposit.uid + "/wallet"
-        ] =
-            currentWallet +
-            depositAmount;
-
-
-        updates[
-            "users/" + deposit.uid + "/totalDeposit"
-        ] =
-            currentDeposit +
-            depositAmount;
-
-
-        await update(
-            ref(db),
-            updates
-        );
-
-
-        alert(
-            "Deposit approved successfully."
-        );
-
-
-        await loadAdminData();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Deposit approval failed."
-        );
-
-    }
-
-};
-
-
-// --------------------------------
-// APPROVE WITHDRAWAL
-// --------------------------------
-
-window.approveWithdrawal =
-async function(id){
-
-    if(!confirm(
-        "Approve this withdrawal?"
-    )){
-        return;
-    }
-
-
-    try{
-
-        const withdrawalSnap =
-            await get(
-                ref(db,"withdrawals/" + id)
-            );
-
-
-        if(!withdrawalSnap.exists()){
-
-            alert("Withdrawal not found.");
-
-            return;
-        }
-
-
-        const withdrawal =
-            withdrawalSnap.val();
-
-
-        if(
-            String(withdrawal.status)
-                .toLowerCase() !== "pending"
-        ){
-
-            alert(
-                "This withdrawal has already been processed."
-            );
-
-            return;
-        }
-
-
-        const userRef =
-            ref(
-                db,
-                "users/" + withdrawal.uid
-            );
-
-
-        const userSnap =
-            await get(userRef);
-
-
-        if(!userSnap.exists()){
-
-            alert("User not found.");
-
-            return;
-        }
-
-
-        const user =
-            userSnap.val();
-
-
-        const amount =
-            Number(
-                withdrawal.amountUSDT || 0
-            );
-
-
-        const fee =
-            Number(
-                withdrawal.feeUSDT || 0
-            );
-
-
-        const totalDeduction =
-            amount + fee;
-
-
-        const wallet =
-            Number(user.wallet || 0);
-
-
-        if(totalDeduction > wallet){
-
-            alert(
-                "Insufficient wallet balance."
-            );
-
-            return;
-        }
-
-
-        const totalWithdrawal =
-            Number(
-                user.totalWithdrawal || 0
-            );
-
-
-        const updates = {};
-
-
-        updates[
-            "withdrawals/" + id + "/status"
-        ] = "approved";
-
-
-        updates[
-            "withdrawals/" + id + "/approvedAt"
-        ] = Date.now();
-
-
-        updates[
-            "users/" + withdrawal.uid + "/wallet"
-        ] =
-            wallet - totalDeduction;
-
-
-        updates[
-            "users/" + withdrawal.uid +
-            "/totalWithdrawal"
-        ] =
-            totalWithdrawal + amount;
-
-
-        await update(
-            ref(db),
-            updates
-        );
-
-
-        alert(
-            "Withdrawal approved successfully."
-        );
-
-
-        await loadAdminData();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Withdrawal approval failed."
-        );
-
-    }
-
-};
-
-
-// --------------------------------
-// LOGOUT
-// --------------------------------
-
-document
-.getElementById("logoutBtn")
-.addEventListener("click", async () => {
-
-    await signOut(auth);
-
-    location.href = "login.html";
-
-});
-
-</script>
-
+        const user = userSnapshot.exists() ? userSnapshot.val() : { wallet: 0, totalDeposit: 0 };
+        const depositAmount = Number(deposit.amount || 0);
+        if (!Number.isFinite(depositAmount) || depositAmount <= 0) throw new Error("Invalid deposit amount.");
+        await update(ref(db), { [`${button.dataset.depositPath}/status`]: "approved", [`${button.dataset.depositPath}/approvedAt`]: Date.now(), [`users/${uid}/wallet`]: Number(user.wallet || 0) + depositAmount, [`users/${uid}/totalDeposit`]: Number(user.totalDeposit || 0) + depositAmount });
+        alert("Deposit approved successfully."); await loadAdminData();
+      } catch (error) { console.error(error); alert(error.message || "Deposit approval failed."); }
+      finally { button.disabled = false; }
+    });
+
+    $("logoutBtn").addEventListener("click", async () => { await signOut(auth); location.href = "login.html"; });
+  </script>
 </body>
 </html>
