@@ -20,11 +20,12 @@
     }
 
     .navbar{
-      height:70px;
+      min-height:70px;
       padding:0 6%;
       display:flex;
       align-items:center;
       justify-content:space-between;
+      gap:15px;
       background:#081528;
       border-bottom:1px solid rgba(255,255,255,.08);
     }
@@ -37,13 +38,27 @@
       -webkit-text-fill-color:transparent;
     }
 
-    .back{
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .back,
+    .deposit-nav{
       color:#fff;
       text-decoration:none;
-      background:#16263f;
       padding:10px 17px;
       border-radius:9px;
       font-size:14px;
+    }
+
+    .back{
+      background:#16263f;
+    }
+
+    .deposit-nav{
+      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
     }
 
     .container{
@@ -54,7 +69,7 @@
 
     .heading{
       text-align:center;
-      margin-bottom:35px;
+      margin-bottom:25px;
     }
 
     .heading h1{
@@ -65,6 +80,55 @@
     .heading p{
       color:#94a3b8;
       font-size:15px;
+    }
+
+    .wallet-box{
+      max-width:500px;
+      margin:0 auto 35px;
+      padding:20px;
+      border-radius:18px;
+      background:linear-gradient(145deg,#0c1b31,#101e36);
+      border:1px solid rgba(0,234,255,.18);
+      box-shadow:0 12px 35px rgba(0,0,0,.25);
+      text-align:center;
+    }
+
+    .wallet-label{
+      color:#94a3b8;
+      font-size:13px;
+      margin-bottom:8px;
+    }
+
+    .wallet-balance{
+      font-size:32px;
+      font-weight:800;
+      margin-bottom:15px;
+    }
+
+    .wallet-actions{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .wallet-btn{
+      border:none;
+      padding:10px 16px;
+      border-radius:9px;
+      color:#fff;
+      font-weight:bold;
+      cursor:pointer;
+      text-decoration:none;
+      font-size:13px;
+    }
+
+    .deposit-btn{
+      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
+    }
+
+    .dashboard-btn{
+      background:#16263f;
     }
 
     .plans{
@@ -132,6 +196,7 @@
     .detail{
       display:flex;
       justify-content:space-between;
+      gap:10px;
       margin:10px 0;
       font-size:13px;
       color:#94a3b8;
@@ -140,6 +205,7 @@
     .detail span:last-child{
       color:#fff;
       font-weight:bold;
+      text-align:right;
     }
 
     .select-btn{
@@ -158,6 +224,11 @@
       opacity:.9;
     }
 
+    .select-btn:disabled{
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
     .note{
       margin-top:30px;
       padding:18px;
@@ -170,6 +241,26 @@
       text-align:center;
     }
 
+    .message{
+      position:fixed;
+      left:50%;
+      bottom:25px;
+      transform:translateX(-50%);
+      width:min(90%,420px);
+      padding:14px 18px;
+      border-radius:12px;
+      background:#13243b;
+      border:1px solid rgba(255,255,255,.12);
+      text-align:center;
+      font-size:14px;
+      display:none;
+      z-index:100;
+    }
+
+    .message.show{
+      display:block;
+    }
+
     @media(max-width:1000px){
       .plans{
         grid-template-columns:repeat(2,1fr);
@@ -177,6 +268,20 @@
     }
 
     @media(max-width:600px){
+      .navbar{
+        padding:12px 4%;
+      }
+
+      .nav-right{
+        gap:6px;
+      }
+
+      .back,
+      .deposit-nav{
+        padding:8px 10px;
+        font-size:12px;
+      }
+
       .container{
         width:92%;
       }
@@ -188,6 +293,10 @@
       .heading h1{
         font-size:29px;
       }
+
+      .wallet-balance{
+        font-size:28px;
+      }
     }
   </style>
 </head>
@@ -196,14 +305,38 @@
 
   <nav class="navbar">
     <div class="logo">NEXORA</div>
-    <a href="dashboard.html" class="back">← Dashboard</a>
+
+    <div class="nav-right">
+      <a href="deposit.html" class="deposit-nav">+ Deposit</a>
+      <a href="dashboard.html" class="back">← Dashboard</a>
+    </div>
   </nav>
 
   <main class="container">
 
     <div class="heading">
       <h1>Choose Your Plan</h1>
-      <p>Select a plan that fits your account.</p>
+      <p>Use your available USDT wallet balance to purchase a plan.</p>
+    </div>
+
+    <div class="wallet-box">
+
+      <div class="wallet-label">Available Wallet Balance</div>
+
+      <div class="wallet-balance" id="walletBalance">
+        $0.00 USDT
+      </div>
+
+      <div class="wallet-actions">
+        <a href="deposit.html" class="wallet-btn deposit-btn">
+          + Deposit USDT
+        </a>
+
+        <a href="dashboard.html" class="wallet-btn dashboard-btn">
+          Dashboard
+        </a>
+      </div>
+
     </div>
 
     <div class="plans">
@@ -219,10 +352,12 @@
             <span>Plan Value</span>
             <span>$5</span>
           </div>
+
           <div class="detail">
             <span>Withdrawal Requirement</span>
             <span>$10</span>
           </div>
+
           <div class="detail">
             <span>Referral</span>
             <span>20%</span>
@@ -230,7 +365,7 @@
         </div>
 
         <button class="select-btn" data-plan="5">
-          Select Plan
+          Buy Plan
         </button>
       </div>
 
@@ -246,10 +381,12 @@
             <span>Plan Value</span>
             <span>$10</span>
           </div>
+
           <div class="detail">
             <span>Withdrawal Requirement</span>
             <span>$20</span>
           </div>
+
           <div class="detail">
             <span>Referral</span>
             <span>20%</span>
@@ -257,7 +394,7 @@
         </div>
 
         <button class="select-btn" data-plan="10">
-          Select Plan
+          Buy Plan
         </button>
       </div>
 
@@ -273,10 +410,12 @@
             <span>Plan Value</span>
             <span>$20</span>
           </div>
+
           <div class="detail">
             <span>Withdrawal Requirement</span>
             <span>$40</span>
           </div>
+
           <div class="detail">
             <span>Referral</span>
             <span>20%</span>
@@ -284,7 +423,7 @@
         </div>
 
         <button class="select-btn" data-plan="20">
-          Select Plan
+          Buy Plan
         </button>
       </div>
 
@@ -302,10 +441,12 @@
             <span>Plan Value</span>
             <span>$50</span>
           </div>
+
           <div class="detail">
             <span>Withdrawal Requirement</span>
             <span>$100</span>
           </div>
+
           <div class="detail">
             <span>Referral</span>
             <span>20%</span>
@@ -313,7 +454,7 @@
         </div>
 
         <button class="select-btn" data-plan="50">
-          Select Plan
+          Buy Plan
         </button>
       </div>
 
@@ -329,10 +470,12 @@
             <span>Plan Value</span>
             <span>$100</span>
           </div>
+
           <div class="detail">
             <span>Withdrawal Requirement</span>
             <span>$200</span>
           </div>
+
           <div class="detail">
             <span>Referral</span>
             <span>20%</span>
@@ -340,7 +483,7 @@
         </div>
 
         <button class="select-btn" data-plan="100">
-          Select Plan
+          Buy Plan
         </button>
       </div>
 
@@ -356,10 +499,12 @@
             <span>Plan Value</span>
             <span>$200</span>
           </div>
+
           <div class="detail">
             <span>Withdrawal Requirement</span>
             <span>$400</span>
           </div>
+
           <div class="detail">
             <span>Referral</span>
             <span>20%</span>
@@ -367,7 +512,7 @@
         </div>
 
         <button class="select-btn" data-plan="200">
-          Select Plan
+          Buy Plan
         </button>
       </div>
 
@@ -385,10 +530,12 @@
             <span>Plan Value</span>
             <span>$500</span>
           </div>
+
           <div class="detail">
             <span>Withdrawal Requirement</span>
             <span>$1,000</span>
           </div>
+
           <div class="detail">
             <span>Referral</span>
             <span>20%</span>
@@ -396,19 +543,20 @@
         </div>
 
         <button class="select-btn" data-plan="500">
-          Select Plan
+          Buy Plan
         </button>
       </div>
 
     </div>
 
-
     <div class="note">
-      Plan selection will be connected to the Nexora deposit and
-      Firebase transaction system in the next step.
+      Plans are purchased directly from your available USDT wallet balance.
+      If your balance is insufficient, deposit USDT first.
     </div>
 
   </main>
+
+  <div class="message" id="message"></div>
 
 
   <script type="module">
@@ -421,6 +569,15 @@
       getAuth,
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      get,
+      runTransaction,
+      push,
+      set
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
     const firebaseConfig = {
@@ -446,28 +603,350 @@
 
     const auth = getAuth(app);
 
+    const db = getDatabase(app);
 
-    onAuthStateChanged(auth, (user) => {
 
-      if (!user) {
-        window.location.href = "login.html";
+    const walletBalanceEl =
+      document.getElementById("walletBalance");
+
+    const messageEl =
+      document.getElementById("message");
+
+
+    let currentUser = null;
+
+
+    function showMessage(text){
+
+      messageEl.textContent = text;
+
+      messageEl.classList.add("show");
+
+      setTimeout(() => {
+        messageEl.classList.remove("show");
+      }, 3500);
+
+    }
+
+
+    function money(value){
+
+      return Number(value || 0).toFixed(2);
+
+    }
+
+
+    async function loadWallet(uid){
+
+      try{
+
+        const snapshot =
+          await get(ref(db, `users/${uid}`));
+
+        if(!snapshot.exists()){
+
+          walletBalanceEl.textContent =
+            "$0.00 USDT";
+
+          return;
+
+        }
+
+        const userData = snapshot.val();
+
+        const wallet =
+          Number(userData.wallet || 0);
+
+        walletBalanceEl.textContent =
+          `$${money(wallet)} USDT`;
+
+      }catch(error){
+
+        console.error(error);
+
+        showMessage(
+          "Unable to load wallet balance."
+        );
+
       }
 
-    });
+    }
 
 
-    document.querySelectorAll(".select-btn").forEach(button => {
+    async function buyPlan(planAmount){
 
-      button.addEventListener("click", () => {
+      if(!currentUser){
 
-        const plan = button.dataset.plan;
+        window.location.href = "login.html";
 
-        window.location.href =
-          "deposit.html?plan=" + encodeURIComponent(plan);
+        return;
+
+      }
+
+
+      planAmount = Number(planAmount);
+
+
+      if(!Number.isFinite(planAmount) || planAmount <= 0){
+
+        showMessage("Invalid plan.");
+
+        return;
+
+      }
+
+
+      const userRef =
+        ref(db, `users/${currentUser.uid}`);
+
+
+      const purchaseRef =
+        push(ref(db, "planPurchases"));
+
+
+      let purchaseCompleted = false;
+
+
+      try{
+
+        const transactionResult =
+          await runTransaction(
+            userRef,
+            (userData) => {
+
+              if(userData === null){
+
+                return;
+
+              }
+
+
+              const wallet =
+                Number(userData.wallet || 0);
+
+
+              if(wallet < planAmount){
+
+                return;
+
+              }
+
+
+              const activePlans =
+                Number(userData.activePlans || 0);
+
+
+              const totalDeposit =
+                Number(userData.totalDeposit || 0);
+
+
+              const totalPlanPurchase =
+                Number(userData.totalPlanPurchase || 0);
+
+
+              return {
+
+                ...userData,
+
+                wallet:
+                  Number(
+                    (wallet - planAmount).toFixed(8)
+                  ),
+
+                activePlans:
+                  activePlans + 1,
+
+                totalPlanPurchase:
+                  Number(
+                    (totalPlanPurchase + planAmount).toFixed(8)
+                  ),
+
+                updatedAt:
+                  Date.now(),
+
+                lastPlanPurchase:
+                  planAmount,
+
+                lastPlanPurchaseAt:
+                  Date.now()
+
+              };
+
+            }
+          );
+
+
+        if(!transactionResult.committed){
+
+          const latest =
+            await get(userRef);
+
+          if(!latest.exists()){
+
+            showMessage(
+              "User account not found."
+            );
+
+            return;
+
+          }
+
+
+          const latestData =
+            latest.val();
+
+
+          const latestWallet =
+            Number(latestData.wallet || 0);
+
+
+          if(latestWallet < planAmount){
+
+            showMessage(
+              `Insufficient balance. You need $${money(planAmount)} USDT.`
+            );
+
+            return;
+
+          }
+
+
+          showMessage(
+            "Plan purchase could not be completed. Please try again."
+          );
+
+          return;
+
+        }
+
+
+        purchaseCompleted = true;
+
+
+        const purchaseData = {
+
+          id: purchaseRef.key,
+
+          uid: currentUser.uid,
+
+          email: currentUser.email || "",
+
+          planAmount: planAmount,
+
+          currency: "USDT",
+
+          status: "active",
+
+          source: "wallet",
+
+          createdAt: Date.now()
+
+        };
+
+
+        await set(
+          purchaseRef,
+          purchaseData
+        );
+
+
+        await loadWallet(currentUser.uid);
+
+
+        showMessage(
+          `$${money(planAmount)} plan purchased successfully.`
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "Plan purchase error:",
+          error
+        );
+
+
+        if(purchaseCompleted){
+
+          showMessage(
+            "Plan was purchased, but the transaction record could not be saved."
+          );
+
+        }else{
+
+          showMessage(
+            "Plan purchase failed. Please try again."
+          );
+
+        }
+
+      }
+
+    }
+
+
+    onAuthStateChanged(
+      auth,
+      async (user) => {
+
+        if(!user){
+
+          window.location.href =
+            "login.html";
+
+          return;
+
+        }
+
+
+        currentUser = user;
+
+
+        await loadWallet(user.uid);
+
+      }
+    );
+
+
+    document
+      .querySelectorAll(".select-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          async () => {
+
+            const plan =
+              Number(button.dataset.plan);
+
+
+            const oldText =
+              button.textContent;
+
+
+            button.disabled = true;
+
+            button.textContent =
+              "Processing...";
+
+
+            try{
+
+              await buyPlan(plan);
+
+            }finally{
+
+              button.disabled = false;
+
+              button.textContent =
+                oldText;
+
+            }
+
+          }
+        );
 
       });
-
-    });
 
   </script>
 
