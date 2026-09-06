@@ -16,8 +16,8 @@
     body {
       min-height: 100vh;
       background:
-        radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.15), transparent 30%),
-        radial-gradient(circle at 90% 80%, rgba(255, 64, 129, 0.15), transparent 30%),
+        radial-gradient(circle at 10% 20%, rgba(0,229,255,.15), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(255,64,129,.15), transparent 30%),
         #07111f;
       color: #fff;
       display: flex;
@@ -34,9 +34,9 @@
       grid-template-columns: 1fr 1fr;
       border-radius: 30px;
       overflow: hidden;
-      background: rgba(13, 26, 45, 0.95);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+      background: rgba(13,26,45,.95);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
     }
 
     .left {
@@ -47,9 +47,9 @@
       background:
         linear-gradient(
           145deg,
-          rgba(0, 198, 255, 0.14),
-          rgba(124, 77, 255, 0.13),
-          rgba(255, 64, 129, 0.12)
+          rgba(0,198,255,.14),
+          rgba(124,77,255,.13),
+          rgba(255,64,129,.12)
         );
     }
 
@@ -57,7 +57,7 @@
       font-size: 34px;
       font-weight: 900;
       letter-spacing: 1px;
-      background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
+      background: linear-gradient(90deg,#00e5ff,#7c4dff,#ff4081);
       -webkit-background-clip: text;
       color: transparent;
       margin-bottom: 30px;
@@ -70,7 +70,7 @@
     }
 
     .gradient {
-      background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
+      background: linear-gradient(90deg,#00e5ff,#7c4dff,#ff4081);
       -webkit-background-clip: text;
       color: transparent;
     }
@@ -101,7 +101,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #00c6ff, #7c4dff);
+      background: linear-gradient(135deg,#00c6ff,#7c4dff);
       flex-shrink: 0;
     }
 
@@ -150,19 +150,19 @@
       top: 50%;
       transform: translateY(-50%);
       font-size: 17px;
-      opacity: 0.7;
+      opacity: .7;
     }
 
     input {
       width: 100%;
       padding: 15px 15px 15px 45px;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,.1);
       outline: none;
-      background: rgba(255,255,255,0.045);
+      background: rgba(255,255,255,.045);
       color: white;
       font-size: 14px;
-      transition: 0.3s;
+      transition: .3s;
     }
 
     input::placeholder {
@@ -171,7 +171,7 @@
 
     input:focus {
       border-color: #00d9ff;
-      box-shadow: 0 0 0 3px rgba(0,217,255,0.08);
+      box-shadow: 0 0 0 3px rgba(0,217,255,.08);
     }
 
     .password-wrap {
@@ -223,18 +223,17 @@
       color: white;
       font-size: 15px;
       font-weight: 800;
-      background: linear-gradient(90deg, #00c6ff, #7c4dff, #ff4081);
-      box-shadow: 0 12px 30px rgba(124,77,255,0.2);
-      transition: 0.3s;
+      background: linear-gradient(90deg,#00c6ff,#7c4dff,#ff4081);
+      box-shadow: 0 12px 30px rgba(124,77,255,.2);
+      transition: .3s;
     }
 
     .register-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 15px 35px rgba(124,77,255,0.3);
     }
 
     .register-btn:disabled {
-      opacity: 0.7;
+      opacity: .7;
       cursor: not-allowed;
       transform: none;
     }
@@ -261,10 +260,6 @@
       font-size: 13px;
     }
 
-    .back-home a:hover {
-      color: white;
-    }
-
     .message {
       display: none;
       margin-bottom: 18px;
@@ -276,12 +271,12 @@
 
     .message.error {
       display: block;
-      background: rgba(255, 64, 129, 0.12);
-      border: 1px solid rgba(255, 64, 129, 0.3);
+      background: rgba(255,64,129,.12);
+      border: 1px solid rgba(255,64,129,.3);
       color: #ff9fbd;
     }
 
-    @media (max-width: 850px) {
+    @media(max-width:850px) {
       .wrapper {
         grid-template-columns: 1fr;
       }
@@ -299,7 +294,7 @@
       }
     }
 
-    @media (max-width: 500px) {
+    @media(max-width:500px) {
       body {
         padding: 12px;
       }
@@ -329,417 +324,519 @@
 
 <body>
 
-  <div class="wrapper">
+<div class="wrapper">
 
-    <!-- LEFT SIDE -->
-    <div class="left">
+  <div class="left">
 
-      <div class="logo">NEXORA</div>
+    <div class="logo">NEXORA</div>
 
-      <h1>
-        Start Your
-        <span class="gradient">Journey.</span>
-      </h1>
+    <h1>
+      Start Your
+      <span class="gradient">Journey.</span>
+    </h1>
 
-      <p>
-        Create your Nexora account and access your personal
-        dashboard, plans, transactions and referral tools
-        from one place.
-      </p>
+    <p>
+      Create your Nexora account and access your personal
+      dashboard, plans, transactions and referral tools
+      from one place.
+    </p>
 
-      <div class="benefits">
+    <div class="benefits">
 
-        <div class="benefit">
-          <div class="benefit-icon">✓</div>
-          <span>Simple account management</span>
-        </div>
-
-        <div class="benefit">
-          <div class="benefit-icon">⚡</div>
-          <span>Fast and modern dashboard</span>
-        </div>
-
-        <div class="benefit">
-          <div class="benefit-icon">👥</div>
-          <span>Personal referral tools</span>
-        </div>
-
-        <div class="benefit">
-          <div class="benefit-icon">🔐</div>
-          <span>Secure authentication</span>
-        </div>
-
+      <div class="benefit">
+        <div class="benefit-icon">✓</div>
+        <span>Simple account management</span>
       </div>
 
-    </div>
+      <div class="benefit">
+        <div class="benefit-icon">⚡</div>
+        <span>Fast and modern dashboard</span>
+      </div>
 
+      <div class="benefit">
+        <div class="benefit-icon">👥</div>
+        <span>Personal referral tools</span>
+      </div>
 
-    <!-- RIGHT SIDE -->
-    <div class="right">
-
-      <div class="form-box">
-
-        <h2>Create Account</h2>
-
-        <p class="subtitle">
-          Join Nexora by creating your account.
-        </p>
-
-        <div id="message" class="message"></div>
-
-        <form id="registerForm">
-
-          <div class="input-group">
-            <label>Full Name</label>
-
-            <div class="input-box">
-              <span>👤</span>
-
-              <input
-                type="text"
-                id="name"
-                placeholder="Enter your full name"
-                required
-              >
-            </div>
-          </div>
-
-
-          <div class="input-group">
-            <label>Email Address</label>
-
-            <div class="input-box">
-              <span>✉️</span>
-
-              <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                required
-              >
-            </div>
-          </div>
-
-
-          <div class="input-group">
-            <label>Password</label>
-
-            <div class="input-box password-wrap">
-
-              <span>🔒</span>
-
-              <input
-                type="password"
-                id="password"
-                placeholder="Create a password"
-                minlength="6"
-                required
-              >
-
-              <span
-                class="show-password"
-                id="showPassword"
-              >👁</span>
-
-            </div>
-          </div>
-
-
-          <div class="input-group">
-            <label>
-              Referral Code <small>(Optional)</small>
-            </label>
-
-            <div class="input-box">
-              <span>🔗</span>
-
-              <input
-                type="text"
-                id="referral"
-                placeholder="Enter referral code"
-              >
-            </div>
-          </div>
-
-
-          <label class="terms">
-
-            <input
-              type="checkbox"
-              id="terms"
-              required
-            >
-
-            <span>
-              I agree to the
-              <a href="#">Terms & Conditions</a>
-              and
-              <a href="#">Privacy Policy</a>.
-            </span>
-
-          </label>
-
-
-          <button
-            type="submit"
-            class="register-btn"
-            id="registerBtn"
-          >
-            Create Account →
-          </button>
-
-        </form>
-
-
-        <div class="login-text">
-          Already have an account?
-          <a href="login.html">Login</a>
-        </div>
-
-
-        <div class="back-home">
-          <a href="index.html">← Back to Home</a>
-        </div>
-
+      <div class="benefit">
+        <div class="benefit-icon">🔐</div>
+        <span>Secure authentication</span>
       </div>
 
     </div>
 
   </div>
 
+  <div class="right">
 
-  <!-- FIREBASE -->
-  <script type="module">
+    <div class="form-box">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+      <h2>Create Account</h2>
 
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      updateProfile
+      <p class="subtitle">
+        Join Nexora by creating your account.
+      </p>
+
+      <div id="message" class="message"></div>
+
+      <form id="registerForm">
+
+        <div class="input-group">
+          <label>Full Name</label>
+
+          <div class="input-box">
+            <span>👤</span>
+
+            <input
+              type="text"
+              id="name"
+              placeholder="Enter your full name"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Email Address</label>
+
+          <div class="input-box">
+            <span>✉️</span>
+
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+
+          <div class="input-box password-wrap">
+
+            <span>🔒</span>
+
+            <input
+              type="password"
+              id="password"
+              placeholder="Create a password"
+              minlength="6"
+              required
+            >
+
+            <span
+              class="show-password"
+              id="showPassword"
+            >👁</span>
+
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>
+            Referral Code <small>(Optional)</small>
+          </label>
+
+          <div class="input-box">
+            <span>🔗</span>
+
+            <input
+              type="text"
+              id="referral"
+              placeholder="Enter referral code"
+            >
+          </div>
+        </div>
+
+        <label class="terms">
+
+          <input
+            type="checkbox"
+            id="terms"
+            required
+          >
+
+          <span>
+            I agree to the
+            <a href="#">Terms & Conditions</a>
+            and
+            <a href="#">Privacy Policy</a>.
+          </span>
+
+        </label>
+
+        <button
+          type="submit"
+          class="register-btn"
+          id="registerBtn"
+        >
+          Create Account →
+        </button>
+
+      </form>
+
+      <div class="login-text">
+        Already have an account?
+        <a href="login.html">Login</a>
+      </div>
+
+      <div class="back-home">
+        <a href="index.html">← Back to Home</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  get
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+
+  authDomain: "nexora-adef3.firebaseapp.com",
+
+  projectId: "nexora-adef3",
+
+  storageBucket: "nexora-adef3.firebasestorage.app",
+
+  messagingSenderId: "318277373899",
+
+  appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+
+  measurementId: "G-WN2V48SC4T"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+
+/* =========================
+   AUTO READ REFERRAL FROM URL
+   Example:
+   register.html?ref=MC
+========================= */
+
+const urlParams =
+  new URLSearchParams(window.location.search);
+
+const urlReferral =
+  (urlParams.get("ref") || "").trim();
+
+const referralInput =
+  document.getElementById("referral");
+
+if (urlReferral) {
+  referralInput.value = urlReferral;
+}
+
+
+/* =========================
+   PASSWORD SHOW / HIDE
+========================= */
+
+document
+  .getElementById("showPassword")
+  .addEventListener("click", function () {
+
+    const password =
+      document.getElementById("password");
+
+    if (password.type === "password") {
+
+      password.type = "text";
+      this.textContent = "🙈";
+
+    } else {
+
+      password.type = "password";
+      this.textContent = "👁";
+
     }
-      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-    import {
-      getDatabase,
-      ref,
-      set
+  });
+
+
+/* =========================
+   REGISTRATION
+========================= */
+
+document
+  .getElementById("registerForm")
+  .addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const name =
+      document.getElementById("name").value.trim();
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    const manualReferral =
+      document.getElementById("referral").value.trim();
+
+    const referral =
+      manualReferral || urlReferral;
+
+    const terms =
+      document.getElementById("terms").checked;
+
+    const button =
+      document.getElementById("registerBtn");
+
+    const message =
+      document.getElementById("message");
+
+
+    message.className = "message";
+    message.textContent = "";
+
+
+    if (!terms) {
+
+      message.className = "message error";
+      message.textContent =
+        "Please accept the Terms & Conditions.";
+
+      return;
     }
-      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
-      authDomain: "nexora-adef3.firebaseapp.com",
-      projectId: "nexora-adef3",
-      storageBucket: "nexora-adef3.firebasestorage.app",
-      messagingSenderId: "318277373899",
-      appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
-      measurementId: "G-WN2V48SC4T"
-    };
+    if (password.length < 6) {
+
+      message.className = "message error";
+      message.textContent =
+        "Password must be at least 6 characters.";
+
+      return;
+    }
 
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
+    try {
 
-    const auth = getAuth(app);
-
-    const db = getDatabase(app);
+      button.disabled = true;
+      button.textContent = "Creating Account...";
 
 
-    // Password Show / Hide
-    document
-      .getElementById("showPassword")
-      .addEventListener("click", function () {
+      /* CREATE AUTH ACCOUNT */
 
-        const password =
-          document.getElementById("password");
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
 
-        if (password.type === "password") {
 
-          password.type = "text";
-          this.textContent = "🙈";
+      const user =
+        userCredential.user;
 
-        } else {
 
-          password.type = "password";
-          this.textContent = "👁";
+      /* SAVE NAME IN AUTH */
 
-        }
-
+      await updateProfile(user, {
+        displayName: name
       });
 
 
-    // Registration
-    document
-      .getElementById("registerForm")
-      .addEventListener("submit", async function (event) {
+      /*
+        IMPORTANT:
 
-        event.preventDefault();
+        referralCode = NEW USER'S OWN CODE
+        referredBy   = PARENT/INVITER CODE
+      */
 
-
-        const name =
-          document.getElementById("name").value.trim();
-
-        const email =
-          document.getElementById("email").value.trim();
-
-        const password =
-          document.getElementById("password").value;
-
-        const referral =
-          document.getElementById("referral").value.trim();
-
-        const terms =
-          document.getElementById("terms").checked;
-
-        const button =
-          document.getElementById("registerBtn");
-
-        const message =
-          document.getElementById("message");
+      const ownReferralCode =
+        "NXR" +
+        user.uid
+          .slice(0, 6)
+          .toUpperCase();
 
 
-        message.className = "message";
-        message.textContent = "";
+      /* =========================
+         OPTIONAL REFERRAL CHECK
 
+         If MC exists, find the
+         user whose referralCode = MC
+      ========================= */
 
-        if (!terms) {
+      let referredBy = "";
 
-          message.className = "message error";
-          message.textContent =
-            "Please accept the Terms & Conditions.";
+      if (referral) {
 
-          return;
-        }
+        const usersSnapshot =
+          await get(ref(db, "users"));
 
+        if (usersSnapshot.exists()) {
 
-        if (password.length < 6) {
+          const users =
+            usersSnapshot.val();
 
-          message.className = "message error";
-          message.textContent =
-            "Password must be at least 6 characters.";
-
-          return;
-        }
-
-
-        try {
-
-          button.disabled = true;
-          button.textContent = "Creating Account...";
-
-
-          // Create Firebase Auth account
-          const userCredential =
-            await createUserWithEmailAndPassword(
-              auth,
-              email,
-              password
+          const matchingUser =
+            Object.values(users).find(
+              u =>
+                u &&
+                String(u.referralCode || "")
+                  .toUpperCase() ===
+                referral.toUpperCase()
             );
 
+          if (matchingUser) {
 
-          const user =
-            userCredential.user;
-
-
-          // Save name in Firebase Auth
-          await updateProfile(user, {
-            displayName: name
-          });
-
-
-          // Create user data in Realtime Database
-          await set(
-            ref(db, "users/" + user.uid),
-            {
-              uid: user.uid,
-              name: name,
-              email: email,
-
-              referralCode: referral,
-
-              wallet: 0,
-
-              totalDeposit: 0,
-
-              totalWithdrawal: 0,
-
-              activePlans: {},
-
-              createdAt: Date.now()
-            }
-          );
-
-
-          alert("Account created successfully! 🎉");
-
-
-          // Go to dashboard
-          window.location.href =
-            "dashboard.html";
-
-
-        } catch (error) {
-
-          console.error("Registration Error:", error);
-
-
-          message.className = "message error";
-
-
-          if (
-            error.code ===
-            "auth/email-already-in-use"
-          ) {
-
-            message.textContent =
-              "This email is already registered.";
-
-          } else if (
-            error.code ===
-            "auth/invalid-email"
-          ) {
-
-            message.textContent =
-              "Please enter a valid email.";
-
-          } else if (
-            error.code ===
-            "auth/weak-password"
-          ) {
-
-            message.textContent =
-              "Password must be at least 6 characters.";
-
-          } else if (
-            error.code ===
-            "auth/network-request-failed"
-          ) {
-
-            message.textContent =
-              "Network error. Please check your internet connection.";
-
-          } else {
-
-            message.textContent =
-              error.message ||
-              "Registration failed. Please try again.";
+            referredBy =
+              matchingUser.referralCode;
 
           }
 
-
-          button.disabled = false;
-          button.textContent =
-            "Create Account →";
-
         }
 
-      });
+      }
 
-  </script>
+
+      /* =========================
+         SAVE USER DATA
+      ========================= */
+
+      await set(
+        ref(db, "users/" + user.uid),
+        {
+
+          uid: user.uid,
+
+          name: name,
+
+          email: email,
+
+          /* NEW USER'S OWN CODE */
+          referralCode: ownReferralCode,
+
+          /* WHO REFERRED THIS USER */
+          referredBy: referredBy,
+
+          wallet: 0,
+
+          totalDeposit: 0,
+
+          totalWithdrawal: 0,
+
+          referralEarnings: 0,
+
+          directReferrals: 0,
+
+          activePlans: {},
+
+          totalPlanPurchase: 0,
+
+          createdAt: Date.now()
+
+        }
+      );
+
+
+      alert(
+        "Account created successfully! 🎉"
+      );
+
+
+      window.location.href =
+        "dashboard.html";
+
+
+    } catch (error) {
+
+      console.error(
+        "Registration Error:",
+        error
+      );
+
+
+      message.className =
+        "message error";
+
+
+      if (
+        error.code ===
+        "auth/email-already-in-use"
+      ) {
+
+        message.textContent =
+          "This email is already registered.";
+
+      } else if (
+        error.code ===
+        "auth/invalid-email"
+      ) {
+
+        message.textContent =
+          "Please enter a valid email.";
+
+      } else if (
+        error.code ===
+        "auth/weak-password"
+      ) {
+
+        message.textContent =
+          "Password must be at least 6 characters.";
+
+      } else if (
+        error.code ===
+        "auth/network-request-failed"
+      ) {
+
+        message.textContent =
+          "Network error. Please check your internet connection.";
+
+      } else {
+
+        message.textContent =
+          error.message ||
+          "Registration failed. Please try again.";
+
+      }
+
+
+      button.disabled = false;
+
+      button.textContent =
+        "Create Account →";
+
+    }
+
+  });
+
+</script>
 
 </body>
 </html>
