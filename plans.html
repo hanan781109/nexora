@@ -218,6 +218,7 @@
       font-weight:bold;
       cursor:pointer;
       font-size:14px;
+      transition:.2s;
     }
 
     .select-btn:hover{
@@ -225,8 +226,58 @@
     }
 
     .select-btn:disabled{
-      opacity:.5;
+      opacity:.55;
       cursor:not-allowed;
+    }
+
+    .select-btn.active{
+      background:linear-gradient(90deg,#16a34a,#22c55e);
+      cursor:default;
+    }
+
+    .plan-status{
+      margin-top:12px;
+      padding:11px 12px;
+      border-radius:10px;
+      background:rgba(34,197,94,.07);
+      border:1px solid rgba(34,197,94,.25);
+      text-align:center;
+      display:none;
+    }
+
+    .plan-status.active{
+      display:block;
+    }
+
+    .status-label{
+      display:block;
+      color:#22c55e;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .countdown{
+      display:block;
+      margin-top:5px;
+      color:#94a3b8;
+      font-size:12px;
+    }
+
+    .earning-btn{
+      margin-top:9px;
+      width:100%;
+      border:none;
+      padding:9px;
+      border-radius:9px;
+      background:#16263f;
+      color:#fff;
+      font-weight:bold;
+      cursor:pointer;
+      font-size:12px;
+    }
+
+    .earning-btn:hover{
+      background:#203553;
     }
 
     .note{
@@ -345,209 +396,339 @@
 
     <div class="plans">
 
-      <div class="plan">
+      <!-- $5 -->
+      <div class="plan" data-plan-card="5">
+
         <h2>Starter</h2>
+
         <div class="price">$5</div>
-        <div class="daily">Plan available</div>
+
+        <div class="daily">
+          Plan available
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$5</span>
           </div>
 
           <div class="detail">
-            <span>Withdrawal Requirement</span>
-            <span>$10</span>
-          </div>
-
-          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="5">
           Buy Plan
         </button>
+
+        <div class="plan-status" id="status-5">
+          <span class="status-label">PLAN ACTIVE ✓</span>
+          <span class="countdown" id="countdown-5">
+            24:00:00 remaining
+          </span>
+          <button class="earning-btn" data-earning="5">
+            Earning
+          </button>
+        </div>
+
       </div>
 
 
-      <div class="plan">
+      <!-- $10 -->
+      <div class="plan" data-plan-card="10">
+
         <h2>Basic</h2>
+
         <div class="price">$10</div>
-        <div class="daily">Plan available</div>
+
+        <div class="daily">
+          Plan available
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$10</span>
           </div>
 
           <div class="detail">
-            <span>Withdrawal Requirement</span>
-            <span>$20</span>
-          </div>
-
-          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="10">
           Buy Plan
         </button>
+
+        <div class="plan-status" id="status-10">
+          <span class="status-label">PLAN ACTIVE ✓</span>
+          <span class="countdown" id="countdown-10">
+            24:00:00 remaining
+          </span>
+          <button class="earning-btn" data-earning="10">
+            Earning
+          </button>
+        </div>
+
       </div>
 
 
-      <div class="plan">
+      <!-- $20 -->
+      <div class="plan" data-plan-card="20">
+
         <h2>Growth</h2>
+
         <div class="price">$20</div>
-        <div class="daily">Plan available</div>
+
+        <div class="daily">
+          Plan available
+        </div>
 
         <div class="details">
+
           <div class="detail">
+
             <span>Plan Value</span>
             <span>$20</span>
+
           </div>
 
           <div class="detail">
-            <span>Withdrawal Requirement</span>
-            <span>$40</span>
-          </div>
 
-          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
+
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="20">
           Buy Plan
         </button>
+
+        <div class="plan-status" id="status-20">
+
+          <span class="status-label">
+            PLAN ACTIVE ✓
+          </span>
+
+          <span class="countdown" id="countdown-20">
+            24:00:00 remaining
+          </span>
+
+          <button class="earning-btn" data-earning="20">
+            Earning
+          </button>
+
+        </div>
+
       </div>
 
 
-      <div class="plan featured">
+      <!-- $50 -->
+      <div class="plan featured" data-plan-card="50">
 
         <div class="badge">
           POPULAR
         </div>
 
         <h2>Pro</h2>
+
         <div class="price">$50</div>
-        <div class="daily">Plan available</div>
+
+        <div class="daily">
+          Plan available
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$50</span>
           </div>
 
           <div class="detail">
-            <span>Withdrawal Requirement</span>
-            <span>$100</span>
-          </div>
-
-          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="50">
           Buy Plan
         </button>
+
+        <div class="plan-status" id="status-50">
+
+          <span class="status-label">
+            PLAN ACTIVE ✓
+          </span>
+
+          <span class="countdown" id="countdown-50">
+            24:00:00 remaining
+          </span>
+
+          <button class="earning-btn" data-earning="50">
+            Earning
+          </button>
+
+        </div>
+
       </div>
 
 
-      <div class="plan">
+      <!-- $100 -->
+      <div class="plan" data-plan-card="100">
+
         <h2>Premium</h2>
+
         <div class="price">$100</div>
-        <div class="daily">Plan available</div>
+
+        <div class="daily">
+          Plan available
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$100</span>
           </div>
 
           <div class="detail">
-            <span>Withdrawal Requirement</span>
-            <span>$200</span>
-          </div>
-
-          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="100">
           Buy Plan
         </button>
+
+        <div class="plan-status" id="status-100">
+
+          <span class="status-label">
+            PLAN ACTIVE ✓
+          </span>
+
+          <span class="countdown" id="countdown-100">
+            24:00:00 remaining
+          </span>
+
+          <button class="earning-btn" data-earning="100">
+            Earning
+          </button>
+
+        </div>
+
       </div>
 
 
-      <div class="plan">
+      <!-- $200 -->
+      <div class="plan" data-plan-card="200">
+
         <h2>Business</h2>
+
         <div class="price">$200</div>
-        <div class="daily">Plan available</div>
+
+        <div class="daily">
+          Plan available
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$200</span>
           </div>
 
           <div class="detail">
-            <span>Withdrawal Requirement</span>
-            <span>$400</span>
-          </div>
-
-          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="200">
           Buy Plan
         </button>
+
+        <div class="plan-status" id="status-200">
+
+          <span class="status-label">
+            PLAN ACTIVE ✓
+          </span>
+
+          <span class="countdown" id="countdown-200">
+            24:00:00 remaining
+          </span>
+
+          <button class="earning-btn" data-earning="200">
+            Earning
+          </button>
+
+        </div>
+
       </div>
 
 
-      <div class="plan featured">
+      <!-- $500 -->
+      <div class="plan featured" data-plan-card="500">
 
         <div class="badge">
           MAX
         </div>
 
         <h2>Elite</h2>
+
         <div class="price">$500</div>
-        <div class="daily">Plan available</div>
+
+        <div class="daily">
+          Plan available
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$500</span>
           </div>
 
           <div class="detail">
-            <span>Withdrawal Requirement</span>
-            <span>$1,000</span>
-          </div>
-
-          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="500">
           Buy Plan
         </button>
+
+        <div class="plan-status" id="status-500">
+
+          <span class="status-label">
+            PLAN ACTIVE ✓
+          </span>
+
+          <span class="countdown" id="countdown-500">
+            24:00:00 remaining
+          </span>
+
+          <button class="earning-btn" data-earning="500">
+            Earning
+          </button>
+
+        </div>
+
       </div>
 
     </div>
@@ -560,6 +741,7 @@
   </main>
 
   <div class="message" id="message"></div>
+
 
   <script type="module">
 
@@ -591,11 +773,14 @@
     };
 
 
-    const app = initializeApp(firebaseConfig);
+    const app =
+      initializeApp(firebaseConfig);
 
-    const auth = getAuth(app);
+    const auth =
+      getAuth(app);
 
-    const db = getDatabase(app);
+    const db =
+      getDatabase(app);
 
 
     const walletBalanceEl =
@@ -615,8 +800,10 @@
       messageEl.classList.add("show");
 
       setTimeout(() => {
+
         messageEl.classList.remove("show");
-      }, 4000);
+
+      },4000);
 
     }
 
@@ -634,7 +821,7 @@
 
         const snapshot =
           await get(
-            ref(db, `users/${uid}`)
+            ref(db,`users/${uid}`)
           );
 
 
@@ -683,6 +870,7 @@
           wallet
         };
 
+
       }catch(error){
 
         console.error(
@@ -695,6 +883,147 @@
         );
 
         return null;
+
+      }
+
+    }
+
+
+    function activatePlanUI(planAmount, purchaseTime){
+
+      const status =
+        document.getElementById(
+          `status-${planAmount}`
+        );
+
+      const button =
+        document.querySelector(
+          `.select-btn[data-plan="${planAmount}"]`
+        );
+
+      const countdown =
+        document.getElementById(
+          `countdown-${planAmount}`
+        );
+
+
+      if(!status) return;
+
+
+      status.classList.add("active");
+
+
+      if(button){
+
+        button.disabled = true;
+
+        button.textContent =
+          "Active ✓";
+
+        button.classList.add("active");
+
+      }
+
+
+      const start =
+        Number(purchaseTime || Date.now());
+
+
+      function updateCountdown(){
+
+        const now =
+          Date.now();
+
+        const cycle =
+          24 * 60 * 60 * 1000;
+
+        let remaining =
+          cycle -
+          ((now - start) % cycle);
+
+
+        if(remaining < 0){
+          remaining = cycle;
+        }
+
+
+        const hours =
+          Math.floor(
+            remaining / 3600000
+          );
+
+        const minutes =
+          Math.floor(
+            (remaining % 3600000) / 60000
+          );
+
+        const seconds =
+          Math.floor(
+            (remaining % 60000) / 1000
+          );
+
+
+        countdown.textContent =
+          `${String(hours).padStart(2,"0")}:` +
+          `${String(minutes).padStart(2,"0")}:` +
+          `${String(seconds).padStart(2,"0")} remaining`;
+
+      }
+
+
+      updateCountdown();
+
+      setInterval(
+        updateCountdown,
+        1000
+      );
+
+    }
+
+
+    async function loadActivePlans(uid){
+
+      try{
+
+        const snapshot =
+          await get(
+            ref(db,"planPurchases")
+          );
+
+
+        if(!snapshot.exists()) return;
+
+
+        const purchases =
+          snapshot.val();
+
+
+        Object.values(purchases).forEach(
+          purchase => {
+
+            if(
+              purchase &&
+              purchase.uid === uid &&
+              purchase.status === "active"
+            ){
+
+              activatePlanUI(
+                Number(purchase.planAmount),
+                Number(purchase.createdAt)
+              );
+
+            }
+
+          }
+        );
+
+
+      }catch(error){
+
+        console.error(
+          "Active plan loading error:",
+          error
+        );
 
       }
 
@@ -737,10 +1066,6 @@
 
       try{
 
-        /*
-          Read the latest user data first.
-        */
-
         const userRef =
           ref(
             db,
@@ -777,11 +1102,6 @@
             "Your Firebase wallet balance is invalid."
           );
 
-          console.error(
-            "Invalid wallet value:",
-            userData.wallet
-          );
-
           return;
 
         }
@@ -810,23 +1130,15 @@
           );
 
 
-        /*
-          Create a new purchase ID.
-        */
-
         const purchaseRef =
           push(
-            ref(db, "planPurchases")
+            ref(db,"planPurchases")
           );
 
 
         const purchaseId =
           purchaseRef.key;
 
-
-        /*
-          Prepare one atomic multi-location update.
-        */
 
         const now =
           Date.now();
@@ -856,10 +1168,6 @@
 
         const updates = {};
 
-
-        /*
-          Update user's wallet.
-        */
 
         updates[
           `users/${currentUser.uid}/wallet`
@@ -897,10 +1205,6 @@
           now;
 
 
-        /*
-          Save purchase record.
-        */
-
         updates[
           `planPurchases/${purchaseId}`
         ] = {
@@ -932,22 +1236,20 @@
         };
 
 
-        /*
-          One Firebase write.
-        */
-
         await update(
           ref(db),
           updates
         );
 
 
-        /*
-          Reload wallet from Firebase.
-        */
-
         await loadWallet(
           currentUser.uid
+        );
+
+
+        activatePlanUI(
+          planAmount,
+          now
         );
 
 
@@ -975,18 +1277,6 @@
         );
 
 
-        console.error(
-          "Firebase error code:",
-          error.code
-        );
-
-
-        console.error(
-          "Firebase error message:",
-          error.message
-        );
-
-
         const errorText =
           String(
             error.message || ""
@@ -1007,7 +1297,10 @@
 
           showMessage(
             "Plan purchase failed: " +
-            (error.message || "Unknown Firebase error")
+            (
+              error.message ||
+              "Unknown Firebase error"
+            )
           );
 
         }
@@ -1017,18 +1310,36 @@
     }
 
 
-    /*
-      Authentication
-    */
+    document
+      .querySelectorAll(".earning-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const plan =
+              Number(
+                button.dataset.earning
+              );
+
+            showMessage(
+              `Earning status for $${money(plan)} plan is shown by the 24-hour timer.`
+            );
+
+          }
+        );
+
+      });
+
 
     onAuthStateChanged(
       auth,
-      async (user) => {
+      async user => {
 
         if(!user){
 
-          currentUser =
-            null;
+          currentUser = null;
 
           window.location.href =
             "login.html";
@@ -1042,17 +1353,23 @@
           user;
 
 
-        await loadWallet(
-          user.uid
-        );
+        const userData =
+          await loadWallet(
+            user.uid
+          );
+
+
+        if(userData){
+
+          await loadActivePlans(
+            user.uid
+          );
+
+        }
 
       }
     );
 
-
-    /*
-      Buy buttons
-    */
 
     document
       .querySelectorAll(".select-btn")
@@ -1086,11 +1403,17 @@
 
             }finally{
 
-              button.disabled =
-                false;
+              if(
+                !button.classList.contains("active")
+              ){
 
-              button.textContent =
-                oldText;
+                button.disabled =
+                  false;
+
+                button.textContent =
+                  oldText;
+
+              }
 
             }
 
