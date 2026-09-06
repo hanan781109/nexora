@@ -321,13 +321,16 @@
 
     <div class="wallet-box">
 
-      <div class="wallet-label">Available Wallet Balance</div>
+      <div class="wallet-label">
+        Available Wallet Balance
+      </div>
 
       <div class="wallet-balance" id="walletBalance">
         $0.00 USDT
       </div>
 
       <div class="wallet-actions">
+
         <a href="deposit.html" class="wallet-btn deposit-btn">
           + Deposit USDT
         </a>
@@ -335,19 +338,27 @@
         <a href="dashboard.html" class="wallet-btn dashboard-btn">
           Dashboard
         </a>
+
       </div>
 
     </div>
+
 
     <div class="plans">
 
       <!-- $5 -->
       <div class="plan">
+
         <h2>Starter</h2>
+
         <div class="price">$5</div>
-        <div class="daily">0.60% daily rate</div>
+
+        <div class="daily">
+          0.60% daily rate
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$5</span>
@@ -362,21 +373,29 @@
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="5">
           Buy Plan
         </button>
+
       </div>
 
 
       <!-- $10 -->
       <div class="plan">
+
         <h2>Basic</h2>
+
         <div class="price">$10</div>
-        <div class="daily">0.60% daily rate</div>
+
+        <div class="daily">
+          0.60% daily rate
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$10</span>
@@ -391,21 +410,29 @@
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="10">
           Buy Plan
         </button>
+
       </div>
 
 
       <!-- $20 -->
       <div class="plan">
+
         <h2>Growth</h2>
+
         <div class="price">$20</div>
-        <div class="daily">0.60% daily rate</div>
+
+        <div class="daily">
+          0.60% daily rate
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$20</span>
@@ -420,23 +447,33 @@
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="20">
           Buy Plan
         </button>
+
       </div>
 
 
       <!-- $50 -->
       <div class="plan featured">
-        <div class="badge">POPULAR</div>
+
+        <div class="badge">
+          POPULAR
+        </div>
 
         <h2>Pro</h2>
+
         <div class="price">$50</div>
-        <div class="daily">0.60% daily rate</div>
+
+        <div class="daily">
+          0.60% daily rate
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$50</span>
@@ -451,21 +488,29 @@
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="50">
           Buy Plan
         </button>
+
       </div>
 
 
       <!-- $100 -->
       <div class="plan">
+
         <h2>Premium</h2>
+
         <div class="price">$100</div>
-        <div class="daily">0.60% daily rate</div>
+
+        <div class="daily">
+          0.60% daily rate
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$100</span>
@@ -480,21 +525,29 @@
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="100">
           Buy Plan
         </button>
+
       </div>
 
 
       <!-- $200 -->
       <div class="plan">
+
         <h2>Business</h2>
+
         <div class="price">$200</div>
-        <div class="daily">0.60% daily rate</div>
+
+        <div class="daily">
+          0.60% daily rate
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$200</span>
@@ -509,23 +562,33 @@
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="200">
           Buy Plan
         </button>
+
       </div>
 
 
       <!-- $500 -->
       <div class="plan featured">
-        <div class="badge">MAX</div>
+
+        <div class="badge">
+          MAX
+        </div>
 
         <h2>Elite</h2>
+
         <div class="price">$500</div>
-        <div class="daily">0.60% daily rate</div>
+
+        <div class="daily">
+          0.60% daily rate
+        </div>
 
         <div class="details">
+
           <div class="detail">
             <span>Plan Value</span>
             <span>$500</span>
@@ -540,14 +603,17 @@
             <span>Referral</span>
             <span>20%</span>
           </div>
+
         </div>
 
         <button class="select-btn" data-plan="500">
           Buy Plan
         </button>
+
       </div>
 
     </div>
+
 
     <div class="note">
       Plans are purchased directly from your available USDT wallet balance.
@@ -556,14 +622,14 @@
 
   </main>
 
+
   <div class="message" id="message"></div>
 
 
   <script type="module">
 
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
     import {
       getAuth,
@@ -623,7 +689,9 @@
       messageEl.classList.add("show");
 
       setTimeout(() => {
+
         messageEl.classList.remove("show");
+
       }, 3500);
 
     }
@@ -641,7 +709,10 @@
       try{
 
         const snapshot =
-          await get(ref(db, `users/${uid}`));
+          await get(
+            ref(db, `users/${uid}`)
+          );
+
 
         if(!snapshot.exists()){
 
@@ -652,17 +723,25 @@
 
         }
 
-        const userData = snapshot.val();
+
+        const userData =
+          snapshot.val();
+
 
         const wallet =
           Number(userData.wallet || 0);
 
+
         walletBalanceEl.textContent =
           `$${money(wallet)} USDT`;
 
+
       }catch(error){
 
-        console.error(error);
+        console.error(
+          "Wallet loading error:",
+          error
+        );
 
         showMessage(
           "Unable to load wallet balance."
@@ -677,19 +756,26 @@
 
       if(!currentUser){
 
-        window.location.href = "login.html";
+        window.location.href =
+          "login.html";
 
         return;
 
       }
 
 
-      planAmount = Number(planAmount);
+      planAmount =
+        Number(planAmount);
 
 
-      if(!Number.isFinite(planAmount) || planAmount <= 0){
+      if(
+        !Number.isFinite(planAmount) ||
+        planAmount <= 0
+      ){
 
-        showMessage("Invalid plan.");
+        showMessage(
+          "Invalid plan."
+        );
 
         return;
 
@@ -697,17 +783,24 @@
 
 
       const userRef =
-        ref(db, `users/${currentUser.uid}`);
+        ref(
+          db,
+          `users/${currentUser.uid}`
+        );
 
 
       const purchaseRef =
-        push(ref(db, "planPurchases"));
-
-
-      let purchaseCompleted = false;
+        push(
+          ref(db, "planPurchases")
+        );
 
 
       try{
+
+        /*
+          Deduct wallet safely using
+          Firebase Realtime Database transaction.
+        */
 
         const transactionResult =
           await runTransaction(
@@ -722,7 +815,9 @@
 
 
               const wallet =
-                Number(userData.wallet || 0);
+                Number(
+                  userData.wallet || 0
+                );
 
 
               if(wallet < planAmount){
@@ -733,15 +828,15 @@
 
 
               const activePlans =
-                Number(userData.activePlans || 0);
-
-
-              const totalDeposit =
-                Number(userData.totalDeposit || 0);
+                Number(
+                  userData.activePlans || 0
+                );
 
 
               const totalPlanPurchase =
-                Number(userData.totalPlanPurchase || 0);
+                Number(
+                  userData.totalPlanPurchase || 0
+                );
 
 
               return {
@@ -750,7 +845,10 @@
 
                 wallet:
                   Number(
-                    (wallet - planAmount).toFixed(8)
+                    (
+                      wallet -
+                      planAmount
+                    ).toFixed(8)
                   ),
 
                 activePlans:
@@ -758,16 +856,19 @@
 
                 totalPlanPurchase:
                   Number(
-                    (totalPlanPurchase + planAmount).toFixed(8)
+                    (
+                      totalPlanPurchase +
+                      planAmount
+                    ).toFixed(8)
                   ),
-
-                updatedAt:
-                  Date.now(),
 
                 lastPlanPurchase:
                   planAmount,
 
                 lastPlanPurchaseAt:
+                  Date.now(),
+
+                updatedAt:
                   Date.now()
 
               };
@@ -776,10 +877,15 @@
           );
 
 
+        /*
+          Transaction failed / was not committed.
+        */
+
         if(!transactionResult.committed){
 
           const latest =
             await get(userRef);
+
 
           if(!latest.exists()){
 
@@ -797,7 +903,9 @@
 
 
           const latestWallet =
-            Number(latestData.wallet || 0);
+            Number(
+              latestData.wallet || 0
+            );
 
 
           if(latestWallet < planAmount){
@@ -806,40 +914,48 @@
               `Insufficient balance. You need $${money(planAmount)} USDT.`
             );
 
-            return;
+          }else{
+
+            showMessage(
+              "Purchase could not be completed. Please try again."
+            );
 
           }
-
-
-          showMessage(
-            "Plan purchase could not be completed. Please try again."
-          );
 
           return;
 
         }
 
 
-        purchaseCompleted = true;
-
+        /*
+          Save the plan purchase record.
+        */
 
         const purchaseData = {
 
-          id: purchaseRef.key,
+          id:
+            purchaseRef.key,
 
-          uid: currentUser.uid,
+          uid:
+            currentUser.uid,
 
-          email: currentUser.email || "",
+          email:
+            currentUser.email || "",
 
-          planAmount: planAmount,
+          planAmount:
+            planAmount,
 
-          currency: "USDT",
+          currency:
+            "USDT",
 
-          status: "active",
+          status:
+            "active",
 
-          source: "wallet",
+          source:
+            "wallet",
 
-          createdAt: Date.now()
+          createdAt:
+            Date.now()
 
         };
 
@@ -850,7 +966,13 @@
         );
 
 
-        await loadWallet(currentUser.uid);
+        /*
+          Refresh wallet after successful purchase.
+        */
+
+        await loadWallet(
+          currentUser.uid
+        );
 
 
         showMessage(
@@ -866,10 +988,20 @@
         );
 
 
-        if(purchaseCompleted){
+        const errorText =
+          String(
+            error.message || ""
+          ).toLowerCase();
+
+
+        if(
+          error.code ===
+          "PERMISSION_DENIED" ||
+          errorText.includes("permission")
+        ){
 
           showMessage(
-            "Plan was purchased, but the transaction record could not be saved."
+            "Firebase permission denied. Check planPurchases Rules."
           );
 
         }else{
@@ -885,6 +1017,10 @@
     }
 
 
+    /*
+      Check Firebase Authentication.
+    */
+
     onAuthStateChanged(
       auth,
       async (user) => {
@@ -899,14 +1035,21 @@
         }
 
 
-        currentUser = user;
+        currentUser =
+          user;
 
 
-        await loadWallet(user.uid);
+        await loadWallet(
+          user.uid
+        );
 
       }
     );
 
+
+    /*
+      Buy Plan buttons.
+    */
 
     document
       .querySelectorAll(".select-btn")
@@ -917,14 +1060,18 @@
           async () => {
 
             const plan =
-              Number(button.dataset.plan);
+              Number(
+                button.dataset.plan
+              );
 
 
             const oldText =
               button.textContent;
 
 
-            button.disabled = true;
+            button.disabled =
+              true;
+
 
             button.textContent =
               "Processing...";
@@ -936,7 +1083,8 @@
 
             }finally{
 
-              button.disabled = false;
+              button.disabled =
+                false;
 
               button.textContent =
                 oldText;
