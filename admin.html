@@ -1,566 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexora | Admin Panel</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      background: #08111f;
-      color: #fff;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 6%;
-      background: #0d1728;
-      border-bottom: 1px solid #293a55;
-    }
-
-    .logo {
-      color: #22d3ee;
-      font-size: 26px;
-      font-weight: 800;
-    }
-
-    .admin {
-      color: #94a3b8;
-      font-size: 14px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 8px;
-      padding: 9px 14px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .logout {
-      margin-left: 12px;
-      background: #17243a;
-      color: #fff;
-    }
-
-    .container {
-      width: 94%;
-      max-width: 1400px;
-      margin: 30px auto;
-    }
-
-    h1 {
-      margin: 0 0 7px;
-    }
-
-    .subtitle,
-    .muted {
-      color: #94a3b8;
-    }
-
-    .subtitle {
-      margin-bottom: 25px;
-    }
-
-    .notice {
-      padding: 13px 15px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      background: #0d2b43;
-      color: #bfeeff;
-      word-break: break-word;
-    }
-
-    .notice.error {
-      background: #42151d;
-      color: #fecaca;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    .card,
-    .section {
-      border: 1px solid #293a55;
-      background: #101d31;
-      border-radius: 16px;
-    }
-
-    .card {
-      padding: 20px;
-    }
-
-    .card small {
-      color: #94a3b8;
-    }
-
-    .card h2 {
-      margin: 8px 0 0;
-      color: #67e8f9;
-    }
-
-    .section {
-      padding: 22px;
-      margin-bottom: 25px;
-    }
-
-    .section h2 {
-      margin: 0 0 18px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      min-width: 850px;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 13px 12px;
-      border-bottom: 1px solid #293a55;
-      text-align: left;
-    }
-
-    th {
-      color: #67e8f9;
-      background: #0c1829;
-    }
-
-    td {
-      color: #dbe5f0;
-    }
-
-    .approve {
-      color: #06120a;
-      background: #22c55e;
-    }
-
-    .reject {
-      color: #fff;
-      background: #dc2626;
-      margin-left: 5px;
-    }
-
-    button:disabled {
-      opacity: .55;
-      cursor: wait;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 15px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .pending {
-      color: #facc15;
-      background: #3b2e0b;
-    }
-
-    .approved {
-      color: #6ee7b7;
-      background: #083b2b;
-    }
-
-    .rejected {
-      color: #fca5a5;
-      background: #42151d;
-    }
-
-    .empty {
-      padding: 25px;
-      text-align: center;
-      color: #94a3b8;
-    }
-
-    .id-text {
-      font-size: 11px;
-      color: #64748b;
-      word-break: break-all;
-      max-width: 180px;
-    }
-
-    @media(max-width: 900px) {
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media(max-width: 550px) {
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .admin {
-        display: none;
-      }
-
-      header {
-        padding: 15px 4%;
-      }
-
-      .container {
-        width: 92%;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  <div class="logo">NEXORA ADMIN</div>
-
-  <div>
-    <span class="admin" id="adminEmail">Checking...</span>
-    <button class="logout" id="logoutBtn">Logout</button>
-  </div>
-</header>
-
-<main class="container">
-
-  <h1>Admin Dashboard</h1>
-
-  <p class="subtitle">
-    Manage users, deposits and withdrawal requests.
-  </p>
-
-  <div id="notice" class="notice">
-    Checking admin access...
-  </div>
-
-  <section class="cards">
-
-    <div class="card">
-      <small>Total Users</small>
-      <h2 id="usersCount">0</h2>
-    </div>
-
-    <div class="card">
-      <small>Pending Deposits</small>
-      <h2 id="pendingDeposits">0</h2>
-    </div>
-
-    <div class="card">
-      <small>Pending Withdrawals</small>
-      <h2 id="pendingWithdrawals">0</h2>
-    </div>
-
-    <div class="card">
-      <small>Total Wallet</small>
-      <h2 id="totalWallet">$0.00</h2>
-    </div>
-
-  </section>
-
-  <!-- USERS -->
-
-  <section class="section">
-
-    <h2>👥 Users</h2>
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Referral Code</th>
-            <th>Wallet</th>
-            <th>Total Deposit</th>
-            <th>Total Withdrawal</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-
-        <tbody id="usersTable">
-          <tr>
-            <td colspan="7" class="empty">
-              Loading users...
-            </td>
-          </tr>
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-  <!-- DEPOSITS -->
-
-  <section class="section">
-
-    <h2>💰 Deposit Requests</h2>
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>User</th>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Transaction ID</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody id="depositsTable">
-          <tr>
-            <td colspan="7" class="empty">
-              Loading deposits...
-            </td>
-          </tr>
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-  <!-- WITHDRAWALS -->
-
-  <section class="section">
-
-    <h2>💸 Withdrawal Requests</h2>
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>User</th>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Account</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-
-        <tbody id="withdrawalsTable">
-          <tr>
-            <td colspan="7" class="empty">
-              Loading withdrawals...
-            </td>
-          </tr>
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-</main>
-
-
 <script type="module">
 
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-  import {
-    getDatabase,
-    ref,
-    get,
-    update
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-
-
-  /* =========================
-     FIREBASE CONFIG
-  ========================= */
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
-    authDomain: "nexora-adef3.firebaseapp.com",
-    projectId: "nexora-adef3",
-    storageBucket: "nexora-adef3.firebasestorage.app",
-    messagingSenderId: "318277373899",
-    appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
-    measurementId: "G-WN2V48SC4T"
-  };
+import {
+  getDatabase,
+  ref,
+  get,
+  update
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+  authDomain: "nexora-adef3.firebaseapp.com",
+  projectId: "nexora-adef3",
+  storageBucket: "nexora-adef3.firebasestorage.app",
+  messagingSenderId: "318277373899",
+  appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+  measurementId: "G-WN2V48SC4T"
+};
 
 
-  /* =========================
-     HELPERS
-  ========================= */
+/* =========================
+   ADMIN UID
+========================= */
 
-  const $ = id => document.getElementById(id);
+const ADMIN_UID = "6wsARRpgWwaez7qg86fjCNS4SY13";
 
 
-  function escapeHTML(value) {
+/* =========================
+   FIREBASE INIT
+========================= */
 
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+
+/* =========================
+   HELPERS
+========================= */
+
+const $ = id => document.getElementById(id);
+
+
+function escapeHTML(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+function money(value) {
+  return `$${Number(value || 0).toFixed(2)}`;
+}
+
+
+function formatDate(value) {
+
+  if (!value) return "-";
+
+  const d = new Date(Number(value));
+
+  if (Number.isNaN(d.getTime())) {
+    return "-";
+  }
+
+  return d.toLocaleString();
+}
+
+
+function statusBadge(value) {
+
+  const s =
+    String(value || "pending").toLowerCase();
+
+  return `
+    <span class="status ${escapeHTML(s)}">
+      ${escapeHTML(s.toUpperCase())}
+    </span>
+  `;
+}
+
+
+function showNotice(message, error = false) {
+
+  const notice = $("notice");
+
+  if (!notice) return;
+
+  notice.textContent = message;
+
+  notice.className =
+    error
+      ? "notice error"
+      : "notice";
+}
+
+
+/* =========================
+   DATABASE READ
+========================= */
+
+async function readPath(path) {
+
+  const snapshot =
+    await get(ref(db, path));
+
+  return snapshot.exists()
+    ? snapshot.val()
+    : {};
+}
+
+
+/* =========================
+   AUTH + ADMIN CHECK
+========================= */
+
+onAuthStateChanged(auth, async (user) => {
+
+  /*
+     Firebase pehle auth state restore karta hai.
+     Isliye bina verification ke logout/redirect nahi karenge.
+  */
+
+  if (!user) {
+
+    showNotice(
+      "No active login session. Please login again.",
+      true
+    );
+
+    setTimeout(() => {
+      location.href = "login.html";
+    }, 2000);
+
+    return;
   }
 
 
-  function money(value) {
-
-    return `$${Number(value || 0).toFixed(2)}`;
-
-  }
-
-
-  function formatDate(value) {
-
-    if (!value) return "-";
-
-    const d = new Date(Number(value));
-
-    if (Number.isNaN(d.getTime())) {
-      return "-";
-    }
-
-    return d.toLocaleString();
-
-  }
-
-
-  function statusBadge(value) {
-
-    const s =
-      String(value || "pending").toLowerCase();
-
-    return `
-      <span class="status ${escapeHTML(s)}">
-        ${escapeHTML(s.toUpperCase())}
-      </span>
-    `;
-
-  }
-
-
-  function showNotice(message, error = false) {
-
-    $("notice").textContent = message;
-
-    $("notice").className =
-      error
-        ? "notice error"
-        : "notice";
-
-  }
+  $("adminEmail").textContent =
+    user.email || "Admin";
 
 
   /*
-    IMPORTANT:
-    Is function error ko hide nahi karti.
-    Agar Firebase problem aaye gi to
-    exact error screen par show hoga.
+     IMPORTANT:
+     Apne main admin UID ko direct verify kar rahe hain.
+     Isse admins/{uid} read check ki wajah se
+     unnecessary redirect nahi hoga.
   */
 
-  async function readPath(path) {
+  if (user.uid === ADMIN_UID) {
 
-    const snapshot =
-      await get(ref(db, path));
-
-    return snapshot.exists()
-      ? snapshot.val()
-      : {};
-
-  }
-
-
-  /* =========================
-     AUTH + ADMIN CHECK
-  ========================= */
-
-  onAuthStateChanged(auth, async (user) => {
-
-    if (!user) {
-
-      location.href = "login.html";
-
-      return;
-
-    }
-
-
-    $("adminEmail").textContent =
-      user.email || "Admin";
-
+    showNotice(
+      "Admin verified. Loading dashboard..."
+    );
 
     try {
-
-      showNotice(
-        "Checking admin permission..."
-      );
-
-
-      const adminSnapshot =
-        await get(
-          ref(db, `admins/${user.uid}`)
-        );
-
-
-      if (
-        !adminSnapshot.exists() ||
-        adminSnapshot.val() !== true
-      ) {
-
-        showNotice(
-          "Access denied. This account is not an admin.",
-          true
-        );
-
-        setTimeout(() => {
-          location.href = "login.html";
-        }, 1500);
-
-        return;
-
-      }
-
-
-      showNotice(
-        "Admin verified. Loading dashboard..."
-      );
-
 
       await loadDashboard();
 
@@ -568,7 +178,10 @@
 
     catch (error) {
 
-      console.error(error);
+      console.error(
+        "Dashboard loading error:",
+        error
+      );
 
       showNotice(
         `Firebase Error: ${error.code || ""} ${error.message || error}`,
@@ -577,954 +190,989 @@
 
     }
 
-  });
+    return;
+  }
 
 
-  /* =========================
-     LOAD DASHBOARD
-  ========================= */
+  /*
+     Agar future mein doosra admin add karna ho
+     to admins/{uid} bhi check hoga.
+  */
 
-  async function loadDashboard() {
+  try {
 
-    /*
-      These are the actual database paths
-      used by the current Nexora pages.
-    */
-
-    const usersData =
-      await readPath("users");
-
-    const depositsData =
-      await readPath("deposits");
-
-    const withdrawalsData =
-      await readPath("withdrawals");
-
-
-    /* =========================
-       USERS
-    ========================= */
-
-    const users =
-      Object.entries(usersData || {})
-        .map(([uid, user]) => ({
-          uid,
-          ...(user || {})
-        }));
-
-
-    $("usersCount").textContent =
-      users.length;
-
-
-    const totalWallet =
-      users.reduce(
-        (sum, user) =>
-          sum + Number(user.wallet || 0),
-        0
-      );
-
-
-    $("totalWallet").textContent =
-      money(totalWallet);
-
-
-    if (!users.length) {
-
-      $("usersTable").innerHTML = `
-        <tr>
-          <td colspan="7" class="empty">
-            No users found.
-          </td>
-        </tr>
-      `;
-
-    }
-
-    else {
-
-      $("usersTable").innerHTML =
-        users.map(user => `
-
-          <tr>
-
-            <td>
-              ${escapeHTML(user.name || "-")}
-            </td>
-
-            <td>
-              ${escapeHTML(user.email || "-")}
-            </td>
-
-            <td>
-              ${escapeHTML(user.referralCode || "-")}
-            </td>
-
-            <td>
-              ${money(user.wallet)}
-            </td>
-
-            <td>
-              ${money(user.totalDeposit)}
-            </td>
-
-            <td>
-              ${money(user.totalWithdrawal)}
-            </td>
-
-            <td>
-              ${
-                user.active === false
-                  ? "Inactive"
-                  : "Active"
-              }
-            </td>
-
-          </tr>
-
-        `).join("");
-
-    }
-
-
-    /* =========================
-       DEPOSITS
-    ========================= */
-
-    const deposits =
-      Object.entries(depositsData || {})
-        .map(([id, deposit]) => ({
-          id,
-          ...(deposit || {})
-        }));
-
-
-    deposits.sort(
-      (a, b) =>
-        Number(b.createdAt || 0) -
-        Number(a.createdAt || 0)
+    showNotice(
+      "Checking admin permission..."
     );
 
 
-    const pendingDeposits =
-      deposits.filter(
-        item =>
-          String(item.status || "pending")
-            .toLowerCase() === "pending"
+    const adminSnapshot =
+      await get(
+        ref(db, `admins/${user.uid}`)
       );
 
 
-    $("pendingDeposits").textContent =
-      pendingDeposits.length;
+    const adminValue =
+      adminSnapshot.exists()
+        ? adminSnapshot.val()
+        : false;
 
 
-    if (!deposits.length) {
-
-      $("depositsTable").innerHTML = `
-        <tr>
-          <td colspan="7" class="empty">
-            No deposit requests.
-          </td>
-        </tr>
-      `;
-
-    }
-
-    else {
-
-      $("depositsTable").innerHTML =
-        deposits.map(deposit => {
-
-          const isPending =
-            String(deposit.status || "pending")
-              .toLowerCase() === "pending";
+    const isAdmin =
+      adminValue === true ||
+      adminValue === "true";
 
 
-          return `
+    if (!isAdmin) {
 
-            <tr>
-
-              <td>
-                ${escapeHTML(
-                  formatDate(deposit.createdAt)
-                )}
-              </td>
-
-              <td>
-                <div>
-                  ${escapeHTML(
-                    deposit.email || "-"
-                  )}
-                </div>
-
-                <div class="id-text">
-                  UID: ${escapeHTML(
-                    deposit.uid || "-"
-                  )}
-                </div>
-              </td>
-
-              <td>
-                ${money(
-                  deposit.amountUSDT
-                )}
-              </td>
-
-              <td>
-                ${escapeHTML(
-                  deposit.method || "-"
-                )}
-              </td>
-
-              <td>
-                <span class="id-text">
-                  ${escapeHTML(
-                    deposit.transactionId || "-"
-                  )}
-                </span>
-              </td>
-
-              <td>
-                ${statusBadge(
-                  deposit.status
-                )}
-              </td>
-
-              <td>
-
-                ${
-                  isPending
-                    ? `
-                      <button
-                        class="approve"
-                        data-approve-deposit="${escapeHTML(deposit.id)}"
-                      >
-                        Approve
-                      </button>
-
-                      <button
-                        class="reject"
-                        data-reject-deposit="${escapeHTML(deposit.id)}"
-                      >
-                        Reject
-                      </button>
-                    `
-                    : "-"
-                }
-
-              </td>
-
-            </tr>
-
-          `;
-
-        }).join("");
-
-    }
-
-
-    /* =========================
-       WITHDRAWALS
-    ========================= */
-
-    const withdrawals =
-      Object.entries(withdrawalsData || {})
-        .map(([id, withdrawal]) => ({
-          id,
-          ...(withdrawal || {})
-        }));
-
-
-    withdrawals.sort(
-      (a, b) =>
-        Number(b.createdAt || 0) -
-        Number(a.createdAt || 0)
-    );
-
-
-    const pendingWithdrawals =
-      withdrawals.filter(
-        item =>
-          String(item.status || "pending")
-            .toLowerCase() === "pending"
+      showNotice(
+        "Access denied. This account is not an admin.",
+        true
       );
 
+      setTimeout(() => {
+        location.href = "login.html";
+      }, 2000);
 
-    $("pendingWithdrawals").textContent =
-      pendingWithdrawals.length;
-
-
-    if (!withdrawals.length) {
-
-      $("withdrawalsTable").innerHTML = `
-        <tr>
-          <td colspan="7" class="empty">
-            No withdrawal requests.
-          </td>
-        </tr>
-      `;
-
-    }
-
-    else {
-
-      $("withdrawalsTable").innerHTML =
-        withdrawals.map(withdrawal => {
-
-          const isPending =
-            String(withdrawal.status || "pending")
-              .toLowerCase() === "pending";
-
-
-          return `
-
-            <tr>
-
-              <td>
-                ${escapeHTML(
-                  formatDate(
-                    withdrawal.createdAt
-                  )
-                )}
-              </td>
-
-              <td>
-
-                <div>
-                  ${escapeHTML(
-                    withdrawal.email || "-"
-                  )}
-                </div>
-
-                <div class="id-text">
-                  UID: ${escapeHTML(
-                    withdrawal.uid || "-"
-                  )}
-                </div>
-
-              </td>
-
-              <td>
-                ${money(
-                  withdrawal.amountUSDT ??
-                  withdrawal.amount
-                )}
-              </td>
-
-              <td>
-                ${escapeHTML(
-                  withdrawal.method || "-"
-                )}
-              </td>
-
-              <td>
-                ${escapeHTML(
-                  withdrawal.accountNumber ||
-                  withdrawal.account ||
-                  "-"
-                )}
-              </td>
-
-              <td>
-                ${statusBadge(
-                  withdrawal.status
-                )}
-              </td>
-
-              <td>
-
-                ${
-                  isPending
-                    ? `
-                      <button
-                        class="approve"
-                        data-approve-withdrawal="${escapeHTML(withdrawal.id)}"
-                      >
-                        Approve
-                      </button>
-
-                      <button
-                        class="reject"
-                        data-reject-withdrawal="${escapeHTML(withdrawal.id)}"
-                      >
-                        Reject
-                      </button>
-                    `
-                    : "-"
-                }
-
-              </td>
-
-            </tr>
-
-          `;
-
-        }).join("");
-
+      return;
     }
 
 
     showNotice(
-      "Dashboard loaded successfully."
+      "Admin verified. Loading dashboard..."
+    );
+
+
+    await loadDashboard();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Admin verification error:",
+      error
+    );
+
+    showNotice(
+      `Admin verification error: ${error.code || ""} ${error.message || error}`,
+      true
     );
 
   }
 
+});
+
+
+/* =========================
+   LOAD DASHBOARD
+========================= */
+
+async function loadDashboard() {
+
+  const usersData =
+    await readPath("users");
+
+  const depositsData =
+    await readPath("deposits");
+
+  const withdrawalsData =
+    await readPath("withdrawals");
+
 
   /* =========================
-     DEPOSIT ACTIONS
+     USERS
   ========================= */
 
-  $("depositsTable").addEventListener(
-    "click",
-    async (event) => {
-
-      const approveButton =
-        event.target.closest(
-          "[data-approve-deposit]"
-        );
+  const users =
+    Object.entries(usersData || {})
+      .map(([uid, user]) => ({
+        uid,
+        ...(user || {})
+      }));
 
 
-      const rejectButton =
-        event.target.closest(
-          "[data-reject-deposit]"
-        );
+  $("usersCount").textContent =
+    users.length;
 
 
-      if (approveButton) {
-
-        await approveDeposit(
-          approveButton.dataset.approveDeposit
-        );
-
-        return;
-
-      }
+  const totalWallet =
+    users.reduce(
+      (sum, user) =>
+        sum + Number(user.wallet || 0),
+      0
+    );
 
 
-      if (rejectButton) {
+  $("totalWallet").textContent =
+    money(totalWallet);
 
-        await rejectDeposit(
-          rejectButton.dataset.rejectDeposit
-        );
 
-      }
+  if (!users.length) {
 
-    }
+    $("usersTable").innerHTML = `
+      <tr>
+        <td colspan="7" class="empty">
+          No users found.
+        </td>
+      </tr>
+    `;
+
+  } else {
+
+    $("usersTable").innerHTML =
+      users.map(user => `
+
+        <tr>
+
+          <td>
+            ${escapeHTML(user.name || "-")}
+          </td>
+
+          <td>
+            ${escapeHTML(user.email || "-")}
+          </td>
+
+          <td>
+            ${escapeHTML(user.referralCode || "-")}
+          </td>
+
+          <td>
+            ${money(user.wallet)}
+          </td>
+
+          <td>
+            ${money(user.totalDeposit)}
+          </td>
+
+          <td>
+            ${money(user.totalWithdrawal)}
+          </td>
+
+          <td>
+            ${
+              user.active === false
+                ? "Inactive"
+                : "Active"
+            }
+          </td>
+
+        </tr>
+
+      `).join("");
+
+  }
+
+
+  /* =========================
+     DEPOSITS
+  ========================= */
+
+  const deposits =
+    Object.entries(depositsData || {})
+      .map(([id, deposit]) => ({
+        id,
+        ...(deposit || {})
+      }));
+
+
+  deposits.sort(
+    (a, b) =>
+      Number(b.createdAt || 0) -
+      Number(a.createdAt || 0)
   );
 
 
-  async function approveDeposit(id) {
+  const pendingDeposits =
+    deposits.filter(
+      item =>
+        String(item.status || "pending")
+          .toLowerCase() === "pending"
+    );
 
-    if (
-      !confirm(
-        "Approve this deposit?"
-      )
-    ) {
+
+  $("pendingDeposits").textContent =
+    pendingDeposits.length;
+
+
+  if (!deposits.length) {
+
+    $("depositsTable").innerHTML = `
+      <tr>
+        <td colspan="7" class="empty">
+          No deposit requests.
+        </td>
+      </tr>
+    `;
+
+  } else {
+
+    $("depositsTable").innerHTML =
+      deposits.map(deposit => {
+
+        const isPending =
+          String(deposit.status || "pending")
+            .toLowerCase() === "pending";
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${escapeHTML(
+                formatDate(deposit.createdAt)
+              )}
+            </td>
+
+            <td>
+
+              <div>
+                ${escapeHTML(
+                  deposit.email || "-"
+                )}
+              </div>
+
+              <div class="id-text">
+                UID:
+                ${escapeHTML(
+                  deposit.uid || "-"
+                )}
+              </div>
+
+            </td>
+
+            <td>
+              ${money(deposit.amountUSDT)}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                deposit.method || "-"
+              )}
+            </td>
+
+            <td>
+
+              <span class="id-text">
+                ${escapeHTML(
+                  deposit.transactionId || "-"
+                )}
+              </span>
+
+            </td>
+
+            <td>
+              ${statusBadge(
+                deposit.status
+              )}
+            </td>
+
+            <td>
+
+              ${
+                isPending
+                  ? `
+
+                    <button
+                      class="approve"
+                      data-approve-deposit="${escapeHTML(deposit.id)}"
+                    >
+                      Approve
+                    </button>
+
+                    <button
+                      class="reject"
+                      data-reject-deposit="${escapeHTML(deposit.id)}"
+                    >
+                      Reject
+                    </button>
+
+                  `
+                  : "-"
+              }
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }).join("");
+
+  }
+
+
+  /* =========================
+     WITHDRAWALS
+  ========================= */
+
+  const withdrawals =
+    Object.entries(withdrawalsData || {})
+      .map(([id, withdrawal]) => ({
+        id,
+        ...(withdrawal || {})
+      }));
+
+
+  withdrawals.sort(
+    (a, b) =>
+      Number(b.createdAt || 0) -
+      Number(a.createdAt || 0)
+  );
+
+
+  const pendingWithdrawals =
+    withdrawals.filter(
+      item =>
+        String(item.status || "pending")
+          .toLowerCase() === "pending"
+    );
+
+
+  $("pendingWithdrawals").textContent =
+    pendingWithdrawals.length;
+
+
+  if (!withdrawals.length) {
+
+    $("withdrawalsTable").innerHTML = `
+      <tr>
+        <td colspan="7" class="empty">
+          No withdrawal requests.
+        </td>
+      </tr>
+    `;
+
+  } else {
+
+    $("withdrawalsTable").innerHTML =
+      withdrawals.map(withdrawal => {
+
+        const isPending =
+          String(withdrawal.status || "pending")
+            .toLowerCase() === "pending";
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${escapeHTML(
+                formatDate(
+                  withdrawal.createdAt
+                )
+              )}
+            </td>
+
+            <td>
+
+              <div>
+                ${escapeHTML(
+                  withdrawal.email || "-"
+                )}
+              </div>
+
+              <div class="id-text">
+                UID:
+                ${escapeHTML(
+                  withdrawal.uid || "-"
+                )}
+              </div>
+
+            </td>
+
+            <td>
+              ${money(
+                withdrawal.amountUSDT ??
+                withdrawal.amount
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                withdrawal.method || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                withdrawal.accountNumber ||
+                withdrawal.account ||
+                "-"
+              )}
+            </td>
+
+            <td>
+              ${statusBadge(
+                withdrawal.status
+              )}
+            </td>
+
+            <td>
+
+              ${
+                isPending
+                  ? `
+
+                    <button
+                      class="approve"
+                      data-approve-withdrawal="${escapeHTML(withdrawal.id)}"
+                    >
+                      Approve
+                    </button>
+
+                    <button
+                      class="reject"
+                      data-reject-withdrawal="${escapeHTML(withdrawal.id)}"
+                    >
+                      Reject
+                    </button>
+
+                  `
+                  : "-"
+              }
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }).join("");
+
+  }
+
+
+  showNotice(
+    "Dashboard loaded successfully."
+  );
+
+}
+
+
+/* =========================
+   DEPOSIT ACTIONS
+========================= */
+
+$("depositsTable").addEventListener(
+  "click",
+  async (event) => {
+
+    const approveButton =
+      event.target.closest(
+        "[data-approve-deposit]"
+      );
+
+
+    const rejectButton =
+      event.target.closest(
+        "[data-reject-deposit]"
+      );
+
+
+    if (approveButton) {
+
+      await approveDeposit(
+        approveButton.dataset.approveDeposit
+      );
+
       return;
     }
 
 
-    try {
+    if (rejectButton) {
 
-      showNotice(
-        "Approving deposit..."
+      await rejectDeposit(
+        rejectButton.dataset.rejectDeposit
+      );
+
+    }
+
+  }
+);
+
+
+async function approveDeposit(id) {
+
+  if (!confirm(
+    "Approve this deposit?"
+  )) {
+    return;
+  }
+
+
+  try {
+
+    showNotice(
+      "Approving deposit..."
+    );
+
+
+    const depositRef =
+      ref(db, `deposits/${id}`);
+
+
+    const depositSnapshot =
+      await get(depositRef);
+
+
+    if (!depositSnapshot.exists()) {
+      throw new Error(
+        "Deposit not found."
+      );
+    }
+
+
+    const deposit =
+      depositSnapshot.val();
+
+
+    if (
+      String(
+        deposit.status || "pending"
+      ).toLowerCase() !== "pending"
+    ) {
+
+      throw new Error(
+        "This deposit is already processed."
+      );
+
+    }
+
+
+    const uid =
+      deposit.uid;
+
+
+    if (!uid) {
+      throw new Error(
+        "Deposit UID is missing."
+      );
+    }
+
+
+    const userSnapshot =
+      await get(
+        ref(db, `users/${uid}`)
       );
 
 
-      const depositRef =
-        ref(db, `deposits/${id}`);
+    if (!userSnapshot.exists()) {
+      throw new Error(
+        "User profile not found."
+      );
+    }
 
 
-      const depositSnapshot =
-        await get(depositRef);
+    const user =
+      userSnapshot.val();
 
 
-      if (!depositSnapshot.exists()) {
-
-        throw new Error(
-          "Deposit not found."
-        );
-
-      }
+    const depositAmount =
+      Number(
+        deposit.amountUSDT || 0
+      );
 
 
-      const deposit =
-        depositSnapshot.val();
+    if (
+      !Number.isFinite(depositAmount) ||
+      depositAmount <= 0
+    ) {
+
+      throw new Error(
+        "Invalid deposit amount."
+      );
+
+    }
 
 
-      if (
-        String(
-          deposit.status || "pending"
-        ).toLowerCase() !== "pending"
-      ) {
+    await update(
+      ref(db),
+      {
 
-        throw new Error(
-          "This deposit is already processed."
-        );
+        [`deposits/${id}/status`]:
+          "approved",
 
-      }
+        [`deposits/${id}/approvedAt`]:
+          Date.now(),
 
+        [`users/${uid}/wallet`]:
+          Number(user.wallet || 0) +
+          depositAmount,
 
-      const uid =
-        deposit.uid;
-
-
-      if (!uid) {
-
-        throw new Error(
-          "Deposit UID is missing."
-        );
-
-      }
-
-
-      const userRef =
-        ref(db, `users/${uid}`);
-
-
-      const userSnapshot =
-        await get(userRef);
-
-
-      if (!userSnapshot.exists()) {
-
-        throw new Error(
-          "User profile not found."
-        );
-
-      }
-
-
-      const user =
-        userSnapshot.val();
-
-
-      const depositAmount =
-        Number(
-          deposit.amountUSDT || 0
-        );
-
-
-      if (
-        !Number.isFinite(
+        [`users/${uid}/totalDeposit`]:
+          Number(user.totalDeposit || 0) +
           depositAmount
-        ) ||
-        depositAmount <= 0
-      ) {
-
-        throw new Error(
-          "Invalid deposit amount."
-        );
 
       }
+    );
 
 
-      /*
-        Approve:
-        1. Deposit status
-        2. Approval time
-        3. Wallet
-        4. Total deposit
-      */
-
-      await update(
-        ref(db),
-        {
-
-          [`deposits/${id}/status`]:
-            "approved",
-
-          [`deposits/${id}/approvedAt`]:
-            Date.now(),
-
-          [`users/${uid}/wallet`]:
-            Number(user.wallet || 0) +
-            depositAmount,
-
-          [`users/${uid}/totalDeposit`]:
-            Number(user.totalDeposit || 0) +
-            depositAmount
-
-        }
-      );
+    alert(
+      "Deposit approved successfully."
+    );
 
 
-      alert(
-        "Deposit approved successfully."
-      );
-
-
-      await loadDashboard();
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Approve deposit error:",
-        error
-      );
-
-
-      showNotice(
-        `Deposit Error: ${error.code || ""} ${error.message || error}`,
-        true
-      );
-
-    }
+    await loadDashboard();
 
   }
 
+  catch (error) {
 
-  async function rejectDeposit(id) {
+    console.error(
+      "Approve deposit error:",
+      error
+    );
+
+
+    showNotice(
+      `Deposit Error: ${error.code || ""} ${error.message || error}`,
+      true
+    );
+
+  }
+
+}
+
+
+async function rejectDeposit(id) {
+
+  if (!confirm(
+    "Reject this deposit?"
+  )) {
+    return;
+  }
+
+
+  try {
+
+    showNotice(
+      "Rejecting deposit..."
+    );
+
+
+    const depositRef =
+      ref(db, `deposits/${id}`);
+
+
+    const snapshot =
+      await get(depositRef);
+
+
+    if (!snapshot.exists()) {
+      throw new Error(
+        "Deposit not found."
+      );
+    }
+
+
+    const deposit =
+      snapshot.val();
+
 
     if (
-      !confirm(
-        "Reject this deposit?"
-      )
+      String(
+        deposit.status || "pending"
+      ).toLowerCase() !== "pending"
     ) {
+
+      throw new Error(
+        "This deposit is already processed."
+      );
+
+    }
+
+
+    await update(
+      ref(db),
+      {
+
+        [`deposits/${id}/status`]:
+          "rejected",
+
+        [`deposits/${id}/rejectedAt`]:
+          Date.now()
+
+      }
+    );
+
+
+    alert(
+      "Deposit rejected."
+    );
+
+
+    await loadDashboard();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Reject deposit error:",
+      error
+    );
+
+
+    showNotice(
+      `Reject Error: ${error.code || ""} ${error.message || error}`,
+      true
+    );
+
+  }
+
+}
+
+
+/* =========================
+   WITHDRAWAL ACTIONS
+========================= */
+
+$("withdrawalsTable").addEventListener(
+  "click",
+  async (event) => {
+
+    const approveButton =
+      event.target.closest(
+        "[data-approve-withdrawal]"
+      );
+
+
+    const rejectButton =
+      event.target.closest(
+        "[data-reject-withdrawal]"
+      );
+
+
+    if (approveButton) {
+
+      await approveWithdrawal(
+        approveButton.dataset.approveWithdrawal
+      );
+
       return;
     }
 
 
-    try {
+    if (rejectButton) {
 
-      showNotice(
-        "Rejecting deposit..."
-      );
-
-
-      const depositSnapshot =
-        await get(
-          ref(db, `deposits/${id}`)
-        );
-
-
-      if (!depositSnapshot.exists()) {
-
-        throw new Error(
-          "Deposit not found."
-        );
-
-      }
-
-
-      const deposit =
-        depositSnapshot.val();
-
-
-      if (
-        String(
-          deposit.status || "pending"
-        ).toLowerCase() !== "pending"
-      ) {
-
-        throw new Error(
-          "This deposit is already processed."
-        );
-
-      }
-
-
-      await update(
-        ref(db),
-        {
-
-          [`deposits/${id}/status`]:
-            "rejected",
-
-          [`deposits/${id}/rejectedAt`]:
-            Date.now()
-
-        }
-      );
-
-
-      alert(
-        "Deposit rejected."
-      );
-
-
-      await loadDashboard();
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Reject deposit error:",
-        error
-      );
-
-
-      showNotice(
-        `Reject Error: ${error.code || ""} ${error.message || error}`,
-        true
+      await rejectWithdrawal(
+        rejectButton.dataset.rejectWithdrawal
       );
 
     }
 
   }
+);
 
 
-  /* =========================
-     WITHDRAWAL ACTIONS
-  ========================= */
+async function approveWithdrawal(id) {
 
-  $("withdrawalsTable").addEventListener(
-    "click",
-    async (event) => {
-
-      const approveButton =
-        event.target.closest(
-          "[data-approve-withdrawal]"
-        );
+  if (!confirm(
+    "Approve this withdrawal?"
+  )) {
+    return;
+  }
 
 
-      const rejectButton =
-        event.target.closest(
-          "[data-reject-withdrawal]"
-        );
+  try {
+
+    showNotice(
+      "Approving withdrawal..."
+    );
 
 
-      if (approveButton) {
-
-        await approveWithdrawal(
-          approveButton.dataset.approveWithdrawal
-        );
-
-        return;
-
-      }
+    const withdrawalRef =
+      ref(db, `withdrawals/${id}`);
 
 
-      if (rejectButton) {
+    const snapshot =
+      await get(withdrawalRef);
 
-        await rejectWithdrawal(
-          rejectButton.dataset.rejectWithdrawal
-        );
 
-      }
-
+    if (!snapshot.exists()) {
+      throw new Error(
+        "Withdrawal not found."
+      );
     }
-  );
 
 
-  async function approveWithdrawal(id) {
+    const withdrawal =
+      snapshot.val();
+
 
     if (
-      !confirm(
-        "Approve this withdrawal?"
-      )
+      String(
+        withdrawal.status || "pending"
+      ).toLowerCase() !== "pending"
     ) {
-      return;
+
+      throw new Error(
+        "This withdrawal is already processed."
+      );
+
     }
 
 
-    try {
+    await update(
+      ref(db),
+      {
 
-      showNotice(
-        "Approving withdrawal..."
-      );
+        [`withdrawals/${id}/status`]:
+          "approved",
 
-
-      const withdrawalRef =
-        ref(db, `withdrawals/${id}`);
-
-
-      const snapshot =
-        await get(withdrawalRef);
-
-
-      if (!snapshot.exists()) {
-
-        throw new Error(
-          "Withdrawal not found."
-        );
+        [`withdrawals/${id}/approvedAt`]:
+          Date.now()
 
       }
+    );
 
 
-      const withdrawal =
-        snapshot.val();
+    alert(
+      "Withdrawal approved successfully."
+    );
 
 
-      if (
-        String(
-          withdrawal.status || "pending"
-        ).toLowerCase() !== "pending"
-      ) {
-
-        throw new Error(
-          "This withdrawal is already processed."
-        );
-
-      }
-
-
-      await update(
-        ref(db),
-        {
-
-          [`withdrawals/${id}/status`]:
-            "approved",
-
-          [`withdrawals/${id}/approvedAt`]:
-            Date.now()
-
-        }
-      );
-
-
-      alert(
-        "Withdrawal approved successfully."
-      );
-
-
-      await loadDashboard();
-
-    }
-
-    catch (error) {
-
-      console.error(
-        "Approve withdrawal error:",
-        error
-      );
-
-
-      showNotice(
-        `Withdrawal Error: ${error.code || ""} ${error.message || error}`,
-        true
-      );
-
-    }
+    await loadDashboard();
 
   }
 
+  catch (error) {
 
-  async function rejectWithdrawal(id) {
+    console.error(
+      "Approve withdrawal error:",
+      error
+    );
+
+
+    showNotice(
+      `Withdrawal Error: ${error.code || ""} ${error.message || error}`,
+      true
+    );
+
+  }
+
+}
+
+
+async function rejectWithdrawal(id) {
+
+  if (!confirm(
+    "Reject this withdrawal?"
+  )) {
+    return;
+  }
+
+
+  try {
+
+    showNotice(
+      "Rejecting withdrawal..."
+    );
+
+
+    const withdrawalRef =
+      ref(db, `withdrawals/${id}`);
+
+
+    const snapshot =
+      await get(withdrawalRef);
+
+
+    if (!snapshot.exists()) {
+      throw new Error(
+        "Withdrawal not found."
+      );
+    }
+
+
+    const withdrawal =
+      snapshot.val();
+
 
     if (
-      !confirm(
-        "Reject this withdrawal?"
-      )
+      String(
+        withdrawal.status || "pending"
+      ).toLowerCase() !== "pending"
     ) {
-      return;
+
+      throw new Error(
+        "This withdrawal is already processed."
+      );
+
     }
 
 
+    await update(
+      ref(db),
+      {
+
+        [`withdrawals/${id}/status`]:
+          "rejected",
+
+        [`withdrawals/${id}/rejectedAt`]:
+          Date.now()
+
+      }
+    );
+
+
+    alert(
+      "Withdrawal rejected."
+    );
+
+
+    await loadDashboard();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Reject withdrawal error:",
+      error
+    );
+
+
+    showNotice(
+      `Reject Error: ${error.code || ""} ${error.message || error}`,
+      true
+    );
+
+  }
+
+}
+
+
+/* =========================
+   LOGOUT BUTTON
+========================= */
+
+$("logoutBtn").addEventListener(
+  "click",
+  async () => {
+
     try {
 
-      showNotice(
-        "Rejecting withdrawal..."
-      );
+      await signOut(auth);
 
-
-      const snapshot =
-        await get(
-          ref(db, `withdrawals/${id}`)
-        );
-
-
-      if (!snapshot.exists()) {
-
-        throw new Error(
-          "Withdrawal not found."
-        );
-
-      }
-
-
-      const withdrawal =
-        snapshot.val();
-
-
-      if (
-        String(
-          withdrawal.status || "pending"
-        ).toLowerCase() !== "pending"
-      ) {
-
-        throw new Error(
-          "This withdrawal is already processed."
-        );
-
-      }
-
-
-      await update(
-        ref(db),
-        {
-
-          [`withdrawals/${id}/status`]:
-            "rejected",
-
-          [`withdrawals/${id}/rejectedAt`]:
-            Date.now()
-
-        }
-      );
-
-
-      alert(
-        "Withdrawal rejected."
-      );
-
-
-      await loadDashboard();
+      location.href =
+        "login.html";
 
     }
 
     catch (error) {
 
-      console.error(
-        "Reject withdrawal error:",
-        error
-      );
-
-
       showNotice(
-        `Reject Error: ${error.code || ""} ${error.message || error}`,
+        `Logout Error: ${error.message}`,
         true
       );
 
     }
 
   }
-
-
-  /* =========================
-     LOGOUT
-  ========================= */
-
-  $("logoutBtn").addEventListener(
-    "click",
-    async () => {
-
-      try {
-
-        await signOut(auth);
-
-        location.href =
-          "login.html";
-
-      }
-
-      catch (error) {
-
-        showNotice(
-          `Logout Error: ${error.message}`,
-          true
-        );
-
-      }
-
-    }
-  );
+);
 
 </script>
-
-</body>
-</html>
