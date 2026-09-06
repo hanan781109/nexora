@@ -3,504 +3,258 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexora | Login</title>
+  <title>Nexora - Login</title>
 
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: Arial, sans-serif;
     }
 
     body {
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.15), transparent 30%),
-        radial-gradient(circle at 90% 80%, rgba(255, 64, 129, 0.15), transparent 30%),
-        #07111f;
-      color: #fff;
       display: flex;
+      justify-content: center;
       align-items: center;
-      justify-content: center;
-      padding: 25px;
-    }
-
-    .wrapper {
-      width: 100%;
-      max-width: 1050px;
-      min-height: 650px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-radius: 30px;
-      overflow: hidden;
-      background: rgba(13, 26, 45, 0.95);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 30px 90px rgba(0,0,0,0.45);
-    }
-
-    /* LEFT */
-    .left {
-      padding: 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
       background:
-        linear-gradient(
-          145deg,
-          rgba(0, 198, 255, 0.14),
-          rgba(124, 77, 255, 0.13),
-          rgba(255, 64, 129, 0.12)
-        );
+        radial-gradient(circle at top left, #4f46e5, transparent 35%),
+        radial-gradient(circle at bottom right, #ec4899, transparent 35%),
+        #07111f;
+      color: white;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      padding: 35px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.45);
     }
 
     .logo {
+      text-align: center;
       font-size: 34px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
-      -webkit-background-clip: text;
-      color: transparent;
-      margin-bottom: 30px;
-    }
-
-    .left h1 {
-      font-size: 48px;
-      line-height: 1.08;
-      margin-bottom: 20px;
-    }
-
-    .gradient {
-      background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .left p {
-      color: #a9bbd0;
-      line-height: 1.7;
-      max-width: 450px;
-      margin-bottom: 35px;
-    }
-
-    .features {
-      display: grid;
-      gap: 15px;
-    }
-
-    .feature {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      color: #d7e4f3;
-    }
-
-    .feature-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #00c6ff, #7c4dff);
-      flex-shrink: 0;
-    }
-
-    /* RIGHT */
-    .right {
-      padding: 55px 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0a1627;
-    }
-
-    .form-box {
-      width: 100%;
-      max-width: 410px;
-    }
-
-    .form-box h2 {
-      font-size: 34px;
+      font-weight: 800;
       margin-bottom: 8px;
+      background: linear-gradient(90deg, #22d3ee, #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
-      color: #8499b1;
+      text-align: center;
+      color: #94a3b8;
       margin-bottom: 30px;
-      font-size: 14px;
     }
 
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
-    .input-group label {
+    label {
       display: block;
       margin-bottom: 8px;
-      color: #c7d4e3;
+      color: #cbd5e1;
       font-size: 14px;
-    }
-
-    .input-box {
-      position: relative;
-    }
-
-    .input-icon {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 17px;
-      opacity: 0.7;
     }
 
     input {
       width: 100%;
-      padding: 15px 15px 15px 45px;
+      padding: 14px 15px;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid #334155;
       outline: none;
-      background: rgba(255,255,255,0.045);
+      background: #0f172a;
       color: white;
-      font-size: 14px;
-      transition: 0.3s;
-    }
-
-    input::placeholder {
-      color: #62758c;
+      font-size: 15px;
     }
 
     input:focus {
-      border-color: #00d9ff;
-      box-shadow: 0 0 0 3px rgba(0,217,255,0.08);
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
     }
 
-    .password-box input {
-      padding-right: 50px;
+    .password-wrap {
+      position: relative;
     }
 
-    .show-password {
+    .password-wrap input {
+      padding-right: 55px;
+    }
+
+    .toggle-password {
       position: absolute;
-      right: 15px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
-      color: #8094ab;
+      color: #94a3b8;
+      font-size: 13px;
       user-select: none;
     }
 
     .options {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      margin: 5px 0 23px;
-      font-size: 12px;
+      align-items: center;
+      margin: 10px 0 22px;
+      font-size: 13px;
     }
 
     .remember {
       display: flex;
       align-items: center;
       gap: 7px;
-      color: #7f94aa;
+      color: #94a3b8;
     }
 
     .remember input {
       width: auto;
-      accent-color: #7c4dff;
     }
 
     .forgot {
-      color: #00d9ff;
-      text-decoration: none;
+      color: #22d3ee;
+      cursor: pointer;
     }
 
-    .login-btn {
+    button {
       width: 100%;
-      padding: 16px;
+      padding: 15px;
       border: none;
       border-radius: 13px;
       cursor: pointer;
       color: white;
-      font-size: 15px;
-      font-weight: 800;
-      background: linear-gradient(90deg, #00c6ff, #7c4dff, #ff4081);
-      box-shadow: 0 12px 30px rgba(124,77,255,0.2);
-      transition: 0.3s;
+      font-size: 16px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #06b6d4, #7c3aed, #ec4899);
+      transition: 0.2s;
     }
 
-    .login-btn:hover {
+    button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 15px 35px rgba(124,77,255,0.3);
+      box-shadow: 0 12px 30px rgba(124,58,237,0.35);
     }
 
-    .login-btn:disabled {
-      opacity: 0.7;
+    button:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
 
     .message {
       display: none;
-      margin-bottom: 18px;
+      margin-top: 16px;
       padding: 12px;
       border-radius: 10px;
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .message.error {
-      display: block;
-      background: rgba(255, 64, 129, 0.12);
-      border: 1px solid rgba(255, 64, 129, 0.3);
-      color: #ff9fbd;
-    }
-
-    .register-text {
-      text-align: center;
-      color: #8094aa;
       font-size: 14px;
-      margin-top: 22px;
-    }
-
-    .register-text a {
-      color: #00d9ff;
-      font-weight: bold;
-    }
-
-    .back-home {
       text-align: center;
-      margin-top: 18px;
     }
 
-    .back-home a {
-      color: #71869d;
-      font-size: 13px;
+    .error {
+      display: block;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5;
     }
 
-    .back-home a:hover {
-      color: white;
+    .success {
+      display: block;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: #86efac;
     }
 
-    @media (max-width: 850px) {
-      .wrapper {
-        grid-template-columns: 1fr;
-      }
-
-      .left {
-        padding: 40px 30px;
-      }
-
-      .left h1 {
-        font-size: 38px;
-      }
-
-      .right {
-        padding: 40px 30px;
-      }
+    .register {
+      text-align: center;
+      margin-top: 24px;
+      color: #94a3b8;
+      font-size: 14px;
     }
 
-    @media (max-width: 500px) {
-      body {
-        padding: 12px;
-      }
-
-      .wrapper {
-        border-radius: 22px;
-      }
-
-      .left {
-        padding: 35px 22px;
-      }
-
-      .right {
-        padding: 35px 22px;
-      }
-
-      .left h1 {
-        font-size: 32px;
-      }
-
-      .form-box h2 {
-        font-size: 29px;
-      }
+    .register a {
+      color: #22d3ee;
+      text-decoration: none;
+      font-weight: 700;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="wrapper">
+  <div class="login-box">
 
-    <!-- LEFT SIDE -->
-    <div class="left">
+    <div class="logo">NEXORA</div>
+    <div class="subtitle">Welcome back. Login to your account.</div>
 
-      <div class="logo">NEXORA</div>
+    <form id="loginForm">
 
-      <h1>
-        Welcome
-        <span class="gradient">Back.</span>
-      </h1>
-
-      <p>
-        Login to your Nexora account and access your
-        dashboard, plans, transactions and referral tools
-        from one place.
-      </p>
-
-      <div class="features">
-
-        <div class="feature">
-          <div class="feature-icon">✓</div>
-          <span>Secure account access</span>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">⚡</div>
-          <span>Fast and modern dashboard</span>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">💰</div>
-          <span>Manage your account easily</span>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">🔐</div>
-          <span>Firebase authentication</span>
-        </div>
-
+      <div class="input-group">
+        <label>Email Address</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your email"
+          required
+        >
       </div>
 
-    </div>
+      <div class="input-group">
+        <label>Password</label>
 
-
-    <!-- RIGHT SIDE -->
-    <div class="right">
-
-      <div class="form-box">
-
-        <h2>Welcome Back</h2>
-
-        <p class="subtitle">
-          Login to continue to your Nexora account.
-        </p>
-
-        <div id="message" class="message"></div>
-
-        <form id="loginForm">
-
-          <div class="input-group">
-
-            <label>Email Address</label>
-
-            <div class="input-box">
-
-              <span class="input-icon">✉️</span>
-
-              <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                required
-              >
-
-            </div>
-
-          </div>
-
-
-          <div class="input-group">
-
-            <label>Password</label>
-
-            <div class="input-box password-box">
-
-              <span class="input-icon">🔒</span>
-
-              <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                required
-              >
-
-              <span
-                class="show-password"
-                id="showPassword"
-              >👁</span>
-
-            </div>
-
-          </div>
-
-
-          <div class="options">
-
-            <label class="remember">
-
-              <input
-                type="checkbox"
-                id="remember"
-              >
-
-              <span>Remember me</span>
-
-            </label>
-
-            <a
-              href="#"
-              class="forgot"
-              id="forgotPassword"
-            >
-              Forgot Password?
-            </a>
-
-          </div>
-
-
-          <button
-            type="submit"
-            class="login-btn"
-            id="loginBtn"
+        <div class="password-wrap">
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            required
           >
-            Login →
-          </button>
 
-        </form>
-
-
-        <div class="register-text">
-
-          Don't have an account?
-
-          <a href="register.html">
-            Create Account
-          </a>
-
+          <span
+            class="toggle-password"
+            id="togglePassword"
+          >Show</span>
         </div>
+      </div>
 
+      <div class="options">
 
-        <div class="back-home">
+        <label class="remember">
+          <input type="checkbox" id="rememberMe">
+          Remember me
+        </label>
 
-          <a href="index.html">
-            ← Back to Home
-          </a>
-
-        </div>
+        <span class="forgot" id="forgotPassword">
+          Forgot Password?
+        </span>
 
       </div>
 
+      <button type="submit" id="loginBtn">
+        Login
+      </button>
+
+      <div id="message" class="message"></div>
+
+    </form>
+
+    <div class="register">
+      Don't have an account?
+      <a href="register.html">Create Account</a>
     </div>
 
   </div>
 
 
-  <!-- FIREBASE -->
   <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
     import {
       getAuth,
@@ -509,117 +263,167 @@
       setPersistence,
       browserLocalPersistence,
       browserSessionPersistence
-    }
-      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      get
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-    // Firebase Configuration
+    // =========================
+    // FIREBASE CONFIG
+    // =========================
+
     const firebaseConfig = {
-
       apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
-
-      authDomain:
-        "nexora-adef3.firebaseapp.com",
-
-      projectId:
-        "nexora-adef3",
-
-      storageBucket:
-        "nexora-adef3.firebasestorage.app",
-
-      messagingSenderId:
-        "318277373899",
-
-      appId:
-        "1:318277373899:web:0d2f97b1fa99cc7702304e",
-
-      measurementId:
-        "G-WN2V48SC4T"
+      authDomain: "nexora-adef3.firebaseapp.com",
+      projectId: "nexora-adef3",
+      storageBucket: "nexora-adef3.firebasestorage.app",
+      messagingSenderId: "318277373899",
+      appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+      measurementId: "G-WN2V48SC4T"
     };
 
 
-    // Initialize Firebase
-    const app =
-      initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
 
-    const auth =
-      getAuth(app);
+    const auth = getAuth(app);
+
+    const db = getDatabase(app);
 
 
-    // Show / Hide Password
-    document
-      .getElementById("showPassword")
-      .addEventListener("click", function () {
+    // =========================
+    // ADMIN UID
+    // =========================
 
-        const password =
-          document.getElementById("password");
+    const ADMIN_UID =
+      "6wsARRpgWwaez7qg86fjCNS4SY13";
 
-        if (password.type === "password") {
 
-          password.type = "text";
-          this.textContent = "🙈";
+    // =========================
+    // ELEMENTS
+    // =========================
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const emailInput =
+      document.getElementById("email");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const rememberMe =
+      document.getElementById("rememberMe");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const message =
+      document.getElementById("message");
+
+    const togglePassword =
+      document.getElementById("togglePassword");
+
+    const forgotPassword =
+      document.getElementById("forgotPassword");
+
+
+    // =========================
+    // MESSAGE
+    // =========================
+
+    function showMessage(text, type = "error") {
+
+      message.textContent = text;
+
+      message.className =
+        "message " + type;
+
+    }
+
+
+    // =========================
+    // PASSWORD SHOW/HIDE
+    // =========================
+
+    togglePassword.addEventListener("click", () => {
+
+      if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+        togglePassword.textContent = "Hide";
+
+      } else {
+
+        passwordInput.type = "password";
+
+        togglePassword.textContent = "Show";
+
+      }
+
+    });
+
+
+    // =========================
+    // LOGIN
+    // =========================
+
+    loginForm.addEventListener("submit", async (e) => {
+
+      e.preventDefault();
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+
+      if (!email || !password) {
+
+        showMessage(
+          "Please enter email and password."
+        );
+
+        return;
+
+      }
+
+
+      loginBtn.disabled = true;
+
+      loginBtn.textContent =
+        "Logging in...";
+
+      message.className =
+        "message";
+
+      try {
+
+        // Remember me
+        if (rememberMe.checked) {
+
+          await setPersistence(
+            auth,
+            browserLocalPersistence
+          );
 
         } else {
 
-          password.type = "password";
-          this.textContent = "👁";
+          await setPersistence(
+            auth,
+            browserSessionPersistence
+          );
 
         }
 
-      });
 
-
-    // Login
-    document
-      .getElementById("loginForm")
-      .addEventListener("submit", async function (event) {
-
-        event.preventDefault();
-
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-        const remember =
-          document
-            .getElementById("remember")
-            .checked;
-
-        const button =
-          document.getElementById("loginBtn");
-
-        const message =
-          document.getElementById("message");
-
-
-        message.className = "message";
-        message.textContent = "";
-
-
-        try {
-
-          button.disabled = true;
-          button.textContent = "Logging In...";
-
-
-          // Remember Me
-          await setPersistence(
-            auth,
-            remember
-              ? browserLocalPersistence
-              : browserSessionPersistence
-          );
-
-
-          // Firebase Login
+        // Firebase login
+        const credential =
           await signInWithEmailAndPassword(
             auth,
             email,
@@ -627,114 +431,193 @@
           );
 
 
-          alert("Login successful! 🎉");
+        const user =
+          credential.user;
 
 
-          // Go to dashboard
-          window.location.href =
-            "dashboard.html";
+        console.log(
+          "Logged in UID:",
+          user.uid
+        );
 
 
-        } catch (error) {
+        // =====================================
+        // ADMIN CHECK
+        // =====================================
 
-          console.error(
-            "Login Error:",
-            error
+        if (user.uid === ADMIN_UID) {
+
+          showMessage(
+            "Admin login successful! Redirecting...",
+            "success"
           );
 
+          setTimeout(() => {
 
-          message.className =
-            "message error";
+            window.location.href =
+              "admin.html";
+
+          }, 500);
+
+          return;
+        }
+
+
+        // =====================================
+        // DATABASE ADMIN CHECK
+        // =====================================
+
+        try {
+
+          const adminSnapshot =
+            await get(
+              ref(db, `admins/${user.uid}`)
+            );
 
 
           if (
-            error.code ===
-            "auth/invalid-credential"
+            adminSnapshot.exists() &&
+            adminSnapshot.val() === true
           ) {
 
-            message.textContent =
-              "Incorrect email or password.";
+            showMessage(
+              "Admin login successful! Redirecting...",
+              "success"
+            );
 
-          } else if (
-            error.code ===
-            "auth/user-not-found"
-          ) {
+            setTimeout(() => {
 
-            message.textContent =
-              "No account found with this email.";
+              window.location.href =
+                "admin.html";
 
-          } else if (
-            error.code ===
-            "auth/wrong-password"
-          ) {
+            }, 500);
 
-            message.textContent =
-              "Incorrect password.";
-
-          } else if (
-            error.code ===
-            "auth/invalid-email"
-          ) {
-
-            message.textContent =
-              "Please enter a valid email.";
-
-          } else if (
-            error.code ===
-            "auth/too-many-requests"
-          ) {
-
-            message.textContent =
-              "Too many attempts. Please try again later.";
-
-          } else if (
-            error.code ===
-            "auth/network-request-failed"
-          ) {
-
-            message.textContent =
-              "Network error. Check your internet connection.";
-
-          } else {
-
-            message.textContent =
-              error.message ||
-              "Login failed. Please try again.";
+            return;
 
           }
 
+        } catch (adminError) {
 
-          button.disabled = false;
-          button.textContent =
-            "Login →";
+          console.log(
+            "Admin database check:",
+            adminError
+          );
+
+          // Agar normal user hai aur
+          // admins read permission na ho,
+          // to normal dashboard par bhej do.
 
         }
 
-      });
+
+        // =====================================
+        // NORMAL USER
+        // =====================================
+
+        showMessage(
+          "Login successful! Redirecting...",
+          "success"
+        );
+
+        setTimeout(() => {
+
+          window.location.href =
+            "dashboard.html";
+
+        }, 500);
 
 
-    // Forgot Password
-    document
-      .getElementById("forgotPassword")
-      .addEventListener("click", async function (event) {
+      } catch (error) {
 
-        event.preventDefault();
+        console.error(
+          "Login Error:",
+          error
+        );
 
+
+        let errorMessage =
+          "Login failed. Please try again.";
+
+
+        if (
+          error.code ===
+          "auth/invalid-credential"
+        ) {
+
+          errorMessage =
+            "Email or password is incorrect.";
+
+        } else if (
+          error.code ===
+          "auth/user-not-found"
+        ) {
+
+          errorMessage =
+            "No account found with this email.";
+
+        } else if (
+          error.code ===
+          "auth/wrong-password"
+        ) {
+
+          errorMessage =
+            "Incorrect password.";
+
+        } else if (
+          error.code ===
+          "auth/invalid-email"
+        ) {
+
+          errorMessage =
+            "Please enter a valid email.";
+
+        } else if (
+          error.code ===
+          "auth/too-many-requests"
+        ) {
+
+          errorMessage =
+            "Too many attempts. Please try again later.";
+
+        }
+
+
+        showMessage(errorMessage);
+
+      } finally {
+
+        loginBtn.disabled = false;
+
+        loginBtn.textContent =
+          "Login";
+
+      }
+
+    });
+
+
+    // =========================
+    // FORGOT PASSWORD
+    // =========================
+
+    forgotPassword.addEventListener(
+      "click",
+      async () => {
 
         const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
+          emailInput.value.trim();
 
 
         if (!email) {
 
-          alert(
-            "Please enter your email address first."
+          showMessage(
+            "Enter your email first, then click Forgot Password."
           );
 
+          emailInput.focus();
+
           return;
+
         }
 
 
@@ -745,49 +628,26 @@
             email
           );
 
-
-          alert(
-            "Password reset email sent! 📩"
+          showMessage(
+            "Password reset email sent. Check your inbox.",
+            "success"
           );
-
 
         } catch (error) {
 
           console.error(
-            "Password Reset Error:",
+            "Password reset error:",
             error
           );
 
-
-          if (
-            error.code ===
-            "auth/user-not-found"
-          ) {
-
-            alert(
-              "No account found with this email."
-            );
-
-          } else if (
-            error.code ===
-            "auth/invalid-email"
-          ) {
-
-            alert(
-              "Please enter a valid email."
-            );
-
-          } else {
-
-            alert(
-              "Could not send reset email. Please try again."
-            );
-
-          }
+          showMessage(
+            "Could not send reset email. Check the email address."
+          );
 
         }
 
-      });
+      }
+    );
 
   </script>
 
