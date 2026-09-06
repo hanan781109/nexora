@@ -19,7 +19,6 @@
       min-height: 100vh;
     }
 
-    /* NAVBAR */
     .navbar {
       height: 70px;
       padding: 0 6%;
@@ -68,7 +67,6 @@
       font-weight: bold;
     }
 
-    /* MAIN */
     .container {
       width: 88%;
       max-width: 1200px;
@@ -88,7 +86,6 @@
       color: #94a3b8;
     }
 
-    /* CARDS */
     .cards {
       display: grid;
       grid-template-columns: repeat(4,1fr);
@@ -131,7 +128,6 @@
       color: #a78bfa;
     }
 
-    /* QUICK ACTIONS */
     .section-title {
       font-size: 21px;
       margin-bottom: 16px;
@@ -161,7 +157,6 @@
       border-color: #00eaff;
     }
 
-    /* INFO */
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -185,6 +180,7 @@
       padding: 13px 0;
       border-bottom: 1px solid rgba(255,255,255,.06);
       color: #cbd5e1;
+      gap: 15px;
     }
 
     .row:last-child {
@@ -194,6 +190,8 @@
     .value {
       color: white;
       font-weight: bold;
+      text-align: right;
+      word-break: break-word;
     }
 
     .loading {
@@ -202,7 +200,10 @@
       color: #94a3b8;
     }
 
-    /* MOBILE */
+    .error {
+      color: #f87171;
+    }
+
     @media(max-width:900px) {
       .cards {
         grid-template-columns: repeat(2,1fr);
@@ -257,7 +258,6 @@
     </div>
   </nav>
 
-
   <main class="container">
 
     <div id="loading" class="loading">
@@ -270,7 +270,6 @@
         <h1>Welcome, <span id="userName">User</span> 👋</h1>
         <p>Manage your Nexora account from your dashboard.</p>
       </div>
-
 
       <!-- STATS -->
 
@@ -297,7 +296,6 @@
         </div>
 
       </div>
-
 
       <!-- ACTIONS -->
 
@@ -331,7 +329,6 @@
 
       </div>
 
-
       <!-- ACCOUNT INFO -->
 
       <div class="info-grid">
@@ -362,7 +359,6 @@
 
         </div>
 
-
         <div class="info-card">
 
           <h3>Referral Summary</h3>
@@ -389,7 +385,6 @@
     </div>
 
   </main>
-
 
   <!-- FIREBASE -->
 
@@ -456,153 +451,129 @@
 
       try {
 
+        // ONLY READ CURRENT USER
+        // This fixes the previous permission problem.
+
         const userRef = ref(db, "users/" + user.uid);
 
         const snapshot = await get(userRef);
 
 
-        if (snapshot.exists()) {
+        if (!snapshot.exists()) {
 
-          const data = snapshot.val();
+          document.getElementById("loading").textContent =
+            "User data not found in database.";
 
+          document.getElementById("loading").classList.add("error");
 
-          const name =
-            data.name ||
-            user.displayName ||
-            "User";
-
-
-          const email =
-            data.email ||
-            user.email ||
-            "-";
-
-
-          const wallet =
-            Number(data.wallet || 0);
-
-
-          const totalDeposit =
-            Number(data.totalDeposit || 0);
-
-
-          const totalWithdrawal =
-            Number(data.totalWithdrawal || 0);
-
-
-          const referralCode =
-            data.referralCode ||
-            "N/A";
-
-
-          const referralEarnings =
-            Number(data.referralEarnings || 0);
-
-
-          let directReferrals = 0;
-
-
-          /*
-            Agar future mein users ke andar
-            referredBy field banega to yahan
-            referrals calculate karenge.
-          */
-
-          const allUsersRef = ref(db, "users");
-
-          const allUsersSnapshot =
-            await get(allUsersRef);
-
-
-          if (allUsersSnapshot.exists()) {
-
-            const users = allUsersSnapshot.val();
-
-
-            Object.values(users).forEach((u) => {
-
-              if (
-                u &&
-                u.referredBy === referralCode
-              ) {
-
-                directReferrals++;
-
-              }
-
-            });
-
-          }
-
-
-          // SHOW DATA
-
-          document.getElementById("userName").textContent =
-            name;
-
-          document.getElementById("navName").textContent =
-            name;
-
-          document.getElementById("infoName").textContent =
-            name;
-
-          document.getElementById("infoEmail").textContent =
-            email;
-
-          document.getElementById("referralCode").textContent =
-            referralCode;
-
-          document.getElementById("wallet").textContent =
-            wallet.toFixed(2);
-
-          document.getElementById("totalDeposit").textContent =
-            totalDeposit.toFixed(2);
-
-          document.getElementById("totalWithdrawal").textContent =
-            totalWithdrawal.toFixed(2);
-
-          document.getElementById("directReferrals").textContent =
-            directReferrals;
-
-          document.getElementById("refCount").textContent =
-            directReferrals;
-
-          document.getElementById("refEarnings").textContent =
-            referralEarnings.toFixed(2);
-
-
-          // AVATAR
-
-          document.getElementById("avatar").textContent =
-            name.charAt(0).toUpperCase();
-
-
-          document.getElementById("loading").style.display =
-            "none";
-
-          document.getElementById("dashboard").style.display =
-            "block";
+          return;
 
         }
 
-        else {
 
-          alert("User data not found in database.");
+        const data = snapshot.val();
 
-          await signOut(auth);
 
-          window.location.href = "login.html";
+        const name =
+          data.name ||
+          user.displayName ||
+          "User";
 
-        }
 
-      }
+        const email =
+          data.email ||
+          user.email ||
+          "-";
 
-      catch (error) {
 
-        console.error(error);
+        const wallet =
+          Number(data.wallet || 0);
+
+
+        const totalDeposit =
+          Number(data.totalDeposit || 0);
+
+
+        const totalWithdrawal =
+          Number(data.totalWithdrawal || 0);
+
+
+        const referralCode =
+          data.referralCode ||
+          "N/A";
+
+
+        const referralEarnings =
+          Number(data.referralEarnings || 0);
+
+
+        // IMPORTANT:
+        // We no longer read the complete /users node.
+        // Referral count comes from the current user's data.
+
+        const directReferrals =
+          Number(data.directReferrals || 0);
+
+
+        // SHOW DATA
+
+        document.getElementById("userName").textContent =
+          name;
+
+        document.getElementById("navName").textContent =
+          name;
+
+        document.getElementById("infoName").textContent =
+          name;
+
+        document.getElementById("infoEmail").textContent =
+          email;
+
+        document.getElementById("referralCode").textContent =
+          referralCode;
+
+        document.getElementById("wallet").textContent =
+          wallet.toFixed(2);
+
+        document.getElementById("totalDeposit").textContent =
+          totalDeposit.toFixed(2);
+
+        document.getElementById("totalWithdrawal").textContent =
+          totalWithdrawal.toFixed(2);
+
+        document.getElementById("directReferrals").textContent =
+          directReferrals;
+
+        document.getElementById("refCount").textContent =
+          directReferrals;
+
+        document.getElementById("refEarnings").textContent =
+          referralEarnings.toFixed(2);
+
+
+        // AVATAR
+
+        document.getElementById("avatar").textContent =
+          name.charAt(0).toUpperCase();
+
+
+        // SHOW DASHBOARD
+
+        document.getElementById("loading").style.display =
+          "none";
+
+        document.getElementById("dashboard").style.display =
+          "block";
+
+
+      } catch (error) {
+
+        console.error("Dashboard error:", error);
 
         document.getElementById("loading").textContent =
           "Unable to load dashboard.";
+
+        document.getElementById("loading").classList.add("error");
 
       }
 
