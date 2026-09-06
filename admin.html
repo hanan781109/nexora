@@ -1,3 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Nexora Admin Panel</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, #172554 0%, transparent 35%),
+        radial-gradient(circle at top right, #581c87 0%, transparent 35%),
+        #070b16;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1400px, 94%);
+      margin: auto;
+    }
+
+    header {
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(5,8,18,.75);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 27px;
+      font-weight: 800;
+      background: linear-gradient(90deg,#22d3ee,#818cf8,#f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .admin-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #adminEmail {
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font-weight: 700;
+      border-radius: 10px;
+      transition: .2s;
+    }
+
+    .logout {
+      padding: 10px 16px;
+      color: white;
+      background: linear-gradient(135deg,#ef4444,#ec4899);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      opacity: .9;
+    }
+
+    main {
+      padding: 35px 0 60px;
+    }
+
+    .hero {
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: clamp(30px,5vw,48px);
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: #94a3b8;
+    }
+
+    .notice {
+      margin: 20px 0;
+      padding: 14px 17px;
+      border-radius: 12px;
+      background: rgba(34,197,94,.10);
+      border: 1px solid rgba(34,197,94,.25);
+      color: #86efac;
+      font-size: 14px;
+    }
+
+    .notice.error {
+      background: rgba(239,68,68,.10);
+      border-color: rgba(239,68,68,.3);
+      color: #fca5a5;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(15,23,42,.72);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 15px 50px rgba(0,0,0,.25);
+    }
+
+    .stat-title {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .users {
+      color: #67e8f9;
+    }
+
+    .deposit {
+      color: #86efac;
+    }
+
+    .withdraw {
+      color: #f9a8d4;
+    }
+
+    .section {
+      margin-top: 25px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .section-header h2 {
+      font-size: 21px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 850px;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      color: #94a3b8;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      padding: 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    td {
+      padding: 15px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,.025);
+    }
+
+    .id-text {
+      color: #64748b;
+      font-size: 11px;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #64748b;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status.pending {
+      color: #fbbf24;
+      background: rgba(245,158,11,.12);
+    }
+
+    .status.approved {
+      color: #4ade80;
+      background: rgba(34,197,94,.12);
+    }
+
+    .status.rejected {
+      color: #f87171;
+      background: rgba(239,68,68,.12);
+    }
+
+    .approve,
+    .reject {
+      padding: 8px 11px;
+      margin: 2px;
+      color: white;
+      font-size: 12px;
+    }
+
+    .approve {
+      background: #16a34a;
+    }
+
+    .reject {
+      background: #dc2626;
+    }
+
+    footer {
+      text-align: center;
+      color: #64748b;
+      padding: 25px 0 40px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .admin-info {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+
+    <div class="brand">
+      Nexora Admin
+    </div>
+
+    <div class="admin-info">
+      <span id="adminEmail">Checking...</span>
+
+      <button class="logout" id="logoutBtn">
+        Logout
+      </button>
+    </div>
+
+  </div>
+</header>
+
+
+<main class="container">
+
+  <div class="hero">
+    <h1>Admin Dashboard</h1>
+    <p>Manage users, deposits and withdrawal requests.</p>
+  </div>
+
+
+  <div id="notice" class="notice">
+    Checking admin access...
+  </div>
+
+
+  <div class="stats">
+
+    <div class="card">
+      <div class="stat-title">Total Users</div>
+      <div class="stat-value users" id="usersCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="stat-title">Total Wallet Balance</div>
+      <div class="stat-value deposit" id="totalWallet">$0.00</div>
+    </div>
+
+    <div class="card">
+      <div class="stat-title">Pending Deposits</div>
+      <div class="stat-value withdraw" id="pendingDeposits">0</div>
+    </div>
+
+  </div>
+
+
+  <div class="card section">
+
+    <div class="section-header">
+      <h2>Users</h2>
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Referral Code</th>
+            <th>Wallet</th>
+            <th>Total Deposit</th>
+            <th>Total Withdrawal</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody id="usersTable">
+          <tr>
+            <td colspan="7" class="empty">
+              Loading users...
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <div class="card section">
+
+    <div class="section-header">
+      <h2>Deposit Requests</h2>
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>USDT</th>
+            <th>Method</th>
+            <th>Transaction ID</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="depositsTable">
+          <tr>
+            <td colspan="7" class="empty">
+              Loading deposits...
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <div class="card section">
+
+    <div class="section-header">
+      <h2>Withdrawal Requests</h2>
+
+      <strong id="pendingWithdrawals">
+        0
+      </strong>
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>USDT</th>
+            <th>Method</th>
+            <th>Account</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="withdrawalsTable">
+          <tr>
+            <td colspan="7" class="empty">
+              Loading withdrawals...
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer>
+  Nexora Admin Panel
+</footer>
+
+
 <script type="module">
 
 import { initializeApp }
@@ -17,10 +474,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
-
 const firebaseConfig = {
   apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
   authDomain: "nexora-adef3.firebaseapp.com",
@@ -32,41 +485,35 @@ const firebaseConfig = {
 };
 
 
-/* =========================
-   MAIN ADMIN UID
-========================= */
+const ADMIN_UID =
+  "6wsARRpgWwaez7qg86fjCNS4SY13";
 
-const ADMIN_UID = "6wsARRpgWwaez7qg86fjCNS4SY13";
-
-
-/* =========================
-   FIREBASE INIT
-========================= */
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
 
-/* =========================
-   HELPERS
-========================= */
-
-const $ = (id) => document.getElementById(id);
+const $ = (id) =>
+  document.getElementById(id);
 
 
 function escapeHTML(value) {
+
   return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+
 }
 
 
 function money(value) {
+
   return `$${Number(value || 0).toFixed(2)}`;
+
 }
 
 
@@ -74,66 +521,60 @@ function formatDate(value) {
 
   if (!value) return "-";
 
-  const d = new Date(Number(value));
+  const date =
+    new Date(Number(value));
 
-  if (Number.isNaN(d.getTime())) {
+  if (Number.isNaN(date.getTime())) {
     return "-";
   }
 
-  return d.toLocaleString();
+  return date.toLocaleString();
+
 }
 
 
 function statusBadge(value) {
 
-  const s = String(value || "pending").toLowerCase();
+  const status =
+    String(value || "pending")
+      .toLowerCase();
 
   return `
-    <span class="status ${escapeHTML(s)}">
-      ${escapeHTML(s.toUpperCase())}
+    <span class="status ${escapeHTML(status)}">
+      ${escapeHTML(status.toUpperCase())}
     </span>
   `;
+
 }
 
 
 function showNotice(message, error = false) {
 
-  const notice = $("notice");
+  const notice =
+    $("notice");
 
-  if (!notice) {
-    console.log(message);
-    return;
-  }
+  if (!notice) return;
 
-  notice.textContent = message;
+  notice.textContent =
+    message;
 
-  notice.className = error
-    ? "notice error"
-    : "notice";
+  notice.className =
+    error
+      ? "notice error"
+      : "notice";
+
 }
 
-
-function setText(id, value) {
-
-  const element = $(id);
-
-  if (element) {
-    element.textContent = value;
-  }
-}
-
-
-/* =========================
-   DATABASE READ
-========================= */
 
 async function readPath(path) {
 
-  const snapshot = await get(ref(db, path));
+  const snapshot =
+    await get(ref(db, path));
 
   return snapshot.exists()
     ? snapshot.val()
     : {};
+
 }
 
 
@@ -145,7 +586,9 @@ async function loadDashboard() {
 
   try {
 
-    showNotice("Loading dashboard...");
+    showNotice(
+      "Loading dashboard..."
+    );
 
 
     const usersData =
@@ -158,9 +601,7 @@ async function loadDashboard() {
       await readPath("withdrawals");
 
 
-    /* =========================
-       USERS
-    ========================= */
+    /* USERS */
 
     const users =
       Object.entries(usersData || {})
@@ -170,10 +611,8 @@ async function loadDashboard() {
         }));
 
 
-    setText(
-      "usersCount",
-      users.length
-    );
+    $("usersCount").textContent =
+      users.length;
 
 
     const totalWallet =
@@ -184,79 +623,71 @@ async function loadDashboard() {
       );
 
 
-    setText(
-      "totalWallet",
-      money(totalWallet)
-    );
+    $("totalWallet").textContent =
+      money(totalWallet);
 
 
     const usersTable =
       $("usersTable");
 
 
-    if (usersTable) {
+    if (!users.length) {
 
-      if (!users.length) {
+      usersTable.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty">
+            No users found.
+          </td>
+        </tr>
+      `;
 
-        usersTable.innerHTML = `
+    } else {
+
+      usersTable.innerHTML =
+        users.map(user => `
+
           <tr>
-            <td colspan="7" class="empty">
-              No users found.
+
+            <td>
+              ${escapeHTML(user.name || "-")}
             </td>
+
+            <td>
+              ${escapeHTML(user.email || "-")}
+            </td>
+
+            <td>
+              ${escapeHTML(user.referralCode || "-")}
+            </td>
+
+            <td>
+              ${money(user.wallet)}
+            </td>
+
+            <td>
+              ${money(user.totalDeposit)}
+            </td>
+
+            <td>
+              ${money(user.totalWithdrawal)}
+            </td>
+
+            <td>
+              ${
+                user.active === false
+                  ? "Inactive"
+                  : "Active"
+              }
+            </td>
+
           </tr>
-        `;
 
-      } else {
-
-        usersTable.innerHTML =
-          users.map(user => `
-
-            <tr>
-
-              <td>
-                ${escapeHTML(user.name || "-")}
-              </td>
-
-              <td>
-                ${escapeHTML(user.email || "-")}
-              </td>
-
-              <td>
-                ${escapeHTML(user.referralCode || "-")}
-              </td>
-
-              <td>
-                ${money(user.wallet)}
-              </td>
-
-              <td>
-                ${money(user.totalDeposit)}
-              </td>
-
-              <td>
-                ${money(user.totalWithdrawal)}
-              </td>
-
-              <td>
-                ${
-                  user.active === false
-                    ? "Inactive"
-                    : "Active"
-                }
-              </td>
-
-            </tr>
-
-          `).join("");
-
-      }
+        `).join("");
 
     }
 
 
-    /* =========================
-       DEPOSITS
-    ========================= */
+    /* DEPOSITS */
 
     const deposits =
       Object.entries(depositsData || {})
@@ -275,137 +706,127 @@ async function loadDashboard() {
 
     const pendingDeposits =
       deposits.filter(
-        item =>
-          String(item.status || "pending")
-            .toLowerCase() === "pending"
+        deposit =>
+          String(
+            deposit.status || "pending"
+          ).toLowerCase() === "pending"
       );
 
 
-    setText(
-      "pendingDeposits",
-      pendingDeposits.length
-    );
+    $("pendingDeposits").textContent =
+      pendingDeposits.length;
 
 
     const depositsTable =
       $("depositsTable");
 
 
-    if (depositsTable) {
+    if (!deposits.length) {
 
-      if (!deposits.length) {
+      depositsTable.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty">
+            No deposit requests.
+          </td>
+        </tr>
+      `;
 
-        depositsTable.innerHTML = `
-          <tr>
-            <td colspan="7" class="empty">
-              No deposit requests.
-            </td>
-          </tr>
-        `;
+    } else {
 
-      } else {
+      depositsTable.innerHTML =
+        deposits.map(deposit => {
 
-        depositsTable.innerHTML =
-          deposits.map(deposit => {
-
-            const isPending =
-              String(deposit.status || "pending")
-                .toLowerCase() === "pending";
+          const pending =
+            String(
+              deposit.status || "pending"
+            ).toLowerCase() === "pending";
 
 
-            return `
+          return `
 
-              <tr>
+            <tr>
 
-                <td>
+              <td>
+                ${escapeHTML(
+                  formatDate(deposit.createdAt)
+                )}
+              </td>
+
+              <td>
+
+                ${escapeHTML(
+                  deposit.email || "-"
+                )}
+
+                <div class="id-text">
+                  UID:
                   ${escapeHTML(
-                    formatDate(deposit.createdAt)
+                    deposit.uid || "-"
                   )}
-                </td>
+                </div>
 
-                <td>
+              </td>
 
-                  <div>
-                    ${escapeHTML(
-                      deposit.email || "-"
-                    )}
-                  </div>
+              <td>
+                ${money(
+                  deposit.amountUSDT
+                )}
+              </td>
 
-                  <div class="id-text">
-                    UID:
-                    ${escapeHTML(
-                      deposit.uid || "-"
-                    )}
-                  </div>
+              <td>
+                ${escapeHTML(
+                  deposit.method || "-"
+                )}
+              </td>
 
-                </td>
+              <td>
+                ${escapeHTML(
+                  deposit.transactionId || "-"
+                )}
+              </td>
 
-                <td>
-                  ${money(deposit.amountUSDT)}
-                </td>
+              <td>
+                ${statusBadge(
+                  deposit.status
+                )}
+              </td>
 
-                <td>
-                  ${escapeHTML(
-                    deposit.method || "-"
-                  )}
-                </td>
+              <td>
 
-                <td>
+                ${
+                  pending
+                    ? `
 
-                  <span class="id-text">
-                    ${escapeHTML(
-                      deposit.transactionId || "-"
-                    )}
-                  </span>
+                      <button
+                        class="approve"
+                        data-approve-deposit="${escapeHTML(deposit.id)}"
+                      >
+                        Approve
+                      </button>
 
-                </td>
+                      <button
+                        class="reject"
+                        data-reject-deposit="${escapeHTML(deposit.id)}"
+                      >
+                        Reject
+                      </button>
 
-                <td>
-                  ${statusBadge(
-                    deposit.status
-                  )}
-                </td>
+                    `
+                    : "-"
+                }
 
-                <td>
+              </td>
 
-                  ${
-                    isPending
-                      ? `
+            </tr>
 
-                        <button
-                          class="approve"
-                          data-approve-deposit="${escapeHTML(deposit.id)}"
-                        >
-                          Approve
-                        </button>
+          `;
 
-                        <button
-                          class="reject"
-                          data-reject-deposit="${escapeHTML(deposit.id)}"
-                        >
-                          Reject
-                        </button>
-
-                      `
-                      : "-"
-                  }
-
-                </td>
-
-              </tr>
-
-            `;
-
-          }).join("");
-
-      }
+        }).join("");
 
     }
 
 
-    /* =========================
-       WITHDRAWALS
-    ========================= */
+    /* WITHDRAWALS */
 
     const withdrawals =
       Object.entries(withdrawalsData || {})
@@ -424,131 +845,127 @@ async function loadDashboard() {
 
     const pendingWithdrawals =
       withdrawals.filter(
-        item =>
-          String(item.status || "pending")
-            .toLowerCase() === "pending"
+        withdrawal =>
+          String(
+            withdrawal.status || "pending"
+          ).toLowerCase() === "pending"
       );
 
 
-    setText(
-      "pendingWithdrawals",
-      pendingWithdrawals.length
-    );
+    $("pendingWithdrawals").textContent =
+      pendingWithdrawals.length;
 
 
     const withdrawalsTable =
       $("withdrawalsTable");
 
 
-    if (withdrawalsTable) {
+    if (!withdrawals.length) {
 
-      if (!withdrawals.length) {
+      withdrawalsTable.innerHTML = `
+        <tr>
+          <td colspan="7" class="empty">
+            No withdrawal requests.
+          </td>
+        </tr>
+      `;
 
-        withdrawalsTable.innerHTML = `
-          <tr>
-            <td colspan="7" class="empty">
-              No withdrawal requests.
-            </td>
-          </tr>
-        `;
+    } else {
 
-      } else {
+      withdrawalsTable.innerHTML =
+        withdrawals.map(withdrawal => {
 
-        withdrawalsTable.innerHTML =
-          withdrawals.map(withdrawal => {
-
-            const isPending =
-              String(withdrawal.status || "pending")
-                .toLowerCase() === "pending";
+          const pending =
+            String(
+              withdrawal.status || "pending"
+            ).toLowerCase() === "pending";
 
 
-            return `
+          return `
 
-              <tr>
+            <tr>
 
-                <td>
+              <td>
+                ${escapeHTML(
+                  formatDate(
+                    withdrawal.createdAt
+                  )
+                )}
+              </td>
+
+              <td>
+
+                ${escapeHTML(
+                  withdrawal.email || "-"
+                )}
+
+                <div class="id-text">
+                  UID:
                   ${escapeHTML(
-                    formatDate(withdrawal.createdAt)
+                    withdrawal.uid || "-"
                   )}
-                </td>
+                </div>
 
-                <td>
+              </td>
 
-                  <div>
-                    ${escapeHTML(
-                      withdrawal.email || "-"
-                    )}
-                  </div>
+              <td>
+                ${money(
+                  withdrawal.amountUSDT ??
+                  withdrawal.amount
+                )}
+              </td>
 
-                  <div class="id-text">
-                    UID:
-                    ${escapeHTML(
-                      withdrawal.uid || "-"
-                    )}
-                  </div>
+              <td>
+                ${escapeHTML(
+                  withdrawal.method || "-"
+                )}
+              </td>
 
-                </td>
+              <td>
+                ${escapeHTML(
+                  withdrawal.accountNumber ||
+                  withdrawal.account ||
+                  "-"
+                )}
+              </td>
 
-                <td>
-                  ${money(
-                    withdrawal.amountUSDT ??
-                    withdrawal.amount
-                  )}
-                </td>
+              <td>
+                ${statusBadge(
+                  withdrawal.status
+                )}
+              </td>
 
-                <td>
-                  ${escapeHTML(
-                    withdrawal.method || "-"
-                  )}
-                </td>
+              <td>
 
-                <td>
-                  ${escapeHTML(
-                    withdrawal.accountNumber ||
-                    withdrawal.account ||
-                    "-"
-                  )}
-                </td>
+                ${
+                  pending
+                    ? `
 
-                <td>
-                  ${statusBadge(
-                    withdrawal.status
-                  )}
-                </td>
+                      <button
+                        class="approve"
+                        data-approve-withdrawal="${escapeHTML(withdrawal.id)}"
+                      >
+                        Approve
+                      </button>
 
-                <td>
+                      <button
+                        class="reject"
+                        data-reject-withdrawal="${escapeHTML(withdrawal.id)}"
+                      >
+                        Reject
+                      </button>
 
-                  ${
-                    isPending
-                      ? `
+                    `
+                    : "-"
+                }
 
-                        <button
-                          class="approve"
-                          data-approve-withdrawal="${escapeHTML(withdrawal.id)}"
-                        >
-                          Approve
-                        </button>
+              </td>
 
-                        <button
-                          class="reject"
-                          data-reject-withdrawal="${escapeHTML(withdrawal.id)}"
-                        >
-                          Reject
-                        </button>
+            </tr>
 
-                      `
-                      : "-"
-                  }
+          `;
 
-                </td>
-
-              </tr>
-
-            `;
-
-          }).join("");
-
-      }
+        }).join("");
 
     }
 
@@ -557,14 +974,9 @@ async function loadDashboard() {
       "Dashboard loaded successfully."
     );
 
-  }
+  } catch (error) {
 
-  catch (error) {
-
-    console.error(
-      "Dashboard loading error:",
-      error
-    );
+    console.error(error);
 
     showNotice(
       `Dashboard Error: ${error.code || ""} ${error.message || error}`,
@@ -577,14 +989,14 @@ async function loadDashboard() {
 
 
 /* =========================
-   DEPOSIT APPROVE
+   DEPOSIT ACTIONS
 ========================= */
 
 async function approveDeposit(id) {
 
-  if (!confirm("Approve this deposit?")) {
-    return;
-  }
+  if (!confirm(
+    "Approve this deposit?"
+  )) return;
 
 
   try {
@@ -598,11 +1010,11 @@ async function approveDeposit(id) {
       ref(db, `deposits/${id}`);
 
 
-    const depositSnapshot =
+    const snapshot =
       await get(depositRef);
 
 
-    if (!depositSnapshot.exists()) {
+    if (!snapshot.exists()) {
       throw new Error(
         "Deposit not found."
       );
@@ -610,7 +1022,7 @@ async function approveDeposit(id) {
 
 
     const deposit =
-      depositSnapshot.val();
+      snapshot.val();
 
 
     if (
@@ -618,15 +1030,14 @@ async function approveDeposit(id) {
         deposit.status || "pending"
       ).toLowerCase() !== "pending"
     ) {
-
       throw new Error(
         "This deposit is already processed."
       );
-
     }
 
 
-    const uid = deposit.uid;
+    const uid =
+      deposit.uid;
 
 
     if (!uid) {
@@ -653,21 +1064,19 @@ async function approveDeposit(id) {
       userSnapshot.val();
 
 
-    const depositAmount =
+    const amount =
       Number(
         deposit.amountUSDT || 0
       );
 
 
     if (
-      !Number.isFinite(depositAmount) ||
-      depositAmount <= 0
+      !Number.isFinite(amount) ||
+      amount <= 0
     ) {
-
       throw new Error(
         "Invalid deposit amount."
       );
-
     }
 
 
@@ -683,11 +1092,11 @@ async function approveDeposit(id) {
 
         [`users/${uid}/wallet`]:
           Number(user.wallet || 0) +
-          depositAmount,
+          amount,
 
         [`users/${uid}/totalDeposit`]:
           Number(user.totalDeposit || 0) +
-          depositAmount
+          amount
 
       }
     );
@@ -700,14 +1109,9 @@ async function approveDeposit(id) {
 
     await loadDashboard();
 
-  }
+  } catch (error) {
 
-  catch (error) {
-
-    console.error(
-      "Approve deposit error:",
-      error
-    );
+    console.error(error);
 
     showNotice(
       `Deposit Error: ${error.code || ""} ${error.message || error}`,
@@ -719,15 +1123,11 @@ async function approveDeposit(id) {
 }
 
 
-/* =========================
-   DEPOSIT REJECT
-========================= */
-
 async function rejectDeposit(id) {
 
-  if (!confirm("Reject this deposit?")) {
-    return;
-  }
+  if (!confirm(
+    "Reject this deposit?"
+  )) return;
 
 
   try {
@@ -761,11 +1161,9 @@ async function rejectDeposit(id) {
         deposit.status || "pending"
       ).toLowerCase() !== "pending"
     ) {
-
       throw new Error(
         "This deposit is already processed."
       );
-
     }
 
 
@@ -790,14 +1188,9 @@ async function rejectDeposit(id) {
 
     await loadDashboard();
 
-  }
+  } catch (error) {
 
-  catch (error) {
-
-    console.error(
-      "Reject deposit error:",
-      error
-    );
+    console.error(error);
 
     showNotice(
       `Reject Error: ${error.code || ""} ${error.message || error}`,
@@ -810,14 +1203,14 @@ async function rejectDeposit(id) {
 
 
 /* =========================
-   WITHDRAWAL APPROVE
+   WITHDRAWAL ACTIONS
 ========================= */
 
 async function approveWithdrawal(id) {
 
-  if (!confirm("Approve this withdrawal?")) {
-    return;
-  }
+  if (!confirm(
+    "Approve this withdrawal?"
+  )) return;
 
 
   try {
@@ -851,11 +1244,9 @@ async function approveWithdrawal(id) {
         withdrawal.status || "pending"
       ).toLowerCase() !== "pending"
     ) {
-
       throw new Error(
         "This withdrawal is already processed."
       );
-
     }
 
 
@@ -880,14 +1271,9 @@ async function approveWithdrawal(id) {
 
     await loadDashboard();
 
-  }
+  } catch (error) {
 
-  catch (error) {
-
-    console.error(
-      "Approve withdrawal error:",
-      error
-    );
+    console.error(error);
 
     showNotice(
       `Withdrawal Error: ${error.code || ""} ${error.message || error}`,
@@ -899,15 +1285,11 @@ async function approveWithdrawal(id) {
 }
 
 
-/* =========================
-   WITHDRAWAL REJECT
-========================= */
-
 async function rejectWithdrawal(id) {
 
-  if (!confirm("Reject this withdrawal?")) {
-    return;
-  }
+  if (!confirm(
+    "Reject this withdrawal?"
+  )) return;
 
 
   try {
@@ -941,11 +1323,9 @@ async function rejectWithdrawal(id) {
         withdrawal.status || "pending"
       ).toLowerCase() !== "pending"
     ) {
-
       throw new Error(
         "This withdrawal is already processed."
       );
-
     }
 
 
@@ -970,14 +1350,9 @@ async function rejectWithdrawal(id) {
 
     await loadDashboard();
 
-  }
+  } catch (error) {
 
-  catch (error) {
-
-    console.error(
-      "Reject withdrawal error:",
-      error
-    );
+    console.error(error);
 
     showNotice(
       `Reject Error: ${error.code || ""} ${error.message || error}`,
@@ -990,121 +1365,91 @@ async function rejectWithdrawal(id) {
 
 
 /* =========================
-   TABLE EVENT LISTENERS
+   TABLE EVENTS
 ========================= */
 
-function setupTableListeners() {
+$("depositsTable")
+  .addEventListener(
+    "click",
+    async (event) => {
 
-  const depositsTable =
-    $("depositsTable");
+      const approve =
+        event.target.closest(
+          "[data-approve-deposit]"
+        );
 
-
-  if (depositsTable) {
-
-    depositsTable.addEventListener(
-      "click",
-      async (event) => {
-
-        const approveButton =
-          event.target.closest(
-            "[data-approve-deposit]"
-          );
+      const reject =
+        event.target.closest(
+          "[data-reject-deposit]"
+        );
 
 
-        const rejectButton =
-          event.target.closest(
-            "[data-reject-deposit]"
-          );
+      if (approve) {
+
+        await approveDeposit(
+          approve.dataset.approveDeposit
+        );
+
+        return;
+      }
 
 
-        if (approveButton) {
+      if (reject) {
 
-          await approveDeposit(
-            approveButton.dataset.approveDeposit
-          );
-
-          return;
-        }
-
-
-        if (rejectButton) {
-
-          await rejectDeposit(
-            rejectButton.dataset.rejectDeposit
-          );
-
-        }
+        await rejectDeposit(
+          reject.dataset.rejectDeposit
+        );
 
       }
-    );
 
-  }
-
-
-  const withdrawalsTable =
-    $("withdrawalsTable");
+    }
+  );
 
 
-  if (withdrawalsTable) {
+$("withdrawalsTable")
+  .addEventListener(
+    "click",
+    async (event) => {
 
-    withdrawalsTable.addEventListener(
-      "click",
-      async (event) => {
+      const approve =
+        event.target.closest(
+          "[data-approve-withdrawal]"
+        );
 
-        const approveButton =
-          event.target.closest(
-            "[data-approve-withdrawal]"
-          );
-
-
-        const rejectButton =
-          event.target.closest(
-            "[data-reject-withdrawal]"
-          );
+      const reject =
+        event.target.closest(
+          "[data-reject-withdrawal]"
+        );
 
 
-        if (approveButton) {
+      if (approve) {
 
-          await approveWithdrawal(
-            approveButton.dataset.approveWithdrawal
-          );
+        await approveWithdrawal(
+          approve.dataset.approveWithdrawal
+        );
 
-          return;
-        }
+        return;
+      }
 
 
-        if (rejectButton) {
+      if (reject) {
 
-          await rejectWithdrawal(
-            rejectButton.dataset.rejectWithdrawal
-          );
-
-        }
+        await rejectWithdrawal(
+          reject.dataset.rejectWithdrawal
+        );
 
       }
-    );
 
-  }
-
-}
+    }
+  );
 
 
 /* =========================
    LOGOUT
 ========================= */
 
-function setupLogout() {
-
-  const logoutBtn =
-    $("logoutBtn");
-
-
-  if (!logoutBtn) {
-    return;
-  }
-
-
-  logoutBtn.addEventListener(
+$("logoutBtn")
+  .addEventListener(
     "click",
     async () => {
 
@@ -1115,17 +1460,12 @@ function setupLogout() {
         location.href =
           "login.html";
 
-      }
+      } catch (error) {
 
-      catch (error) {
-
-        console.error(
-          "Logout error:",
-          error
-        );
+        console.error(error);
 
         showNotice(
-          `Logout Error: ${error.message || error}`,
+          `Logout Error: ${error.message}`,
           true
         );
 
@@ -1134,148 +1474,108 @@ function setupLogout() {
     }
   );
 
-}
-
 
 /* =========================
-   START ADMIN PAGE
+   AUTH
 ========================= */
 
-function startAdminPage() {
+onAuthStateChanged(
+  auth,
+  async (user) => {
 
-  setupTableListeners();
+    if (!user) {
 
-  setupLogout();
+      showNotice(
+        "No active login session. Please login again.",
+        true
+      );
+
+      setTimeout(() => {
+        location.href =
+          "login.html";
+      }, 1500);
+
+      return;
+    }
 
 
-  onAuthStateChanged(
-    auth,
-    async (user) => {
+    $("adminEmail").textContent =
+      user.email || "Admin";
 
-      /* No user */
-      if (!user) {
+
+    /* MAIN ADMIN */
+
+    if (user.uid === ADMIN_UID) {
+
+      showNotice(
+        "Admin verified. Loading dashboard..."
+      );
+
+      await loadDashboard();
+
+      return;
+    }
+
+
+    /* OTHER ADMINS */
+
+    try {
+
+      const snapshot =
+        await get(
+          ref(db, `admins/${user.uid}`)
+        );
+
+
+      const value =
+        snapshot.exists()
+          ? snapshot.val()
+          : false;
+
+
+      const isAdmin =
+        value === true ||
+        value === "true";
+
+
+      if (!isAdmin) {
 
         showNotice(
-          "No active login session. Please login first.",
+          "Access denied. This account is not an admin.",
           true
         );
+
+        setTimeout(() => {
+          location.href =
+            "login.html";
+        }, 1500);
 
         return;
       }
 
 
-      /* Show admin email */
-      setText(
-        "adminEmail",
-        user.email || "Admin"
+      showNotice(
+        "Admin verified. Loading dashboard..."
       );
 
 
-      /* =========================
-         MAIN ADMIN
-      ========================= */
+      await loadDashboard();
 
-      if (user.uid === ADMIN_UID) {
+    } catch (error) {
 
-        showNotice(
-          "Admin verified. Loading dashboard..."
-        );
+      console.error(error);
 
-        await loadDashboard();
-
-        return;
-      }
-
-
-      /* =========================
-         OTHER ADMINS
-      ========================= */
-
-      try {
-
-        showNotice(
-          "Checking admin permission..."
-        );
-
-
-        const adminSnapshot =
-          await get(
-            ref(
-              db,
-              `admins/${user.uid}`
-            )
-          );
-
-
-        const adminValue =
-          adminSnapshot.exists()
-            ? adminSnapshot.val()
-            : false;
-
-
-        const isAdmin =
-          adminValue === true ||
-          adminValue === "true";
-
-
-        if (!isAdmin) {
-
-          showNotice(
-            "Access denied. This account is not an admin.",
-            true
-          );
-
-          return;
-        }
-
-
-        showNotice(
-          "Admin verified. Loading dashboard..."
-        );
-
-
-        await loadDashboard();
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "Admin verification error:",
-          error
-        );
-
-
-        showNotice(
-          `Admin Error: ${error.code || ""} ${error.message || error}`,
-          true
-        );
-
-      }
+      showNotice(
+        `Admin Error: ${error.code || ""} ${error.message || error}`,
+        true
+      );
 
     }
-  );
 
-}
-
-
-/* =========================
-   RUN
-========================= */
-
-if (
-  document.readyState === "loading"
-) {
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    startAdminPage
-  );
-
-} else {
-
-  startAdminPage();
-
-}
+  }
+);
 
 </script>
+
+</body>
+</html>
