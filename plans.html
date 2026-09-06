@@ -233,6 +233,13 @@
     .select-btn.active{
       background:linear-gradient(90deg,#16a34a,#22c55e);
       cursor:default;
+      opacity:1;
+    }
+
+    .select-btn.expired{
+      background:#334155;
+      cursor:pointer;
+      opacity:1;
     }
 
     .plan-status{
@@ -254,6 +261,10 @@
       color:#22c55e;
       font-size:13px;
       font-weight:800;
+    }
+
+    .status-label.expired{
+      color:#f59e0b;
     }
 
     .countdown{
@@ -363,12 +374,14 @@
     </div>
   </nav>
 
+
   <main class="container">
 
     <div class="heading">
       <h1>Choose Your Plan</h1>
-      <p>Use your available USDT wallet balance to purchase a plan.</p>
+      <p>Purchase a 30-day plan using your available USDT wallet balance.</p>
     </div>
+
 
     <div class="wallet-box">
 
@@ -394,7 +407,9 @@
 
     </div>
 
+
     <div class="plans">
+
 
       <!-- $5 -->
       <div class="plan" data-plan-card="5">
@@ -404,7 +419,7 @@
         <div class="price">$5</div>
 
         <div class="daily">
-          Plan available
+          30 Days Package
         </div>
 
         <div class="details">
@@ -412,6 +427,11 @@
           <div class="detail">
             <span>Plan Value</span>
             <span>$5</span>
+          </div>
+
+          <div class="detail">
+            <span>Duration</span>
+            <span>30 Days</span>
           </div>
 
           <div class="detail">
@@ -426,13 +446,19 @@
         </button>
 
         <div class="plan-status" id="status-5">
-          <span class="status-label">PLAN ACTIVE ✓</span>
-          <span class="countdown" id="countdown-5">
-            24:00:00 remaining
+
+          <span class="status-label" id="status-label-5">
+            PLAN ACTIVE ✓
           </span>
+
+          <span class="countdown" id="countdown-5">
+            30 days remaining
+          </span>
+
           <button class="earning-btn" data-earning="5">
-            Earning
+            Earning Status
           </button>
+
         </div>
 
       </div>
@@ -446,7 +472,7 @@
         <div class="price">$10</div>
 
         <div class="daily">
-          Plan available
+          30 Days Package
         </div>
 
         <div class="details">
@@ -454,6 +480,11 @@
           <div class="detail">
             <span>Plan Value</span>
             <span>$10</span>
+          </div>
+
+          <div class="detail">
+            <span>Duration</span>
+            <span>30 Days</span>
           </div>
 
           <div class="detail">
@@ -468,13 +499,19 @@
         </button>
 
         <div class="plan-status" id="status-10">
-          <span class="status-label">PLAN ACTIVE ✓</span>
-          <span class="countdown" id="countdown-10">
-            24:00:00 remaining
+
+          <span class="status-label" id="status-label-10">
+            PLAN ACTIVE ✓
           </span>
+
+          <span class="countdown" id="countdown-10">
+            30 days remaining
+          </span>
+
           <button class="earning-btn" data-earning="10">
-            Earning
+            Earning Status
           </button>
+
         </div>
 
       </div>
@@ -488,23 +525,24 @@
         <div class="price">$20</div>
 
         <div class="daily">
-          Plan available
+          30 Days Package
         </div>
 
         <div class="details">
 
           <div class="detail">
-
             <span>Plan Value</span>
             <span>$20</span>
-
           </div>
 
           <div class="detail">
+            <span>Duration</span>
+            <span>30 Days</span>
+          </div>
 
+          <div class="detail">
             <span>Referral</span>
             <span>20%</span>
-
           </div>
 
         </div>
@@ -515,16 +553,16 @@
 
         <div class="plan-status" id="status-20">
 
-          <span class="status-label">
+          <span class="status-label" id="status-label-20">
             PLAN ACTIVE ✓
           </span>
 
           <span class="countdown" id="countdown-20">
-            24:00:00 remaining
+            30 days remaining
           </span>
 
           <button class="earning-btn" data-earning="20">
-            Earning
+            Earning Status
           </button>
 
         </div>
@@ -544,7 +582,7 @@
         <div class="price">$50</div>
 
         <div class="daily">
-          Plan available
+          30 Days Package
         </div>
 
         <div class="details">
@@ -552,6 +590,11 @@
           <div class="detail">
             <span>Plan Value</span>
             <span>$50</span>
+          </div>
+
+          <div class="detail">
+            <span>Duration</span>
+            <span>30 Days</span>
           </div>
 
           <div class="detail">
@@ -567,16 +610,16 @@
 
         <div class="plan-status" id="status-50">
 
-          <span class="status-label">
+          <span class="status-label" id="status-label-50">
             PLAN ACTIVE ✓
           </span>
 
           <span class="countdown" id="countdown-50">
-            24:00:00 remaining
+            30 days remaining
           </span>
 
           <button class="earning-btn" data-earning="50">
-            Earning
+            Earning Status
           </button>
 
         </div>
@@ -592,7 +635,7 @@
         <div class="price">$100</div>
 
         <div class="daily">
-          Plan available
+          30 Days Package
         </div>
 
         <div class="details">
@@ -600,6 +643,11 @@
           <div class="detail">
             <span>Plan Value</span>
             <span>$100</span>
+          </div>
+
+          <div class="detail">
+            <span>Duration</span>
+            <span>30 Days</span>
           </div>
 
           <div class="detail">
@@ -615,16 +663,16 @@
 
         <div class="plan-status" id="status-100">
 
-          <span class="status-label">
+          <span class="status-label" id="status-label-100">
             PLAN ACTIVE ✓
           </span>
 
           <span class="countdown" id="countdown-100">
-            24:00:00 remaining
+            30 days remaining
           </span>
 
           <button class="earning-btn" data-earning="100">
-            Earning
+            Earning Status
           </button>
 
         </div>
@@ -640,7 +688,7 @@
         <div class="price">$200</div>
 
         <div class="daily">
-          Plan available
+          30 Days Package
         </div>
 
         <div class="details">
@@ -648,6 +696,11 @@
           <div class="detail">
             <span>Plan Value</span>
             <span>$200</span>
+          </div>
+
+          <div class="detail">
+            <span>Duration</span>
+            <span>30 Days</span>
           </div>
 
           <div class="detail">
@@ -663,16 +716,16 @@
 
         <div class="plan-status" id="status-200">
 
-          <span class="status-label">
+          <span class="status-label" id="status-label-200">
             PLAN ACTIVE ✓
           </span>
 
           <span class="countdown" id="countdown-200">
-            24:00:00 remaining
+            30 days remaining
           </span>
 
           <button class="earning-btn" data-earning="200">
-            Earning
+            Earning Status
           </button>
 
         </div>
@@ -692,7 +745,7 @@
         <div class="price">$500</div>
 
         <div class="daily">
-          Plan available
+          30 Days Package
         </div>
 
         <div class="details">
@@ -700,6 +753,11 @@
           <div class="detail">
             <span>Plan Value</span>
             <span>$500</span>
+          </div>
+
+          <div class="detail">
+            <span>Duration</span>
+            <span>30 Days</span>
           </div>
 
           <div class="detail">
@@ -715,16 +773,16 @@
 
         <div class="plan-status" id="status-500">
 
-          <span class="status-label">
+          <span class="status-label" id="status-label-500">
             PLAN ACTIVE ✓
           </span>
 
           <span class="countdown" id="countdown-500">
-            24:00:00 remaining
+            30 days remaining
           </span>
 
           <button class="earning-btn" data-earning="500">
-            Earning
+            Earning Status
           </button>
 
         </div>
@@ -733,12 +791,15 @@
 
     </div>
 
+
     <div class="note">
+      Each purchased package is active for 30 days.
+      After the 30-day period ends, the package expires and must be purchased again to activate a new package.
       Plans are purchased directly from your available USDT wallet balance.
-      If your balance is insufficient, deposit USDT first.
     </div>
 
   </main>
+
 
   <div class="message" id="message"></div>
 
@@ -792,6 +853,12 @@
 
     let currentUser = null;
 
+    const planTimers = {};
+
+
+    const PLAN_DURATION =
+      30 * 24 * 60 * 60 * 1000;
+
 
     function showMessage(text){
 
@@ -800,9 +867,7 @@
       messageEl.classList.add("show");
 
       setTimeout(() => {
-
         messageEl.classList.remove("show");
-
       },4000);
 
     }
@@ -811,6 +876,47 @@
     function money(value){
 
       return Number(value || 0).toFixed(2);
+
+    }
+
+
+    function formatRemaining(milliseconds){
+
+      if(milliseconds <= 0){
+        return "Expired";
+      }
+
+
+      const totalSeconds =
+        Math.floor(milliseconds / 1000);
+
+
+      const days =
+        Math.floor(totalSeconds / 86400);
+
+
+      const hours =
+        Math.floor(
+          (totalSeconds % 86400) / 3600
+        );
+
+
+      const minutes =
+        Math.floor(
+          (totalSeconds % 3600) / 60
+        );
+
+
+      const seconds =
+        totalSeconds % 60;
+
+
+      return (
+        `${days}d ` +
+        `${String(hours).padStart(2,"0")}:` +
+        `${String(minutes).padStart(2,"0")}:` +
+        `${String(seconds).padStart(2,"0")}`
+      );
 
     }
 
@@ -878,9 +984,11 @@
           error
         );
 
+
         showMessage(
           "Unable to load wallet balance."
         );
+
 
         return null;
 
@@ -889,17 +997,114 @@
     }
 
 
-    function activatePlanUI(planAmount, purchaseTime){
+    function clearPlanTimer(planAmount){
+
+      if(planTimers[planAmount]){
+
+        clearInterval(
+          planTimers[planAmount]
+        );
+
+        delete planTimers[planAmount];
+
+      }
+
+    }
+
+
+    function setExpiredUI(planAmount){
 
       const status =
         document.getElementById(
           `status-${planAmount}`
         );
 
+
       const button =
         document.querySelector(
           `.select-btn[data-plan="${planAmount}"]`
         );
+
+
+      const label =
+        document.getElementById(
+          `status-label-${planAmount}`
+        );
+
+
+      const countdown =
+        document.getElementById(
+          `countdown-${planAmount}`
+        );
+
+
+      if(status){
+
+        status.classList.add("active");
+
+      }
+
+
+      if(label){
+
+        label.textContent =
+          "PLAN EXPIRED";
+
+        label.classList.add("expired");
+
+      }
+
+
+      if(countdown){
+
+        countdown.textContent =
+          "30-day package completed";
+
+      }
+
+
+      if(button){
+
+        button.disabled = false;
+
+        button.textContent =
+          "Purchase Again";
+
+        button.classList.remove("active");
+
+        button.classList.add("expired");
+
+      }
+
+    }
+
+
+    function activatePlanUI(
+      planAmount,
+      purchaseTime,
+      expiresAt
+    ){
+
+      clearPlanTimer(planAmount);
+
+
+      const status =
+        document.getElementById(
+          `status-${planAmount}`
+        );
+
+
+      const button =
+        document.querySelector(
+          `.select-btn[data-plan="${planAmount}"]`
+        );
+
+
+      const label =
+        document.getElementById(
+          `status-label-${planAmount}`
+        );
+
 
       const countdown =
         document.getElementById(
@@ -913,6 +1118,16 @@
       status.classList.add("active");
 
 
+      if(label){
+
+        label.textContent =
+          "PLAN ACTIVE ✓";
+
+        label.classList.remove("expired");
+
+      }
+
+
       if(button){
 
         button.disabled = true;
@@ -920,63 +1135,81 @@
         button.textContent =
           "Active ✓";
 
+        button.classList.remove("expired");
+
         button.classList.add("active");
 
       }
 
 
       const start =
-        Number(purchaseTime || Date.now());
+        Number(purchaseTime);
 
 
-      function updateCountdown(){
-
-        const now =
-          Date.now();
-
-        const cycle =
-          24 * 60 * 60 * 1000;
-
-        let remaining =
-          cycle -
-          ((now - start) % cycle);
+      let expiry =
+        Number(expiresAt);
 
 
-        if(remaining < 0){
-          remaining = cycle;
-        }
+      if(
+        !Number.isFinite(start) ||
+        start <= 0
+      ){
 
-
-        const hours =
-          Math.floor(
-            remaining / 3600000
-          );
-
-        const minutes =
-          Math.floor(
-            (remaining % 3600000) / 60000
-          );
-
-        const seconds =
-          Math.floor(
-            (remaining % 60000) / 1000
-          );
-
-
-        countdown.textContent =
-          `${String(hours).padStart(2,"0")}:` +
-          `${String(minutes).padStart(2,"0")}:` +
-          `${String(seconds).padStart(2,"0")} remaining`;
+        return;
 
       }
 
 
-      updateCountdown();
+      if(
+        !Number.isFinite(expiry) ||
+        expiry <= start
+      ){
 
-      setInterval(
-        updateCountdown,
-        1000
-      );
+        expiry =
+          start + PLAN_DURATION;
+
+      }
+
+
+      function updatePlanCountdown(){
+
+        const now =
+          Date.now();
+
+
+        const remaining =
+          expiry - now;
+
+
+        if(remaining <= 0){
+
+          clearPlanTimer(planAmount);
+
+          setExpiredUI(planAmount);
+
+          return;
+
+        }
+
+
+        if(countdown){
+
+          countdown.textContent =
+            `${formatRemaining(remaining)} remaining`;
+
+        }
+
+      }
+
+
+      updatePlanCountdown();
+
+
+      planTimers[planAmount] =
+        setInterval(
+          updatePlanCountdown,
+          1000
+        );
 
     }
 
@@ -991,7 +1224,11 @@
           );
 
 
-        if(!snapshot.exists()) return;
+        if(!snapshot.exists()){
+
+          return;
+
+        }
 
 
         const purchases =
@@ -1002,15 +1239,69 @@
           purchase => {
 
             if(
-              purchase &&
-              purchase.uid === uid &&
-              purchase.status === "active"
+              !purchase ||
+              purchase.uid !== uid
+            ){
+
+              return;
+
+            }
+
+
+            const planAmount =
+              Number(purchase.planAmount);
+
+
+            if(
+              !Number.isFinite(planAmount)
+            ){
+
+              return;
+
+            }
+
+
+            const createdAt =
+              Number(purchase.createdAt);
+
+
+            let expiresAt =
+              Number(purchase.expiresAt);
+
+
+            if(
+              !Number.isFinite(expiresAt)
+            ){
+
+              expiresAt =
+                createdAt + PLAN_DURATION;
+
+            }
+
+
+            const now =
+              Date.now();
+
+
+            if(
+              purchase.status === "active" &&
+              expiresAt > now
             ){
 
               activatePlanUI(
-                Number(purchase.planAmount),
-                Number(purchase.createdAt)
+                planAmount,
+                createdAt,
+                expiresAt
               );
+
+            }
+
+            else if(
+              purchase.status === "active" &&
+              expiresAt <= now
+            ){
+
+              setExpiredUI(planAmount);
 
             }
 
@@ -1144,6 +1435,10 @@
           Date.now();
 
 
+        const expiresAt =
+          now + PLAN_DURATION;
+
+
         const newWallet =
           Number(
             (
@@ -1230,8 +1525,14 @@
           source:
             "wallet",
 
+          durationDays:
+            30,
+
           createdAt:
-            now
+            now,
+
+          expiresAt:
+            expiresAt
 
         };
 
@@ -1242,29 +1543,31 @@
         );
 
 
-        await loadWallet(
-          currentUser.uid
-        );
+        walletBalanceEl.textContent =
+          `$${money(newWallet)} USDT`;
 
 
         activatePlanUI(
           planAmount,
-          now
+          now,
+          expiresAt
         );
 
 
         showMessage(
-          `$${money(planAmount)} plan purchased successfully.`
+          `$${money(planAmount)} plan purchased successfully for 30 days.`
         );
 
 
         console.log(
-          "Plan purchase successful:",
+          "30-day plan purchase successful:",
           {
             purchaseId,
             planAmount,
             oldWallet: wallet,
-            newWallet
+            newWallet,
+            createdAt: now,
+            expiresAt
           }
         );
 
@@ -1323,8 +1626,9 @@
                 button.dataset.earning
               );
 
+
             showMessage(
-              `Earning status for $${money(plan)} plan is shown by the 24-hour timer.`
+              `Earning status for the $${money(plan)} plan is shown by its package timer.`
             );
 
           }
@@ -1410,8 +1714,14 @@
                 button.disabled =
                   false;
 
-                button.textContent =
-                  oldText;
+                if(
+                  !button.classList.contains("expired")
+                ){
+
+                  button.textContent =
+                    oldText;
+
+                }
 
               }
 
