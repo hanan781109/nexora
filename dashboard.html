@@ -6,242 +6,401 @@
   <title>Nexora Dashboard</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Arial,sans-serif;
     }
 
-    body {
-      background: #07111f;
-      color: #fff;
-      min-height: 100vh;
+    body{
+      background:#07111f;
+      color:#fff;
+      min-height:100vh;
     }
 
     /* SIDEBAR */
-    .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 240px;
-      height: 100vh;
-      background: linear-gradient(180deg, #101d38, #0a1426);
-      border-right: 1px solid #263b63;
-      padding: 25px 15px;
-      z-index: 1000;
+    .sidebar{
+      position:fixed;
+      left:0;
+      top:0;
+      width:240px;
+      height:100vh;
+      background:linear-gradient(180deg,#101d38,#0a1426);
+      border-right:1px solid #263b63;
+      padding:25px 15px;
+      z-index:1000;
     }
 
-    .logo {
-      text-align: center;
-      font-size: 25px;
-      font-weight: bold;
-      color: #42e8ff;
-      margin-bottom: 35px;
+    .logo{
+      text-align:center;
+      font-size:25px;
+      font-weight:800;
+      background:linear-gradient(90deg,#42e8ff,#8b5cf6,#ff4f81);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      margin-bottom:35px;
     }
 
-    .nav a {
-      display: block;
-      text-decoration: none;
-      color: #c6d2e5;
-      padding: 14px 16px;
-      margin-bottom: 8px;
-      border-radius: 12px;
-      transition: .2s;
-      font-weight: 600;
+    .nav a{
+      display:block;
+      text-decoration:none;
+      color:#c6d2e5;
+      padding:14px 16px;
+      margin-bottom:8px;
+      border-radius:12px;
+      transition:.2s;
+      font-weight:600;
     }
 
     .nav a:hover,
-    .nav a.active {
-      background: linear-gradient(135deg, #18345c, #253d70);
-      color: #42e8ff;
+    .nav a.active{
+      background:linear-gradient(135deg,#18345c,#253d70);
+      color:#42e8ff;
     }
 
-    .logout {
-      position: absolute;
-      bottom: 25px;
-      left: 15px;
-      width: calc(100% - 30px);
-      border: none;
-      background: #ff4f81;
-      color: #fff;
-      padding: 13px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 15px;
+    .logout{
+      position:absolute;
+      bottom:25px;
+      left:15px;
+      width:calc(100% - 30px);
+      border:none;
+      background:#ff4f81;
+      color:#fff;
+      padding:13px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:bold;
+      font-size:15px;
     }
 
     /* MAIN */
-    .main {
-      margin-left: 240px;
-      padding: 25px;
+    .main{
+      margin-left:240px;
+      padding:25px;
     }
 
-    .topbar {
-      background: linear-gradient(135deg, #101d38, #182d58);
-      border: 1px solid #263b63;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 25px;
+    .topbar{
+      background:linear-gradient(135deg,#101d38,#182d58);
+      border:1px solid #263b63;
+      border-radius:18px;
+      padding:22px;
+      margin-bottom:25px;
     }
 
-    .topbar h1 {
-      font-size: 28px;
-      margin-bottom: 7px;
+    .topbar h1{
+      font-size:28px;
+      margin-bottom:7px;
     }
 
-    .topbar p {
-      color: #9fb0c9;
-      word-break: break-word;
+    .topbar p{
+      color:#9fb0c9;
+      word-break:break-word;
     }
 
     /* CARDS */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 18px;
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+      gap:18px;
     }
 
-    .card {
-      background: linear-gradient(145deg, #101d34, #142746);
-      border: 1px solid #263b63;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    .card{
+      background:linear-gradient(145deg,#101d34,#142746);
+      border:1px solid #263b63;
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);
+      transition:.2s;
     }
 
-    .card h3 {
-      color: #9fb0c9;
-      font-size: 14px;
-      margin-bottom: 12px;
+    .card:hover{
+      transform:translateY(-3px);
+      border-color:#42e8ff;
     }
 
-    .amount {
-      font-size: 29px;
-      font-weight: bold;
-      color: #42e8ff;
+    .card h3{
+      color:#9fb0c9;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    .amount{
+      font-size:29px;
+      font-weight:bold;
+      color:#42e8ff;
+    }
+
+    .earning-card{
+      background:linear-gradient(135deg,#24154b,#182b55);
+      border:1px solid #6546a8;
+    }
+
+    .earning-card .amount{
+      color:#ff6fa5;
+    }
+
+    .earning-sub{
+      color:#9fb0c9;
+      font-size:12px;
+      margin-top:8px;
+    }
+
+    /* EARNINGS */
+    .earnings-section{
+      margin-top:22px;
+      background:linear-gradient(135deg,#102c32,#123a45);
+      border:1px solid #236878;
+      border-radius:18px;
+      padding:22px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .section-title h2{
+      font-size:20px;
+    }
+
+    .section-title span{
+      color:#42e8ff;
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    .plans-list{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:15px;
+    }
+
+    .earning-plan{
+      background:rgba(7,17,31,.55);
+      border:1px solid rgba(66,232,255,.18);
+      border-radius:15px;
+      padding:18px;
+    }
+
+    .earning-plan-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .plan-name{
+      font-size:16px;
+      font-weight:bold;
+    }
+
+    .active-badge{
+      background:rgba(34,197,94,.12);
+      border:1px solid rgba(34,197,94,.3);
+      color:#22c55e;
+      padding:5px 8px;
+      border-radius:20px;
+      font-size:10px;
+      font-weight:bold;
+    }
+
+    .plan-value{
+      color:#9fb0c9;
+      font-size:13px;
+      margin-bottom:10px;
+    }
+
+    .timer-label{
+      color:#9fb0c9;
+      font-size:12px;
+      margin-bottom:5px;
+    }
+
+    .timer{
+      font-size:22px;
+      font-weight:800;
+      color:#42e8ff;
+      letter-spacing:1px;
+      margin-bottom:12px;
+    }
+
+    .earning-btn{
+      width:100%;
+      border:none;
+      padding:11px;
+      border-radius:10px;
+      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
+      color:#fff;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .earning-btn:hover{
+      opacity:.9;
+    }
+
+    .no-plans{
+      text-align:center;
+      color:#9fb0c9;
+      padding:20px;
+      border:1px dashed #263b63;
+      border-radius:12px;
     }
 
     /* REFERRAL */
-    .ref {
-      margin-top: 22px;
-      background: linear-gradient(135deg, #24154b, #182b55);
-      border: 1px solid #6546a8;
-      border-radius: 18px;
-      padding: 22px;
+    .ref{
+      margin-top:22px;
+      background:linear-gradient(135deg,#24154b,#182b55);
+      border:1px solid #6546a8;
+      border-radius:18px;
+      padding:22px;
     }
 
-    .ref h3 {
-      margin-bottom: 10px;
+    .ref h3{
+      margin-bottom:10px;
     }
 
-    .ref-code {
-      color: #ff6fa5;
-      font-size: 21px;
-      font-weight: bold;
-      word-break: break-all;
+    .ref-code{
+      color:#ff6fa5;
+      font-size:21px;
+      font-weight:bold;
+      word-break:break-all;
     }
 
     /* STATUS */
-    .status {
-      margin-top: 22px;
-      background: linear-gradient(135deg, #102c32, #123a45);
-      border: 1px solid #236878;
-      border-radius: 18px;
-      padding: 20px;
+    .status{
+      margin-top:22px;
+      background:linear-gradient(135deg,#102c32,#123a45);
+      border:1px solid #236878;
+      border-radius:18px;
+      padding:20px;
     }
 
-    .status-title {
-      color: #9fb0c9;
-      font-size: 14px;
-      margin-bottom: 8px;
+    .status-title{
+      color:#9fb0c9;
+      font-size:14px;
+      margin-bottom:8px;
     }
 
-    .online {
-      color: #42e8ff;
-      font-weight: bold;
+    .online{
+      color:#42e8ff;
+      font-weight:bold;
     }
 
     /* LOADING */
-    .loading {
-      text-align: center;
-      padding: 50px;
-      color: #9fb0c9;
+    .loading{
+      text-align:center;
+      padding:50px;
+      color:#9fb0c9;
     }
 
-    .error {
-      background: #321726;
-      border: 1px solid #79314c;
-      color: #ff8cac;
-      padding: 18px;
-      border-radius: 14px;
-      margin-top: 20px;
-      display: none;
+    .error{
+      background:#321726;
+      border:1px solid #79314c;
+      color:#ff8cac;
+      padding:18px;
+      border-radius:14px;
+      margin-top:20px;
+      display:none;
+    }
+
+    /* MESSAGE */
+    .message{
+      position:fixed;
+      left:50%;
+      bottom:25px;
+      transform:translateX(-50%);
+      width:min(90%,430px);
+      padding:14px 18px;
+      border-radius:12px;
+      background:#13243b;
+      border:1px solid rgba(255,255,255,.12);
+      text-align:center;
+      font-size:14px;
+      display:none;
+      z-index:2000;
+    }
+
+    .message.show{
+      display:block;
     }
 
     /* MOBILE */
-    .mobile-header {
-      display: none;
+    .mobile-header{
+      display:none;
     }
 
-    @media (max-width: 750px) {
+    @media(max-width:750px){
 
-      .sidebar {
-        width: 210px;
+      .sidebar{
+        width:210px;
       }
 
-      .main {
-        margin-left: 210px;
+      .main{
+        margin-left:210px;
       }
+
     }
 
-    @media (max-width: 600px) {
+    @media(max-width:600px){
 
-      .mobile-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: #101d38;
-        padding: 15px 18px;
-        border-bottom: 1px solid #263b63;
+      .mobile-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        background:#101d38;
+        padding:15px 18px;
+        border-bottom:1px solid #263b63;
       }
 
-      .mobile-header h2 {
-        color: #42e8ff;
+      .mobile-header h2{
+        background:linear-gradient(90deg,#42e8ff,#8b5cf6,#ff4f81);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
       }
 
-      .menu-btn {
-        border: none;
-        background: #253d70;
-        color: white;
-        padding: 9px 13px;
-        border-radius: 9px;
-        font-size: 18px;
+      .menu-btn{
+        border:none;
+        background:#253d70;
+        color:white;
+        padding:9px 13px;
+        border-radius:9px;
+        font-size:18px;
+        cursor:pointer;
       }
 
-      .sidebar {
-        transform: translateX(-100%);
-        transition: .25s;
-        width: 240px;
+      .sidebar{
+        transform:translateX(-100%);
+        transition:.25s;
+        width:240px;
       }
 
-      .sidebar.open {
-        transform: translateX(0);
+      .sidebar.open{
+        transform:translateX(0);
       }
 
-      .main {
-        margin-left: 0;
-        padding: 16px;
+      .main{
+        margin-left:0;
+        padding:16px;
       }
 
-      .topbar h1 {
-        font-size: 23px;
+      .topbar h1{
+        font-size:23px;
       }
 
-      .amount {
-        font-size: 25px;
+      .amount{
+        font-size:25px;
       }
+
+      .plans-list{
+        grid-template-columns:1fr;
+      }
+
     }
   </style>
 </head>
@@ -254,10 +413,13 @@
     <button class="menu-btn" id="menuBtn">☰</button>
   </div>
 
+
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
 
-    <div class="logo">NEXORA</div>
+    <div class="logo">
+      NEXORA
+    </div>
 
     <nav class="nav">
 
@@ -298,9 +460,17 @@
   <main class="main">
 
     <div class="topbar">
-      <h1>Welcome Back 👋</h1>
-      <p id="userEmail">Loading account...</p>
+
+      <h1>
+        Welcome Back 👋
+      </h1>
+
+      <p id="userEmail">
+        Loading account...
+      </p>
+
     </div>
+
 
     <div id="loading" class="loading">
       Loading your account...
@@ -309,62 +479,155 @@
 
     <div id="dashboardContent" style="display:none;">
 
+      <!-- MAIN CARDS -->
       <div class="cards">
 
         <div class="card">
-          <h3>Available Balance</h3>
+
+          <h3>
+            Available Balance
+          </h3>
+
           <div class="amount">
             $<span id="wallet">0.00</span>
           </div>
+
         </div>
 
+
         <div class="card">
-          <h3>Total Deposits</h3>
+
+          <h3>
+            Total Deposits
+          </h3>
+
           <div class="amount">
             $<span id="totalDeposit">0.00</span>
           </div>
+
         </div>
 
+
         <div class="card">
-          <h3>Total Withdrawals</h3>
+
+          <h3>
+            Total Withdrawals
+          </h3>
+
           <div class="amount">
             $<span id="totalWithdrawal">0.00</span>
           </div>
+
         </div>
 
+
+        <div class="card earning-card">
+
+          <h3>
+            Earnings
+          </h3>
+
+          <div class="amount">
+            $<span id="earnings">0.00</span>
+          </div>
+
+          <div class="earning-sub">
+            Earnings status
+          </div>
+
+        </div>
+
+
         <div class="card">
-          <h3>Referral Earnings</h3>
+
+          <h3>
+            Referral Earnings
+          </h3>
+
           <div class="amount">
             $<span id="referralEarnings">0.00</span>
           </div>
+
         </div>
 
+
         <div class="card">
-          <h3>Direct Referrals</h3>
+
+          <h3>
+            Direct Referrals
+          </h3>
+
           <div class="amount">
             <span id="directReferrals">0</span>
           </div>
+
         </div>
 
+
         <div class="card">
-          <h3>Plan Purchases</h3>
+
+          <h3>
+            Plan Purchases
+          </h3>
+
           <div class="amount">
             $<span id="totalPlanPurchase">0.00</span>
           </div>
+
         </div>
 
       </div>
 
 
+      <!-- EARNINGS SECTION -->
+      <section class="earnings-section">
+
+        <div class="section-title">
+
+          <h2>
+            Earnings
+          </h2>
+
+          <span id="activePlanCount">
+            0 Active Plans
+          </span>
+
+        </div>
+
+        <div
+          class="plans-list"
+          id="plansList"
+        >
+
+          <div class="no-plans">
+            No active plans yet.
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- REFERRAL -->
       <div class="ref">
-        <h3>Your Referral Code</h3>
-        <div class="ref-code" id="referralCode">
+
+        <h3>
+          Your Referral Code
+        </h3>
+
+        <div
+          class="ref-code"
+          id="referralCode"
+        >
           ---
         </div>
+
       </div>
 
 
+      <!-- STATUS -->
       <div class="status">
+
         <div class="status-title">
           Account Status
         </div>
@@ -372,14 +635,24 @@
         <div class="online">
           ● Account Connected
         </div>
+
       </div>
 
     </div>
 
 
-    <div id="errorBox" class="error"></div>
+    <div
+      id="errorBox"
+      class="error"
+    ></div>
 
   </main>
+
+
+  <div
+    class="message"
+    id="message"
+  ></div>
 
 
   <!-- FIREBASE -->
@@ -402,21 +675,39 @@
 
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
-      authDomain: "nexora-adef3.firebaseapp.com",
-      projectId: "nexora-adef3",
-      storageBucket: "nexora-adef3.firebasestorage.app",
-      messagingSenderId: "318277373899",
-      appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
-      measurementId: "G-WN2V48SC4T"
+
+      apiKey:
+        "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+
+      authDomain:
+        "nexora-adef3.firebaseapp.com",
+
+      projectId:
+        "nexora-adef3",
+
+      storageBucket:
+        "nexora-adef3.firebasestorage.app",
+
+      messagingSenderId:
+        "318277373899",
+
+      appId:
+        "1:318277373899:web:0d2f97b1fa99cc7702304e",
+
+      measurementId:
+        "G-WN2V48SC4T"
+
     };
 
 
-    const app = initializeApp(firebaseConfig);
+    const app =
+      initializeApp(firebaseConfig);
 
-    const auth = getAuth(app);
+    const auth =
+      getAuth(app);
 
-    const db = getDatabase(app);
+    const db =
+      getDatabase(app);
 
 
     const loading =
@@ -428,191 +719,510 @@
     const errorBox =
       document.getElementById("errorBox");
 
+    const message =
+      document.getElementById("message");
 
-    function money(value) {
+    const plansList =
+      document.getElementById("plansList");
 
-      const number = Number(value);
 
-      if (!Number.isFinite(number)) {
+    let timerIds = [];
+
+
+    function money(value){
+
+      const number =
+        Number(value);
+
+      if(!Number.isFinite(number)){
         return "0.00";
       }
 
       return number.toFixed(2);
+
     }
 
 
-    onAuthStateChanged(auth, (user) => {
+    function showMessage(text){
 
-      if (!user) {
-        window.location.href = "login.html";
+      message.textContent =
+        text;
+
+      message.classList.add("show");
+
+      setTimeout(() => {
+
+        message.classList.remove("show");
+
+      },3500);
+
+    }
+
+
+    function clearTimers(){
+
+      timerIds.forEach(
+        timer => clearInterval(timer)
+      );
+
+      timerIds = [];
+
+    }
+
+
+    function formatTime(milliseconds){
+
+      if(milliseconds <= 0){
+        return "00:00:00";
+      }
+
+      const totalSeconds =
+        Math.floor(
+          milliseconds / 1000
+        );
+
+      const hours =
+        Math.floor(
+          totalSeconds / 3600
+        );
+
+      const minutes =
+        Math.floor(
+          (totalSeconds % 3600) / 60
+        );
+
+      const seconds =
+        totalSeconds % 60;
+
+      return (
+        String(hours).padStart(2,"0") +
+        ":" +
+        String(minutes).padStart(2,"0") +
+        ":" +
+        String(seconds).padStart(2,"0")
+      );
+
+    }
+
+
+    function renderActivePlans(purchases){
+
+      clearTimers();
+
+      plansList.innerHTML = "";
+
+      const activePlans =
+        purchases.filter(
+          purchase =>
+            purchase &&
+            purchase.status === "active"
+        );
+
+
+      document.getElementById(
+        "activePlanCount"
+      ).textContent =
+        `${activePlans.length} Active Plan${activePlans.length === 1 ? "" : "s"}`;
+
+
+      if(activePlans.length === 0){
+
+        plansList.innerHTML = `
+          <div class="no-plans">
+            No active plans yet. Go to Plans to purchase one.
+          </div>
+        `;
+
         return;
+
       }
 
 
-      document.getElementById("userEmail").textContent =
-        user.email || "User";
+      activePlans.forEach(
+        (purchase,index) => {
+
+          const amount =
+            Number(
+              purchase.planAmount || 0
+            );
+
+          const createdAt =
+            Number(
+              purchase.createdAt || Date.now()
+            );
 
 
-      /*
-        IMPORTANT:
+          const card =
+            document.createElement("div");
 
-        Ye dashboard wallet ko change nahi karta.
-
-        Sirf:
-        users/{uid}
-
-        se realtime data read karta hai.
-
-        Agar Firebase mein wallet 600 hai,
-        dashboard 600 show karega.
-
-        Agar kisi aur page se wallet change hota hai,
-        dashboard automatically latest value show karega.
-      */
-
-      const userRef =
-        ref(db, "users/" + user.uid);
+          card.className =
+            "earning-plan";
 
 
-      onValue(
-        userRef,
-        (snapshot) => {
+          card.innerHTML = `
 
-          loading.style.display = "none";
+            <div class="earning-plan-top">
+
+              <div class="plan-name">
+                Plan #${index + 1}
+              </div>
+
+              <div class="active-badge">
+                ACTIVE ✓
+              </div>
+
+            </div>
+
+            <div class="plan-value">
+              Plan Value: $${money(amount)} USDT
+            </div>
+
+            <div class="timer-label">
+              24-hour cycle status
+            </div>
+
+            <div
+              class="timer"
+              id="timer-${index}"
+            >
+              24:00:00
+            </div>
+
+            <button
+              class="earning-btn"
+              data-amount="${amount}"
+            >
+              Earning
+            </button>
+
+          `;
 
 
-          if (!snapshot.exists()) {
+          plansList.appendChild(card);
 
-            dashboardContent.style.display = "none";
 
-            errorBox.style.display = "block";
+          const timerEl =
+            card.querySelector(
+              `#timer-${index}`
+            );
 
-            errorBox.textContent =
-              "User data not found in Firebase.";
 
-            return;
+          function updateTimer(){
+
+            const cycle =
+              24 * 60 * 60 * 1000;
+
+            const elapsed =
+              Date.now() - createdAt;
+
+            let remaining =
+              cycle -
+              (elapsed % cycle);
+
+
+            if(remaining <= 0){
+              remaining = cycle;
+            }
+
+
+            timerEl.textContent =
+              formatTime(remaining);
+
           }
 
 
-          const data =
-            snapshot.val() || {};
+          updateTimer();
 
 
-          const wallet =
-            Number(data.wallet) || 0;
-
-          const totalDeposit =
-            Number(data.totalDeposit) || 0;
-
-          const totalWithdrawal =
-            Number(data.totalWithdrawal) || 0;
-
-          const referralEarnings =
-            Number(data.referralEarnings) || 0;
-
-          const directReferrals =
-            Number(data.directReferrals) || 0;
-
-          const totalPlanPurchase =
-            Number(data.totalPlanPurchase) || 0;
-
-          const referralCode =
-            data.referralCode || "---";
+          const timerId =
+            setInterval(
+              updateTimer,
+              1000
+            );
 
 
-          document.getElementById("wallet").textContent =
-            money(wallet);
-
-          document.getElementById("totalDeposit").textContent =
-            money(totalDeposit);
-
-          document.getElementById("totalWithdrawal").textContent =
-            money(totalWithdrawal);
-
-          document.getElementById("referralEarnings").textContent =
-            money(referralEarnings);
-
-          document.getElementById("directReferrals").textContent =
-            directReferrals;
-
-          document.getElementById("totalPlanPurchase").textContent =
-            money(totalPlanPurchase);
-
-          document.getElementById("referralCode").textContent =
-            referralCode;
+          timerIds.push(timerId);
 
 
-          dashboardContent.style.display = "block";
+          card
+            .querySelector(".earning-btn")
+            .addEventListener(
+              "click",
+              () => {
 
-          errorBox.style.display = "none";
+                showMessage(
+                  `Earning status: $${money(amount)} plan — ${timerEl.textContent} remaining.`
+                );
 
-        },
-
-        (error) => {
-
-          loading.style.display = "none";
-
-          dashboardContent.style.display = "none";
-
-          errorBox.style.display = "block";
-
-          errorBox.textContent =
-            "Database error: " + error.message;
+              }
+            );
 
         }
       );
 
-    });
+    }
+
+
+    onAuthStateChanged(
+      auth,
+      user => {
+
+        if(!user){
+
+          window.location.href =
+            "login.html";
+
+          return;
+
+        }
+
+
+        document.getElementById(
+          "userEmail"
+        ).textContent =
+          user.email || "User";
+
+
+        const userRef =
+          ref(
+            db,
+            "users/" + user.uid
+          );
+
+
+        onValue(
+          userRef,
+
+          snapshot => {
+
+            if(!snapshot.exists()){
+
+              loading.style.display =
+                "none";
+
+              dashboardContent.style.display =
+                "none";
+
+              errorBox.style.display =
+                "block";
+
+              errorBox.textContent =
+                "User data not found in Firebase.";
+
+              return;
+
+            }
+
+
+            const data =
+              snapshot.val() || {};
+
+
+            document.getElementById(
+              "wallet"
+            ).textContent =
+              money(data.wallet);
+
+
+            document.getElementById(
+              "totalDeposit"
+            ).textContent =
+              money(data.totalDeposit);
+
+
+            document.getElementById(
+              "totalWithdrawal"
+            ).textContent =
+              money(data.totalWithdrawal);
+
+
+            document.getElementById(
+              "earnings"
+            ).textContent =
+              money(data.earnings);
+
+
+            document.getElementById(
+              "referralEarnings"
+            ).textContent =
+              money(data.referralEarnings);
+
+
+            document.getElementById(
+              "directReferrals"
+            ).textContent =
+              Number(
+                data.directReferrals || 0
+              );
+
+
+            document.getElementById(
+              "totalPlanPurchase"
+            ).textContent =
+              money(data.totalPlanPurchase);
+
+
+            document.getElementById(
+              "referralCode"
+            ).textContent =
+              data.referralCode || "---";
+
+
+            loading.style.display =
+              "none";
+
+            dashboardContent.style.display =
+              "block";
+
+            errorBox.style.display =
+              "none";
+
+          },
+
+          error => {
+
+            loading.style.display =
+              "none";
+
+            dashboardContent.style.display =
+              "none";
+
+            errorBox.style.display =
+              "block";
+
+            errorBox.textContent =
+              "Database error: " +
+              error.message;
+
+          }
+        );
+
+
+        const purchasesRef =
+          ref(
+            db,
+            "planPurchases"
+          );
+
+
+        onValue(
+          purchasesRef,
+
+          snapshot => {
+
+            if(!snapshot.exists()){
+
+              renderActivePlans([]);
+
+              return;
+
+            }
+
+
+            const raw =
+              snapshot.val() || {};
+
+
+            const purchases =
+              Object.values(raw)
+                .filter(
+                  purchase =>
+                    purchase &&
+                    purchase.uid === user.uid
+                );
+
+
+            renderActivePlans(
+              purchases
+            );
+
+          },
+
+          error => {
+
+            console.error(
+              "Plan loading error:",
+              error
+            );
+
+          }
+        );
+
+      }
+    );
 
 
     /* LOGOUT */
 
     document
       .getElementById("logoutBtn")
-      .addEventListener("click", async () => {
+      .addEventListener(
+        "click",
+        async () => {
 
-        try {
+          try{
 
-          await signOut(auth);
+            await signOut(auth);
 
-          window.location.href = "login.html";
+            window.location.href =
+              "login.html";
 
-        } catch (error) {
+          }catch(error){
 
-          alert("Logout failed: " + error.message);
+            alert(
+              "Logout failed: " +
+              error.message
+            );
+
+          }
 
         }
-
-      });
+      );
 
 
     /* MOBILE MENU */
 
     const menuBtn =
-      document.getElementById("menuBtn");
+      document.getElementById(
+        "menuBtn"
+      );
 
     const sidebar =
-      document.getElementById("sidebar");
+      document.getElementById(
+        "sidebar"
+      );
 
 
-    menuBtn.addEventListener("click", () => {
+    menuBtn.addEventListener(
+      "click",
+      () => {
 
-      sidebar.classList.toggle("open");
+        sidebar.classList.toggle(
+          "open"
+        );
 
-    });
+      }
+    );
 
 
     document
       .querySelectorAll(".nav a")
-      .forEach((link) => {
+      .forEach(
+        link => {
 
-        link.addEventListener("click", () => {
+          link.addEventListener(
+            "click",
+            () => {
 
-          sidebar.classList.remove("open");
+              sidebar.classList.remove(
+                "open"
+              );
 
-        });
+            }
+          );
 
-      });
+        }
+      );
 
   </script>
 
