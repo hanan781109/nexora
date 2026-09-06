@@ -1,1230 +1,1428 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexora Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora Dashboard</title>
 
-  <style>
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-      font-family:Arial,sans-serif;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
 
-    body{
-      background:#07111f;
-      color:#fff;
-      min-height:100vh;
-    }
+body{
+  background:#07111f;
+  color:#fff;
+  min-height:100vh;
+}
 
-    /* SIDEBAR */
-    .sidebar{
-      position:fixed;
-      left:0;
-      top:0;
-      width:240px;
-      height:100vh;
-      background:linear-gradient(180deg,#101d38,#0a1426);
-      border-right:1px solid #263b63;
-      padding:25px 15px;
-      z-index:1000;
-    }
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  width:240px;
+  height:100vh;
+  background:linear-gradient(180deg,#101d38,#0a1426);
+  border-right:1px solid #263b63;
+  padding:25px 15px;
+  z-index:1000;
+}
 
-    .logo{
-      text-align:center;
-      font-size:25px;
-      font-weight:800;
-      background:linear-gradient(90deg,#42e8ff,#8b5cf6,#ff4f81);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      margin-bottom:35px;
-    }
+.logo{
+  text-align:center;
+  font-size:25px;
+  font-weight:800;
+  background:linear-gradient(90deg,#42e8ff,#8b5cf6,#ff4f81);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:35px;
+}
 
-    .nav a{
-      display:block;
-      text-decoration:none;
-      color:#c6d2e5;
-      padding:14px 16px;
-      margin-bottom:8px;
-      border-radius:12px;
-      transition:.2s;
-      font-weight:600;
-    }
+.nav a{
+  display:block;
+  text-decoration:none;
+  color:#c6d2e5;
+  padding:14px 16px;
+  margin-bottom:8px;
+  border-radius:12px;
+  transition:.2s;
+  font-weight:600;
+}
 
-    .nav a:hover,
-    .nav a.active{
-      background:linear-gradient(135deg,#18345c,#253d70);
-      color:#42e8ff;
-    }
+.nav a:hover,
+.nav a.active{
+  background:linear-gradient(135deg,#18345c,#253d70);
+  color:#42e8ff;
+}
 
-    .logout{
-      position:absolute;
-      bottom:25px;
-      left:15px;
-      width:calc(100% - 30px);
-      border:none;
-      background:#ff4f81;
-      color:#fff;
-      padding:13px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:bold;
-      font-size:15px;
-    }
+.logout{
+  position:absolute;
+  bottom:25px;
+  left:15px;
+  width:calc(100% - 30px);
+  border:none;
+  background:#ff4f81;
+  color:#fff;
+  padding:13px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:15px;
+}
 
-    /* MAIN */
-    .main{
-      margin-left:240px;
-      padding:25px;
-    }
+/* MAIN */
+.main{
+  margin-left:240px;
+  padding:25px;
+}
 
-    .topbar{
-      background:linear-gradient(135deg,#101d38,#182d58);
-      border:1px solid #263b63;
-      border-radius:18px;
-      padding:22px;
-      margin-bottom:25px;
-    }
+.topbar{
+  background:linear-gradient(135deg,#101d38,#182d58);
+  border:1px solid #263b63;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:25px;
+}
 
-    .topbar h1{
-      font-size:28px;
-      margin-bottom:7px;
-    }
+.topbar h1{
+  font-size:28px;
+  margin-bottom:7px;
+}
 
-    .topbar p{
-      color:#9fb0c9;
-      word-break:break-word;
-    }
+.topbar p{
+  color:#9fb0c9;
+  word-break:break-word;
+}
 
-    /* CARDS */
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-      gap:18px;
-    }
+/* CARDS */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:18px;
+}
 
-    .card{
-      background:linear-gradient(145deg,#101d34,#142746);
-      border:1px solid #263b63;
-      border-radius:18px;
-      padding:22px;
-      box-shadow:0 10px 30px rgba(0,0,0,.2);
-      transition:.2s;
-    }
+.card{
+  background:linear-gradient(145deg,#101d34,#142746);
+  border:1px solid #263b63;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  transition:.2s;
+}
 
-    .card:hover{
-      transform:translateY(-3px);
-      border-color:#42e8ff;
-    }
+.card:hover{
+  transform:translateY(-3px);
+  border-color:#42e8ff;
+}
 
-    .card h3{
-      color:#9fb0c9;
-      font-size:14px;
-      margin-bottom:12px;
-    }
+.card h3{
+  color:#9fb0c9;
+  font-size:14px;
+  margin-bottom:12px;
+}
 
-    .amount{
-      font-size:29px;
-      font-weight:bold;
-      color:#42e8ff;
-    }
+.amount{
+  font-size:29px;
+  font-weight:bold;
+  color:#42e8ff;
+}
 
-    .earning-card{
-      background:linear-gradient(135deg,#24154b,#182b55);
-      border:1px solid #6546a8;
-    }
+.earning-card{
+  background:linear-gradient(135deg,#24154b,#182b55);
+  border:1px solid #6546a8;
+}
 
-    .earning-card .amount{
-      color:#ff6fa5;
-    }
+.earning-card .amount{
+  color:#ff6fa5;
+}
 
-    .earning-sub{
-      color:#9fb0c9;
-      font-size:12px;
-      margin-top:8px;
-    }
+.earning-sub{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-top:8px;
+}
 
-    /* EARNINGS */
-    .earnings-section{
-      margin-top:22px;
-      background:linear-gradient(135deg,#102c32,#123a45);
-      border:1px solid #236878;
-      border-radius:18px;
-      padding:22px;
-    }
+/* EARNINGS */
+.earnings-section{
+  margin-top:22px;
+  background:linear-gradient(135deg,#102c32,#123a45);
+  border:1px solid #236878;
+  border-radius:18px;
+  padding:22px;
+}
 
-    .section-title{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:18px;
-    }
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:18px;
+}
 
-    .section-title h2{
-      font-size:20px;
-    }
+.section-title h2{
+  font-size:20px;
+}
 
-    .section-title span{
-      color:#42e8ff;
-      font-size:13px;
-      font-weight:bold;
-    }
+.section-title span{
+  color:#42e8ff;
+  font-size:13px;
+  font-weight:bold;
+}
 
-    .plans-list{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-      gap:15px;
-    }
+.plans-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
 
-    .earning-plan{
-      background:rgba(7,17,31,.55);
-      border:1px solid rgba(66,232,255,.18);
-      border-radius:15px;
-      padding:18px;
-    }
+.earning-plan{
+  background:rgba(7,17,31,.55);
+  border:1px solid rgba(66,232,255,.18);
+  border-radius:15px;
+  padding:18px;
+}
 
-    .earning-plan-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:14px;
-    }
+.earning-plan-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
 
-    .plan-name{
-      font-size:16px;
-      font-weight:bold;
-    }
+.plan-name{
+  font-size:16px;
+  font-weight:bold;
+}
 
-    .active-badge{
-      background:rgba(34,197,94,.12);
-      border:1px solid rgba(34,197,94,.3);
-      color:#22c55e;
-      padding:5px 8px;
-      border-radius:20px;
-      font-size:10px;
-      font-weight:bold;
-    }
+.active-badge{
+  background:rgba(34,197,94,.12);
+  border:1px solid rgba(34,197,94,.3);
+  color:#22c55e;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:bold;
+}
 
-    .plan-value{
-      color:#9fb0c9;
-      font-size:13px;
-      margin-bottom:10px;
-    }
+.expired-badge{
+  background:rgba(255,79,129,.12);
+  border:1px solid rgba(255,79,129,.3);
+  color:#ff6fa5;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:bold;
+}
 
-    .timer-label{
-      color:#9fb0c9;
-      font-size:12px;
-      margin-bottom:5px;
-    }
+.plan-value{
+  color:#9fb0c9;
+  font-size:13px;
+  margin-bottom:8px;
+}
 
-    .timer{
-      font-size:22px;
-      font-weight:800;
-      color:#42e8ff;
-      letter-spacing:1px;
-      margin-bottom:12px;
-    }
+.rate{
+  color:#ff6fa5;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
 
-    .earning-btn{
-      width:100%;
-      border:none;
-      padding:11px;
-      border-radius:10px;
-      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
-      color:#fff;
-      font-weight:bold;
-      cursor:pointer;
-    }
+.timer-label{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-bottom:5px;
+}
 
-    .earning-btn:hover{
-      opacity:.9;
-    }
+.timer{
+  font-size:22px;
+  font-weight:800;
+  color:#42e8ff;
+  letter-spacing:1px;
+  margin-bottom:12px;
+}
 
-    .no-plans{
-      text-align:center;
-      color:#9fb0c9;
-      padding:20px;
-      border:1px dashed #263b63;
-      border-radius:12px;
-    }
+.expiry-label{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-bottom:5px;
+}
 
-    /* REFERRAL */
-    .ref{
-      margin-top:22px;
-      background:linear-gradient(135deg,#24154b,#182b55);
-      border:1px solid #6546a8;
-      border-radius:18px;
-      padding:22px;
-    }
+.expiry-timer{
+  font-size:18px;
+  font-weight:800;
+  color:#8b5cf6;
+  margin-bottom:14px;
+}
 
-    .ref h3{
-      margin-bottom:10px;
-    }
+.earning-btn{
+  width:100%;
+  border:none;
+  padding:11px;
+  border-radius:10px;
+  background:linear-gradient(90deg,#00c6ff,#8b5cf6);
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .ref-code{
-      color:#ff6fa5;
-      font-size:21px;
-      font-weight:bold;
-      word-break:break-all;
-    }
+.earning-btn:hover{
+  opacity:.9;
+}
 
-    /* STATUS */
-    .status{
-      margin-top:22px;
-      background:linear-gradient(135deg,#102c32,#123a45);
-      border:1px solid #236878;
-      border-radius:18px;
-      padding:20px;
-    }
+.earning-btn.expired{
+  background:#263044;
+  color:#9fb0c9;
+  cursor:not-allowed;
+}
 
-    .status-title{
-      color:#9fb0c9;
-      font-size:14px;
-      margin-bottom:8px;
-    }
+.no-plans{
+  text-align:center;
+  color:#9fb0c9;
+  padding:20px;
+  border:1px dashed #263b63;
+  border-radius:12px;
+}
 
-    .online{
-      color:#42e8ff;
-      font-weight:bold;
-    }
+/* REFERRAL */
+.ref{
+  margin-top:22px;
+  background:linear-gradient(135deg,#24154b,#182b55);
+  border:1px solid #6546a8;
+  border-radius:18px;
+  padding:22px;
+}
 
-    /* LOADING */
-    .loading{
-      text-align:center;
-      padding:50px;
-      color:#9fb0c9;
-    }
+.ref h3{
+  margin-bottom:10px;
+}
 
-    .error{
-      background:#321726;
-      border:1px solid #79314c;
-      color:#ff8cac;
-      padding:18px;
-      border-radius:14px;
-      margin-top:20px;
-      display:none;
-    }
+.ref-code{
+  color:#ff6fa5;
+  font-size:21px;
+  font-weight:bold;
+  word-break:break-all;
+}
 
-    /* MESSAGE */
-    .message{
-      position:fixed;
-      left:50%;
-      bottom:25px;
-      transform:translateX(-50%);
-      width:min(90%,430px);
-      padding:14px 18px;
-      border-radius:12px;
-      background:#13243b;
-      border:1px solid rgba(255,255,255,.12);
-      text-align:center;
-      font-size:14px;
-      display:none;
-      z-index:2000;
-    }
+/* STATUS */
+.status{
+  margin-top:22px;
+  background:linear-gradient(135deg,#102c32,#123a45);
+  border:1px solid #236878;
+  border-radius:18px;
+  padding:20px;
+}
 
-    .message.show{
-      display:block;
-    }
+.status-title{
+  color:#9fb0c9;
+  font-size:14px;
+  margin-bottom:8px;
+}
 
-    /* MOBILE */
-    .mobile-header{
-      display:none;
-    }
+.online{
+  color:#42e8ff;
+  font-weight:bold;
+}
 
-    @media(max-width:750px){
+/* LOADING */
+.loading{
+  text-align:center;
+  padding:50px;
+  color:#9fb0c9;
+}
 
-      .sidebar{
-        width:210px;
-      }
+.error{
+  background:#321726;
+  border:1px solid #79314c;
+  color:#ff8cac;
+  padding:18px;
+  border-radius:14px;
+  margin-top:20px;
+  display:none;
+}
 
-      .main{
-        margin-left:210px;
-      }
+/* MESSAGE */
+.message{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%);
+  width:min(90%,430px);
+  padding:14px 18px;
+  border-radius:12px;
+  background:#13243b;
+  border:1px solid rgba(255,255,255,.12);
+  text-align:center;
+  font-size:14px;
+  display:none;
+  z-index:2000;
+}
 
-    }
+.message.show{
+  display:block;
+}
 
-    @media(max-width:600px){
+/* MOBILE */
+.mobile-header{
+  display:none;
+}
 
-      .mobile-header{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        background:#101d38;
-        padding:15px 18px;
-        border-bottom:1px solid #263b63;
-      }
+@media(max-width:750px){
 
-      .mobile-header h2{
-        background:linear-gradient(90deg,#42e8ff,#8b5cf6,#ff4f81);
-        -webkit-background-clip:text;
-        -webkit-text-fill-color:transparent;
-      }
+  .sidebar{
+    width:210px;
+  }
 
-      .menu-btn{
-        border:none;
-        background:#253d70;
-        color:white;
-        padding:9px 13px;
-        border-radius:9px;
-        font-size:18px;
-        cursor:pointer;
-      }
+  .main{
+    margin-left:210px;
+  }
 
-      .sidebar{
-        transform:translateX(-100%);
-        transition:.25s;
-        width:240px;
-      }
+}
 
-      .sidebar.open{
-        transform:translateX(0);
-      }
+@media(max-width:600px){
 
-      .main{
-        margin-left:0;
-        padding:16px;
-      }
+  .mobile-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#101d38;
+    padding:15px 18px;
+    border-bottom:1px solid #263b63;
+  }
 
-      .topbar h1{
-        font-size:23px;
-      }
+  .mobile-header h2{
+    background:linear-gradient(90deg,#42e8ff,#8b5cf6,#ff4f81);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
 
-      .amount{
-        font-size:25px;
-      }
+  .menu-btn{
+    border:none;
+    background:#253d70;
+    color:white;
+    padding:9px 13px;
+    border-radius:9px;
+    font-size:18px;
+    cursor:pointer;
+  }
 
-      .plans-list{
-        grid-template-columns:1fr;
-      }
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+    width:240px;
+  }
 
-    }
-  </style>
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+    padding:16px;
+  }
+
+  .topbar h1{
+    font-size:23px;
+  }
+
+  .amount{
+    font-size:25px;
+  }
+
+  .plans-list{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
 </head>
 
 <body>
 
-  <!-- MOBILE HEADER -->
-  <div class="mobile-header">
-    <h2>NEXORA</h2>
-    <button class="menu-btn" id="menuBtn">☰</button>
+<!-- MOBILE HEADER -->
+<div class="mobile-header">
+  <h2>NEXORA</h2>
+  <button class="menu-btn" id="menuBtn">☰</button>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
+    NEXORA
   </div>
 
+  <nav class="nav">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
+    <a href="dashboard.html" class="active">
+      🏠 Dashboard
+    </a>
 
-    <div class="logo">
-      NEXORA
-    </div>
+    <a href="plans.html">
+      💎 Plans
+    </a>
 
-    <nav class="nav">
+    <a href="deposit.html">
+      💰 Deposit
+    </a>
 
-      <a href="dashboard.html" class="active">
-        🏠 Dashboard
-      </a>
+    <a href="withdraw.html">
+      💸 Withdraw
+    </a>
 
-      <a href="plans.html">
-        💎 Plans
-      </a>
+    <a href="referrals.html">
+      👥 Referrals
+    </a>
 
-      <a href="deposit.html">
-        💰 Deposit
-      </a>
+    <a href="history.html">
+      📜 History
+    </a>
 
-      <a href="withdraw.html">
-        💸 Withdraw
-      </a>
+  </nav>
 
-      <a href="referrals.html">
-        👥 Referrals
-      </a>
+  <button class="logout" id="logoutBtn">
+    🚪 Logout
+  </button>
 
-      <a href="history.html">
-        📜 History
-      </a>
+</aside>
 
-    </nav>
+<!-- MAIN -->
+<main class="main">
 
-    <button class="logout" id="logoutBtn">
-      🚪 Logout
-    </button>
+  <div class="topbar">
 
-  </aside>
+    <h1>
+      Welcome Back 👋
+    </h1>
 
+    <p id="userEmail">
+      Loading account...
+    </p>
 
-  <!-- MAIN -->
-  <main class="main">
+  </div>
 
-    <div class="topbar">
+  <div id="loading" class="loading">
+    Loading your account...
+  </div>
 
-      <h1>
-        Welcome Back 👋
-      </h1>
+  <div id="dashboardContent" style="display:none;">
 
-      <p id="userEmail">
-        Loading account...
-      </p>
+    <!-- MAIN CARDS -->
+    <div class="cards">
 
-    </div>
+      <div class="card">
+        <h3>Available Balance</h3>
 
+        <div class="amount">
+          $<span id="wallet">0.00</span>
+        </div>
+      </div>
 
-    <div id="loading" class="loading">
-      Loading your account...
-    </div>
+      <div class="card">
+        <h3>Total Deposits</h3>
 
+        <div class="amount">
+          $<span id="totalDeposit">0.00</span>
+        </div>
+      </div>
 
-    <div id="dashboardContent" style="display:none;">
+      <div class="card">
+        <h3>Total Withdrawals</h3>
 
-      <!-- MAIN CARDS -->
-      <div class="cards">
+        <div class="amount">
+          $<span id="totalWithdrawal">0.00</span>
+        </div>
+      </div>
 
-        <div class="card">
+      <div class="card earning-card">
 
-          <h3>
-            Available Balance
-          </h3>
+        <h3>Earnings</h3>
 
-          <div class="amount">
-            $<span id="wallet">0.00</span>
-          </div>
-
+        <div class="amount">
+          $<span id="earnings">0.00</span>
         </div>
 
-
-        <div class="card">
-
-          <h3>
-            Total Deposits
-          </h3>
-
-          <div class="amount">
-            $<span id="totalDeposit">0.00</span>
-          </div>
-
-        </div>
-
-
-        <div class="card">
-
-          <h3>
-            Total Withdrawals
-          </h3>
-
-          <div class="amount">
-            $<span id="totalWithdrawal">0.00</span>
-          </div>
-
-        </div>
-
-
-        <div class="card earning-card">
-
-          <h3>
-            Earnings
-          </h3>
-
-          <div class="amount">
-            $<span id="earnings">0.00</span>
-          </div>
-
-          <div class="earning-sub">
-            Earnings status
-          </div>
-
-        </div>
-
-
-        <div class="card">
-
-          <h3>
-            Referral Earnings
-          </h3>
-
-          <div class="amount">
-            $<span id="referralEarnings">0.00</span>
-          </div>
-
-        </div>
-
-
-        <div class="card">
-
-          <h3>
-            Direct Referrals
-          </h3>
-
-          <div class="amount">
-            <span id="directReferrals">0</span>
-          </div>
-
-        </div>
-
-
-        <div class="card">
-
-          <h3>
-            Plan Purchases
-          </h3>
-
-          <div class="amount">
-            $<span id="totalPlanPurchase">0.00</span>
-          </div>
-
+        <div class="earning-sub">
+          Earnings status
         </div>
 
       </div>
 
+      <div class="card">
 
-      <!-- EARNINGS SECTION -->
-      <section class="earnings-section">
+        <h3>Referral Earnings</h3>
 
-        <div class="section-title">
-
-          <h2>
-            Earnings
-          </h2>
-
-          <span id="activePlanCount">
-            0 Active Plans
-          </span>
-
-        </div>
-
-        <div
-          class="plans-list"
-          id="plansList"
-        >
-
-          <div class="no-plans">
-            No active plans yet.
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- REFERRAL -->
-      <div class="ref">
-
-        <h3>
-          Your Referral Code
-        </h3>
-
-        <div
-          class="ref-code"
-          id="referralCode"
-        >
-          ---
+        <div class="amount">
+          $<span id="referralEarnings">0.00</span>
         </div>
 
       </div>
 
+      <div class="card">
 
-      <!-- STATUS -->
-      <div class="status">
+        <h3>Direct Referrals</h3>
 
-        <div class="status-title">
-          Account Status
+        <div class="amount">
+          <span id="directReferrals">0</span>
         </div>
 
-        <div class="online">
-          ● Account Connected
+      </div>
+
+      <div class="card">
+
+        <h3>Plan Purchases</h3>
+
+        <div class="amount">
+          $<span id="totalPlanPurchase">0.00</span>
         </div>
 
       </div>
 
     </div>
 
+    <!-- EARNINGS / ACTIVE PLANS -->
+    <section class="earnings-section">
 
-    <div
-      id="errorBox"
-      class="error"
-    ></div>
+      <div class="section-title">
 
-  </main>
+        <h2>
+          My Plans
+        </h2>
 
+        <span id="activePlanCount">
+          0 Active Plans
+        </span>
+
+      </div>
+
+      <div
+        class="plans-list"
+        id="plansList"
+      >
+
+        <div class="no-plans">
+          No active plans yet.
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- REFERRAL -->
+    <div class="ref">
+
+      <h3>
+        Your Referral Code
+      </h3>
+
+      <div
+        class="ref-code"
+        id="referralCode"
+      >
+        ---
+      </div>
+
+    </div>
+
+    <!-- STATUS -->
+    <div class="status">
+
+      <div class="status-title">
+        Account Status
+      </div>
+
+      <div class="online">
+        ● Account Connected
+      </div>
+
+    </div>
+
+  </div>
 
   <div
-    class="message"
-    id="message"
+    id="errorBox"
+    class="error"
   ></div>
 
+</main>
 
-  <!-- FIREBASE -->
-  <script type="module">
+<div
+  class="message"
+  id="message"
+></div>
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+<!-- FIREBASE -->
+<script type="module">
 
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-    import {
-      getDatabase,
-      ref,
-      onValue
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-
-    const firebaseConfig = {
-
-      apiKey:
-        "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
-
-      authDomain:
-        "nexora-adef3.firebaseapp.com",
-
-      projectId:
-        "nexora-adef3",
-
-      storageBucket:
-        "nexora-adef3.firebasestorage.app",
-
-      messagingSenderId:
-        "318277373899",
-
-      appId:
-        "1:318277373899:web:0d2f97b1fa99cc7702304e",
-
-      measurementId:
-        "G-WN2V48SC4T"
-
-    };
+import {
+  getDatabase,
+  ref,
+  onValue
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-    const app =
-      initializeApp(firebaseConfig);
+const firebaseConfig = {
 
-    const auth =
-      getAuth(app);
+  apiKey:
+    "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
 
-    const db =
-      getDatabase(app);
+  authDomain:
+    "nexora-adef3.firebaseapp.com",
 
+  projectId:
+    "nexora-adef3",
 
-    const loading =
-      document.getElementById("loading");
+  storageBucket:
+    "nexora-adef3.firebasestorage.app",
 
-    const dashboardContent =
-      document.getElementById("dashboardContent");
+  messagingSenderId:
+    "318277373899",
 
-    const errorBox =
-      document.getElementById("errorBox");
+  appId:
+    "1:318277373899:web:0d2f97b1fa99cc7702304e",
 
-    const message =
-      document.getElementById("message");
+  measurementId:
+    "G-WN2V48SC4T"
 
-    const plansList =
-      document.getElementById("plansList");
-
-
-    let timerIds = [];
+};
 
 
-    function money(value){
+const app =
+  initializeApp(firebaseConfig);
 
-      const number =
-        Number(value);
+const auth =
+  getAuth(app);
 
-      if(!Number.isFinite(number)){
-        return "0.00";
+const db =
+  getDatabase(app);
+
+
+const loading =
+  document.getElementById("loading");
+
+const dashboardContent =
+  document.getElementById("dashboardContent");
+
+const errorBox =
+  document.getElementById("errorBox");
+
+const message =
+  document.getElementById("message");
+
+const plansList =
+  document.getElementById("plansList");
+
+
+let timerIds = [];
+
+
+/* MONEY */
+
+function money(value){
+
+  const number =
+    Number(value);
+
+  if(!Number.isFinite(number)){
+    return "0.00";
+  }
+
+  return number.toFixed(2);
+
+}
+
+
+/* MESSAGE */
+
+function showMessage(text){
+
+  message.textContent =
+    text;
+
+  message.classList.add("show");
+
+  setTimeout(() => {
+
+    message.classList.remove("show");
+
+  },3500);
+
+}
+
+
+/* CLEAR TIMERS */
+
+function clearTimers(){
+
+  timerIds.forEach(
+    timer => clearInterval(timer)
+  );
+
+  timerIds = [];
+
+}
+
+
+/* FORMAT TIME */
+
+function formatTime(milliseconds){
+
+  if(milliseconds <= 0){
+    return "00:00:00";
+  }
+
+  const totalSeconds =
+    Math.floor(
+      milliseconds / 1000
+    );
+
+  const hours =
+    Math.floor(
+      totalSeconds / 3600
+    );
+
+  const minutes =
+    Math.floor(
+      (totalSeconds % 3600) / 60
+    );
+
+  const seconds =
+    totalSeconds % 60;
+
+  return (
+    String(hours).padStart(2,"0") +
+    ":" +
+    String(minutes).padStart(2,"0") +
+    ":" +
+    String(seconds).padStart(2,"0")
+  );
+
+}
+
+
+/* FORMAT 30 DAYS */
+
+function formatDays(milliseconds){
+
+  if(milliseconds <= 0){
+    return "Expired";
+  }
+
+  const totalSeconds =
+    Math.floor(
+      milliseconds / 1000
+    );
+
+  const days =
+    Math.floor(
+      totalSeconds / 86400
+    );
+
+  const hours =
+    Math.floor(
+      (totalSeconds % 86400) / 3600
+    );
+
+  const minutes =
+    Math.floor(
+      (totalSeconds % 3600) / 60
+    );
+
+  const seconds =
+    totalSeconds % 60;
+
+  return (
+    days + "d " +
+    String(hours).padStart(2,"0") + ":" +
+    String(minutes).padStart(2,"0") + ":" +
+    String(seconds).padStart(2,"0")
+  );
+
+}
+
+
+/* RENDER PLANS */
+
+function renderActivePlans(purchases){
+
+  clearTimers();
+
+  plansList.innerHTML = "";
+
+  const now =
+    Date.now();
+
+  const activePlans =
+    purchases.filter(
+      purchase => {
+
+        if(!purchase){
+          return false;
+        }
+
+        if(purchase.status !== "active"){
+          return false;
+        }
+
+        const createdAt =
+          Number(
+            purchase.createdAt || 0
+          );
+
+        const savedExpiry =
+          Number(
+            purchase.expiresAt || 0
+          );
+
+        const expiry =
+          savedExpiry ||
+          (
+            createdAt +
+            30 * 24 * 60 * 60 * 1000
+          );
+
+        return expiry > now;
+
       }
-
-      return number.toFixed(2);
-
-    }
+    );
 
 
-    function showMessage(text){
-
-      message.textContent =
-        text;
-
-      message.classList.add("show");
-
-      setTimeout(() => {
-
-        message.classList.remove("show");
-
-      },3500);
-
-    }
+  document.getElementById(
+    "activePlanCount"
+  ).textContent =
+    `${activePlans.length} Active Plan${activePlans.length === 1 ? "" : "s"}`;
 
 
-    function clearTimers(){
+  if(activePlans.length === 0){
 
-      timerIds.forEach(
-        timer => clearInterval(timer)
-      );
+    plansList.innerHTML = `
+      <div class="no-plans">
+        No active plans yet. Go to Plans to purchase one.
+      </div>
+    `;
 
-      timerIds = [];
+    return;
 
-    }
+  }
 
 
-    function formatTime(milliseconds){
+  activePlans.forEach(
+    (purchase,index) => {
 
-      if(milliseconds <= 0){
-        return "00:00:00";
-      }
-
-      const totalSeconds =
-        Math.floor(
-          milliseconds / 1000
+      const amount =
+        Number(
+          purchase.planAmount || 0
         );
 
-      const hours =
-        Math.floor(
-          totalSeconds / 3600
+      const createdAt =
+        Number(
+          purchase.createdAt || Date.now()
         );
 
-      const minutes =
-        Math.floor(
-          (totalSeconds % 3600) / 60
-        );
-
-      const seconds =
-        totalSeconds % 60;
-
-      return (
-        String(hours).padStart(2,"0") +
-        ":" +
-        String(minutes).padStart(2,"0") +
-        ":" +
-        String(seconds).padStart(2,"0")
-      );
-
-    }
-
-
-    function renderActivePlans(purchases){
-
-      clearTimers();
-
-      plansList.innerHTML = "";
-
-      const activePlans =
-        purchases.filter(
-          purchase =>
-            purchase &&
-            purchase.status === "active"
+      const expiry =
+        Number(
+          purchase.expiresAt ||
+          (
+            createdAt +
+            30 * 24 * 60 * 60 * 1000
+          )
         );
 
 
-      document.getElementById(
-        "activePlanCount"
-      ).textContent =
-        `${activePlans.length} Active Plan${activePlans.length === 1 ? "" : "s"}`;
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "earning-plan";
 
 
-      if(activePlans.length === 0){
+      card.innerHTML = `
 
-        plansList.innerHTML = `
-          <div class="no-plans">
-            No active plans yet. Go to Plans to purchase one.
+        <div class="earning-plan-top">
+
+          <div class="plan-name">
+            Plan #${index + 1}
           </div>
-        `;
 
-        return;
+          <div class="active-badge">
+            ACTIVE ✓
+          </div>
+
+        </div>
+
+        <div class="plan-value">
+          Plan Value: $${money(amount)} USDT
+        </div>
+
+        <div class="rate">
+          Configured Rate: 0.60%
+        </div>
+
+        <div class="timer-label">
+          24-hour cycle status
+        </div>
+
+        <div
+          class="timer"
+          id="cycle-${index}"
+        >
+          24:00:00
+        </div>
+
+        <div class="expiry-label">
+          30-day plan remaining
+        </div>
+
+        <div
+          class="expiry-timer"
+          id="expiry-${index}"
+        >
+          Calculating...
+        </div>
+
+        <button
+          class="earning-btn"
+          id="earning-${index}"
+        >
+          Earning Status
+        </button>
+
+      `;
+
+
+      plansList.appendChild(card);
+
+
+      const cycleEl =
+        card.querySelector(
+          `#cycle-${index}`
+        );
+
+      const expiryEl =
+        card.querySelector(
+          `#expiry-${index}`
+        );
+
+      const earningBtn =
+        card.querySelector(
+          `#earning-${index}`
+        );
+
+
+      function updatePlan(){
+
+        const now =
+          Date.now();
+
+
+        /* 24 HOUR CYCLE */
+
+        const cycle =
+          24 * 60 * 60 * 1000;
+
+        const elapsed =
+          now - createdAt;
+
+        let cycleRemaining =
+          cycle -
+          (
+            elapsed % cycle
+          );
+
+        if(cycleRemaining <= 0){
+          cycleRemaining = cycle;
+        }
+
+
+        cycleEl.textContent =
+          formatTime(
+            cycleRemaining
+          );
+
+
+        /* 30 DAY EXPIRY */
+
+        const remaining =
+          expiry - now;
+
+
+        if(remaining <= 0){
+
+          expiryEl.textContent =
+            "Expired";
+
+          cycleEl.textContent =
+            "00:00:00";
+
+          earningBtn.textContent =
+            "Plan Expired";
+
+          earningBtn.classList.add(
+            "expired"
+          );
+
+          earningBtn.disabled =
+            true;
+
+          return false;
+
+        }
+
+
+        expiryEl.textContent =
+          formatDays(
+            remaining
+          );
+
+        return true;
 
       }
 
 
-      activePlans.forEach(
-        (purchase,index) => {
-
-          const amount =
-            Number(
-              purchase.planAmount || 0
-            );
-
-          const createdAt =
-            Number(
-              purchase.createdAt || Date.now()
-            );
+      updatePlan();
 
 
-          const card =
-            document.createElement("div");
+      const timerId =
+        setInterval(
+          () => {
 
-          card.className =
-            "earning-plan";
+            const active =
+              updatePlan();
 
+            if(!active){
 
-          card.innerHTML = `
+              clearInterval(
+                timerId
+              );
 
-            <div class="earning-plan-top">
-
-              <div class="plan-name">
-                Plan #${index + 1}
-              </div>
-
-              <div class="active-badge">
-                ACTIVE ✓
-              </div>
-
-            </div>
-
-            <div class="plan-value">
-              Plan Value: $${money(amount)} USDT
-            </div>
-
-            <div class="timer-label">
-              24-hour cycle status
-            </div>
-
-            <div
-              class="timer"
-              id="timer-${index}"
-            >
-              24:00:00
-            </div>
-
-            <button
-              class="earning-btn"
-              data-amount="${amount}"
-            >
-              Earning
-            </button>
-
-          `;
-
-
-          plansList.appendChild(card);
-
-
-          const timerEl =
-            card.querySelector(
-              `#timer-${index}`
-            );
-
-
-          function updateTimer(){
-
-            const cycle =
-              24 * 60 * 60 * 1000;
-
-            const elapsed =
-              Date.now() - createdAt;
-
-            let remaining =
-              cycle -
-              (elapsed % cycle);
-
-
-            if(remaining <= 0){
-              remaining = cycle;
             }
 
+          },
+          1000
+        );
 
-            timerEl.textContent =
-              formatTime(remaining);
+
+      timerIds.push(
+        timerId
+      );
+
+
+      earningBtn.addEventListener(
+        "click",
+        () => {
+
+          const remaining =
+            expiry - Date.now();
+
+          if(remaining <= 0){
+
+            showMessage(
+              "This plan has expired."
+            );
+
+            return;
 
           }
 
 
-          updateTimer();
-
-
-          const timerId =
-            setInterval(
-              updateTimer,
-              1000
-            );
-
-
-          timerIds.push(timerId);
-
-
-          card
-            .querySelector(".earning-btn")
-            .addEventListener(
-              "click",
-              () => {
-
-                showMessage(
-                  `Earning status: $${money(amount)} plan — ${timerEl.textContent} remaining.`
-                );
-
-              }
-            );
+          showMessage(
+            `Plan $${money(amount)} is active. 30-day remaining time: ${formatDays(remaining)}`
+          );
 
         }
       );
 
     }
+  );
+
+}
 
 
-    onAuthStateChanged(
-      auth,
-      user => {
+/* AUTH */
 
-        if(!user){
+onAuthStateChanged(
+  auth,
+  user => {
 
-          window.location.href =
-            "login.html";
+    if(!user){
+
+      window.location.href =
+        "login.html";
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "userEmail"
+    ).textContent =
+      user.email || "User";
+
+
+    const userRef =
+      ref(
+        db,
+        "users/" + user.uid
+      );
+
+
+    /* USER DATA */
+
+    onValue(
+      userRef,
+
+      snapshot => {
+
+        if(!snapshot.exists()){
+
+          loading.style.display =
+            "none";
+
+          dashboardContent.style.display =
+            "none";
+
+          errorBox.style.display =
+            "block";
+
+          errorBox.textContent =
+            "User data not found in Firebase.";
 
           return;
 
         }
 
 
+        const data =
+          snapshot.val() || {};
+
+
         document.getElementById(
-          "userEmail"
+          "wallet"
         ).textContent =
-          user.email || "User";
+          money(data.wallet);
 
 
-        const userRef =
-          ref(
-            db,
-            "users/" + user.uid
+        document.getElementById(
+          "totalDeposit"
+        ).textContent =
+          money(data.totalDeposit);
+
+
+        document.getElementById(
+          "totalWithdrawal"
+        ).textContent =
+          money(data.totalWithdrawal);
+
+
+        document.getElementById(
+          "earnings"
+        ).textContent =
+          money(data.earnings);
+
+
+        document.getElementById(
+          "referralEarnings"
+        ).textContent =
+          money(data.referralEarnings);
+
+
+        document.getElementById(
+          "directReferrals"
+        ).textContent =
+          Number(
+            data.directReferrals || 0
           );
 
 
-        onValue(
-          userRef,
-
-          snapshot => {
-
-            if(!snapshot.exists()){
-
-              loading.style.display =
-                "none";
-
-              dashboardContent.style.display =
-                "none";
-
-              errorBox.style.display =
-                "block";
-
-              errorBox.textContent =
-                "User data not found in Firebase.";
-
-              return;
-
-            }
+        document.getElementById(
+          "totalPlanPurchase"
+        ).textContent =
+          money(data.totalPlanPurchase);
 
 
-            const data =
-              snapshot.val() || {};
+        document.getElementById(
+          "referralCode"
+        ).textContent =
+          data.referralCode || "---";
 
 
-            document.getElementById(
-              "wallet"
-            ).textContent =
-              money(data.wallet);
+        loading.style.display =
+          "none";
 
+        dashboardContent.style.display =
+          "block";
 
-            document.getElementById(
-              "totalDeposit"
-            ).textContent =
-              money(data.totalDeposit);
+        errorBox.style.display =
+          "none";
 
+      },
 
-            document.getElementById(
-              "totalWithdrawal"
-            ).textContent =
-              money(data.totalWithdrawal);
+      error => {
 
+        loading.style.display =
+          "none";
 
-            document.getElementById(
-              "earnings"
-            ).textContent =
-              money(data.earnings);
+        dashboardContent.style.display =
+          "none";
 
+        errorBox.style.display =
+          "block";
 
-            document.getElementById(
-              "referralEarnings"
-            ).textContent =
-              money(data.referralEarnings);
-
-
-            document.getElementById(
-              "directReferrals"
-            ).textContent =
-              Number(
-                data.directReferrals || 0
-              );
-
-
-            document.getElementById(
-              "totalPlanPurchase"
-            ).textContent =
-              money(data.totalPlanPurchase);
-
-
-            document.getElementById(
-              "referralCode"
-            ).textContent =
-              data.referralCode || "---";
-
-
-            loading.style.display =
-              "none";
-
-            dashboardContent.style.display =
-              "block";
-
-            errorBox.style.display =
-              "none";
-
-          },
-
-          error => {
-
-            loading.style.display =
-              "none";
-
-            dashboardContent.style.display =
-              "none";
-
-            errorBox.style.display =
-              "block";
-
-            errorBox.textContent =
-              "Database error: " +
-              error.message;
-
-          }
-        );
-
-
-        const purchasesRef =
-          ref(
-            db,
-            "planPurchases"
-          );
-
-
-        onValue(
-          purchasesRef,
-
-          snapshot => {
-
-            if(!snapshot.exists()){
-
-              renderActivePlans([]);
-
-              return;
-
-            }
-
-
-            const raw =
-              snapshot.val() || {};
-
-
-            const purchases =
-              Object.values(raw)
-                .filter(
-                  purchase =>
-                    purchase &&
-                    purchase.uid === user.uid
-                );
-
-
-            renderActivePlans(
-              purchases
-            );
-
-          },
-
-          error => {
-
-            console.error(
-              "Plan loading error:",
-              error
-            );
-
-          }
-        );
+        errorBox.textContent =
+          "Database error: " +
+          error.message;
 
       }
+
     );
 
 
-    /* LOGOUT */
+    /* PLAN PURCHASES */
 
-    document
-      .getElementById("logoutBtn")
-      .addEventListener(
+    const purchasesRef =
+      ref(
+        db,
+        "planPurchases"
+      );
+
+
+    onValue(
+      purchasesRef,
+
+      snapshot => {
+
+        if(!snapshot.exists()){
+
+          renderActivePlans([]);
+
+          return;
+
+        }
+
+
+        const raw =
+          snapshot.val() || {};
+
+
+        const purchases =
+          Object.values(raw)
+            .filter(
+              purchase =>
+                purchase &&
+                purchase.uid === user.uid
+            );
+
+
+        renderActivePlans(
+          purchases
+        );
+
+      },
+
+      error => {
+
+        console.error(
+          "Plan loading error:",
+          error
+        );
+
+      }
+
+    );
+
+  }
+);
+
+
+/* LOGOUT */
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      try{
+
+        await signOut(auth);
+
+        window.location.href =
+          "login.html";
+
+      }catch(error){
+
+        alert(
+          "Logout failed: " +
+          error.message
+        );
+
+      }
+
+    }
+  );
+
+
+/* MOBILE MENU */
+
+const menuBtn =
+  document.getElementById(
+    "menuBtn"
+  );
+
+const sidebar =
+  document.getElementById(
+    "sidebar"
+  );
+
+
+menuBtn.addEventListener(
+  "click",
+  () => {
+
+    sidebar.classList.toggle(
+      "open"
+    );
+
+  }
+);
+
+
+document
+  .querySelectorAll(".nav a")
+  .forEach(
+    link => {
+
+      link.addEventListener(
         "click",
-        async () => {
+        () => {
 
-          try{
-
-            await signOut(auth);
-
-            window.location.href =
-              "login.html";
-
-          }catch(error){
-
-            alert(
-              "Logout failed: " +
-              error.message
-            );
-
-          }
-
-        }
-      );
-
-
-    /* MOBILE MENU */
-
-    const menuBtn =
-      document.getElementById(
-        "menuBtn"
-      );
-
-    const sidebar =
-      document.getElementById(
-        "sidebar"
-      );
-
-
-    menuBtn.addEventListener(
-      "click",
-      () => {
-
-        sidebar.classList.toggle(
-          "open"
-        );
-
-      }
-    );
-
-
-    document
-      .querySelectorAll(".nav a")
-      .forEach(
-        link => {
-
-          link.addEventListener(
-            "click",
-            () => {
-
-              sidebar.classList.remove(
-                "open"
-              );
-
-            }
+          sidebar.classList.remove(
+            "open"
           );
 
         }
       );
 
-  </script>
+    }
+  );
+
+</script>
 
 </body>
 </html>
