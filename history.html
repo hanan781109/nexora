@@ -57,6 +57,29 @@ h1{
     margin-bottom:25px;
 }
 
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.summary-box{
+    background:#101d31;
+    border:1px solid #293a55;
+    border-radius:15px;
+    padding:20px;
+}
+
+.summary-box small{
+    color:#94a3b8;
+}
+
+.summary-box h3{
+    margin-top:8px;
+    font-size:22px;
+}
+
 .card{
     background:#101d31;
     border:1px solid #293a55;
@@ -119,42 +142,22 @@ td{
     color:#fca5a5;
 }
 
-.empty{
+.empty,
+.loading{
     text-align:center;
-    color:#94a3b8;
     padding:25px;
+}
+
+.empty{
+    color:#94a3b8;
 }
 
 .loading{
-    text-align:center;
     color:#67e8f9;
-    padding:25px;
-}
-
-.summary{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-    margin-bottom:25px;
-}
-
-.summary-box{
-    background:#101d31;
-    border:1px solid #293a55;
-    border-radius:15px;
-    padding:20px;
-}
-
-.summary-box small{
-    color:#94a3b8;
-}
-
-.summary-box h3{
-    margin-top:8px;
-    font-size:22px;
 }
 
 @media(max-width:700px){
+
     .summary{
         grid-template-columns:1fr;
     }
@@ -180,6 +183,7 @@ td{
 <div class="container">
 
     <h1>Transaction History</h1>
+
     <p class="subtitle">
         View all your deposits and withdrawal requests.
     </p>
@@ -202,7 +206,6 @@ td{
         </div>
 
     </div>
-
 
     <!-- DEPOSITS -->
 
@@ -241,7 +244,6 @@ td{
         </div>
 
     </div>
-
 
     <!-- WITHDRAWALS -->
 
@@ -348,8 +350,18 @@ function formatDate(timestamp){
         return "-";
     }
 
-    return new Date(timestamp).toLocaleString();
+    return new Date(Number(timestamp)).toLocaleString();
+}
 
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
 
@@ -369,22 +381,9 @@ function statusHTML(status){
 
     return `
         <span class="status ${className}">
-            ${status.toUpperCase()}
+            ${escapeHTML(status.toUpperCase())}
         </span>
     `;
-
-}
-
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
 }
 
 
@@ -397,64 +396,54 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
-
     try{
 
         const uid = user.uid;
 
+        let depositTotal = 0;
+        let depositCount = 0;
 
-        // -----------------------------
-        // LOAD DEPOSITS
-        // -----------------------------
+        let withdrawalTotal = 0;
+        let withdrawalCount = 0;
+
+
+        /* =========================
+           DEPOSITS
+        ========================= */
 
         const depositsSnap =
             await get(ref(db,"deposits"));
-
-
-        let depositTotal = 0;
-
-        let depositCount = 0;
-
 
         if(depositsSnap.exists()){
 
             const deposits =
                 depositsSnap.val();
 
-
             const rows = [];
 
-
             Object.entries(deposits).forEach(
-                ([id,deposit]) => {
+                ([id, deposit]) => {
 
-                if(deposit.uid !== uid){
+                if(!deposit || deposit.uid !== uid){
                     return;
                 }
 
-
                 depositCount++;
-
 
                 const amount =
                     Number(deposit.amountUSDT || 0);
 
                 depositTotal += amount;
 
-
                 rows.push({
-
-                    id:id,
-
+                    id,
                     ...deposit
-
                 });
 
             });
 
 
-            rows.sort(
-                (a,b) =>
+            rows.sort((a,b) =>
                 Number(b.createdAt || 0) -
                 Number(a.createdAt || 0)
             );
@@ -486,7 +475,8 @@ onAuthStateChanged(auth, async (user) => {
                         <td>
                             ${
                                 deposit.plan
-                                ? "$" + Number(deposit.plan).toFixed(2)
+                                ? "$" +
+                                  Number(deposit.plan).toFixed(2)
                                 : "-"
                             }
                         </td>
@@ -534,65 +524,44 @@ onAuthStateChanged(auth, async (user) => {
                     </td>
                 </tr>
             `;
-
         }
 
 
-        // -----------------------------
-        // LOAD WITHDRAWALS
-        // -----------------------------
+        /* =========================
+           WITHDRAWALS
+        ========================= */
 
         const withdrawalsSnap =
             await get(ref(db,"withdrawals"));
-
-
-        let withdrawalTotal = 0;
-
-        let withdrawalCount = 0;
-
 
         if(withdrawalsSnap.exists()){
 
             const withdrawals =
                 withdrawalsSnap.val();
 
-
             const rows = [];
 
-
             Object.entries(withdrawals).forEach(
-                ([id,withdrawal]) => {
+                ([id, withdrawal]) => {
 
-                if(withdrawal.uid !== uid){
+                if(!withdrawal || withdrawal.uid !== uid){
                     return;
                 }
 
-
                 withdrawalCount++;
 
-
-                const amount =
-                    Number(
-                        withdrawal.amountUSDT || 0
-                    );
-
-
-                withdrawalTotal += amount;
-
+                withdrawalTotal +=
+                    Number(withdrawal.amountUSDT || 0);
 
                 rows.push({
-
-                    id:id,
-
+                    id,
                     ...withdrawal
-
                 });
 
             });
 
 
-            rows.sort(
-                (a,b) =>
+            rows.sort((a,b) =>
                 Number(b.createdAt || 0) -
                 Number(a.createdAt || 0)
             );
@@ -674,21 +643,18 @@ onAuthStateChanged(auth, async (user) => {
                     </td>
                 </tr>
             `;
-
         }
 
 
-        // -----------------------------
-        // SUMMARY
-        // -----------------------------
+        /* =========================
+           SUMMARY
+        ========================= */
 
         totalDeposits.textContent =
             "$" + depositTotal.toFixed(2);
 
-
         totalWithdrawals.textContent =
             "$" + withdrawalTotal.toFixed(2);
-
 
         totalTransactions.textContent =
             depositCount + withdrawalCount;
@@ -696,7 +662,7 @@ onAuthStateChanged(auth, async (user) => {
 
     }catch(error){
 
-        console.error(error);
+        console.error("History error:", error);
 
         depositHistory.innerHTML = `
             <tr>
@@ -706,7 +672,6 @@ onAuthStateChanged(auth, async (user) => {
             </tr>
         `;
 
-
         withdrawHistory.innerHTML = `
             <tr>
                 <td colspan="7" class="empty">
@@ -714,7 +679,6 @@ onAuthStateChanged(auth, async (user) => {
                 </td>
             </tr>
         `;
-
     }
 
 });
