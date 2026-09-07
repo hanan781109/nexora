@@ -173,6 +173,32 @@ body{
   font-weight:bold;
 }
 
+.total-daily{
+  margin-bottom:18px;
+  padding:18px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#24154b,#182b55);
+  border:1px solid #6546a8;
+}
+
+.total-daily-label{
+  color:#9fb0c9;
+  font-size:13px;
+  margin-bottom:7px;
+}
+
+.total-daily-value{
+  color:#ff6fa5;
+  font-size:30px;
+  font-weight:800;
+}
+
+.total-daily-note{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-top:6px;
+}
+
 .plans-list{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -227,7 +253,7 @@ body{
 
 .rate{
   color:#ff6fa5;
-  font-size:13px;
+  font-size:14px;
   font-weight:bold;
   margin-bottom:12px;
 }
@@ -437,6 +463,10 @@ body{
     grid-template-columns:1fr;
   }
 
+  .total-daily-value{
+    font-size:26px;
+  }
+
 }
 </style>
 </head>
@@ -590,12 +620,29 @@ body{
       <div class="section-title">
 
         <h2>
-          My Plans
+          My Plans & Earnings
         </h2>
 
         <span id="activePlanCount">
           0 Active Plans
         </span>
+
+      </div>
+
+      <!-- TOTAL DAILY EARNING -->
+      <div class="total-daily">
+
+        <div class="total-daily-label">
+          Total Daily Earning
+        </div>
+
+        <div class="total-daily-value">
+          $<span id="totalDailyEarning">0.00</span>
+        </div>
+
+        <div class="total-daily-note">
+          Calculated from your active plans
+        </div>
 
       </div>
 
@@ -676,6 +723,8 @@ import {
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
+/* FIREBASE CONFIG */
+
 const firebaseConfig = {
 
   apiKey:
@@ -727,8 +776,29 @@ const message =
 const plansList =
   document.getElementById("plansList");
 
+const totalDailyEarningEl =
+  document.getElementById("totalDailyEarning");
+
 
 let timerIds = [];
+
+
+/*
+  DAILY DISPLAY CALCULATION
+
+  6%:
+  $5   = $0.30
+  $10  = $0.60
+  $50  = $3.00
+  $100 = $6.00
+  $200 = $12.00
+  $500 = $30.00
+
+  DISPLAY ONLY.
+  This does not modify the Firebase wallet.
+*/
+
+const DAILY_RATE = 0.06;
 
 
 /* MONEY */
@@ -864,8 +934,12 @@ function renderActivePlans(purchases){
 
   plansList.innerHTML = "";
 
+  totalDailyEarningEl.textContent =
+    "0.00";
+
   const now =
     Date.now();
+
 
   const activePlans =
     purchases.filter(
@@ -921,6 +995,39 @@ function renderActivePlans(purchases){
   }
 
 
+  /*
+    TOTAL DAILY CALCULATION
+  */
+
+  let totalDaily =
+    0;
+
+
+  activePlans.forEach(
+    purchase => {
+
+      const amount =
+        Number(
+          purchase.planAmount || 0
+        );
+
+      if(Number.isFinite(amount)){
+        totalDaily +=
+          amount * DAILY_RATE;
+      }
+
+    }
+  );
+
+
+  totalDailyEarningEl.textContent =
+    money(totalDaily);
+
+
+  /*
+    RENDER EACH PLAN
+  */
+
   activePlans.forEach(
     (purchase,index) => {
 
@@ -942,6 +1049,14 @@ function renderActivePlans(purchases){
             30 * 24 * 60 * 60 * 1000
           )
         );
+
+
+      /*
+        DAILY EARNING
+      */
+
+      const dailyEarning =
+        amount * DAILY_RATE;
 
 
       const card =
@@ -970,7 +1085,7 @@ function renderActivePlans(purchases){
         </div>
 
         <div class="rate">
-          Configured Rate: 0.60%
+          Daily Earning: $${money(dailyEarning)}
         </div>
 
         <div class="timer-label">
@@ -1013,10 +1128,12 @@ function renderActivePlans(purchases){
           `#cycle-${index}`
         );
 
+
       const expiryEl =
         card.querySelector(
           `#expiry-${index}`
         );
+
 
       const earningBtn =
         card.querySelector(
@@ -1141,7 +1258,7 @@ function renderActivePlans(purchases){
 
 
           showMessage(
-            `Plan $${money(amount)} is active. 30-day remaining time: ${formatDays(remaining)}`
+            `Plan $${money(amount)} has a daily earning calculation of $${money(dailyEarning)}.`
           );
 
         }
