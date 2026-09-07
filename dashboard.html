@@ -584,7 +584,7 @@ body{
           $<span id="totalDailyEarning">0.00</span>
         </div>
         <div class="total-daily-note">
-          Automatically credited to your Available Balance every 24 hours
+          Calculated from your active plans
         </div>
       </div>
 
@@ -662,9 +662,8 @@ const plansList = document.getElementById("plansList");
 const totalDailyEarningEl = document.getElementById("totalDailyEarning");
 
 let timerIds = [];
-const DAILY_RATE = 0.06; // 6% Daily Return
+const DAILY_RATE = 0.06;
 
-/* MONEY FORMATTER */
 function money(value){
   const number = Number(value);
   if(!Number.isFinite(number)){
@@ -673,7 +672,6 @@ function money(value){
   return number.toFixed(2);
 }
 
-/* MESSAGE TOAST */
 function showMessage(text){
   message.textContent = text;
   message.classList.add("show");
@@ -682,13 +680,11 @@ function showMessage(text){
   },3500);
 }
 
-/* CLEAR TIMERS */
 function clearTimers(){
   timerIds.forEach(timer => clearInterval(timer));
   timerIds = [];
 }
 
-/* FORMAT TIME (HH:MM:SS) */
 function formatTime(milliseconds){
   if(milliseconds <= 0) return "00:00:00";
   const totalSeconds = Math.floor(milliseconds / 1000);
@@ -702,7 +698,6 @@ function formatTime(milliseconds){
   );
 }
 
-/* FORMAT 30 DAYS REMAINING */
 function formatDays(milliseconds){
   if(milliseconds <= 0) return "Expired";
   const totalSeconds = Math.floor(milliseconds / 1000);
@@ -718,74 +713,35 @@ function formatDays(milliseconds){
   );
 }
 
-/* AUTOMATIC 6% DAILY RETURN PROCESSOR */
-async function processDailyEarnings(uid) {
+/* DIRECTLY ADD $30 TO AVAILABLE BALANCE IN FIREBASE */
+async function addThirtyToAvailableBalance(uid) {
   try {
-    const purchasesRef = ref(db, "planPurchases");
-    const snapshot = await get(purchasesRef);
+    const userRef = ref(db, "users/" + uid);
+    const userSnapshot = await get(userRef);
 
-    if (!snapshot.exists()) return;
-
-    const raw = snapshot.val() || {};
-    const now = Date.now();
-    const DAY_MS = 24 * 60 * 60 * 1000;
-    const EXPIRY_MS = 30 * DAY_MS;
-
-    let totalNewEarnings = 0;
-    let updates = {};
-
-    Object.keys(raw).forEach(key => {
-      const purchase = raw[key];
-
-      if (purchase && purchase.uid === uid && (purchase.status === "active" || !purchase.status)) {
-        const createdAt = Number(purchase.createdAt || now);
-        const expiresAt = Number(purchase.expiresAt || (createdAt + EXPIRY_MS));
-        const lastClaimed = Number(purchase.lastClaimedAt || createdAt);
-
-        if (now <= expiresAt || lastClaimed < expiresAt) {
-          const effectiveNow = Math.min(now, expiresAt);
-          const timeElapsed = effectiveNow - lastClaimed;
-          const cyclesEarned = Math.floor(timeElapsed / DAY_MS);
-
-          if (cyclesEarned > 0) {
-            const planAmount = Number(purchase.planAmount || 0);
-            const profitPerCycle = planAmount * DAILY_RATE;
-            const cycleProfit = profitPerCycle * cyclesEarned;
-
-            totalNewEarnings += cycleProfit;
-
-            const newLastClaimed = lastClaimed + (cyclesEarned * DAY_MS);
-            updates[`planPurchases/${key}/lastClaimedAt`] = newLastClaimed;
-
-            if (newLastClaimed >= expiresAt) {
-              updates[`planPurchases/${key}/status`] = "expired";
-            }
-          }
-        }
-      }
-    });
-
-    if (totalNewEarnings > 0) {
-      const userRef = ref(db, "users/" + uid);
-      const userSnapshot = await get(userRef);
-      if (userSnapshot.exists()) {
-        const userData = userSnapshot.val();
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.val();
+      
+      // Check if $30 bonus was already added once
+      if (!userData.bonusAdded30) {
         const currentWallet = Number(userData.wallet || 0);
         const currentEarnings = Number(userData.earnings || 0);
 
-        updates[`users/${uid}/wallet`] = currentWallet + totalNewEarnings;
-        updates[`users/${uid}/earnings`] = currentEarnings + totalNewEarnings;
+        await update(userRef, {
+          wallet: currentWallet + 30, // Direct update in Available Balance
+          earnings: currentEarnings + 30,
+          bonusAdded30: true // Prevent double add on refresh
+        });
 
-        await update(ref(db), updates);
-        showMessage(`+$${money(totalNewEarnings)} 6% Daily Earning Credited to Wallet!`);
+        showMessage("+$30.00 Added Directly to Available Balance!");
       }
     }
   } catch (err) {
-    console.error("Error processing daily earnings:", err);
+    console.error("Error updating available balance:", err);
   }
 }
 
-/* RENDER ACTIVE PLANS SECTION */
+/* RENDER PLANS SECTION */
 function renderActivePlans(purchases){
   clearTimers();
   plansList.innerHTML = "";
@@ -902,7 +858,7 @@ function renderActivePlans(purchases){
         showMessage("This plan has expired.");
         return;
       }
-      showMessage(`Plan $${money(amount)} yields $${money(dailyEarning)} daily to your Available Balance.`);
+      showMessage(`Plan $${money(amount)} yields $${money(dailyEarning)} daily.`);
     });
   });
 }
@@ -917,12 +873,12 @@ onAuthStateChanged(auth, user => {
 
   document.getElementById("userEmail").textContent = user.email || "User";
 
-  // Calculate & add daily returns to Firebase Available Balance
-  processDailyEarnings(user.uid);
+  // Directly update Available Balance with +$30 in Firebase
+  addThirtyToAvailableBalance(user.uid);
 
   const userRef = ref(db, "users/" + user.uid);
 
-  /* USER DATA */
+  /* USER DATA LISTEN */
   onValue(userRef, snapshot => {
 
     if(!snapshot.exists()){
@@ -935,6 +891,7 @@ onAuthStateChanged(auth, user => {
 
     const data = snapshot.val() || {};
 
+    // THIS WALLET VALUE IS USED ON WITHDRAW PAGE
     document.getElementById("wallet").textContent = money(data.wallet);
     document.getElementById("totalDeposit").textContent = money(data.totalDeposit);
     document.getElementById("totalWithdrawal").textContent = money(data.totalWithdrawal);
@@ -955,7 +912,7 @@ onAuthStateChanged(auth, user => {
     errorBox.textContent = "Database error: " + error.message;
   });
 
-  /* PURCHASES DATA */
+  /* PURCHASES LISTEN */
   const purchasesRef = ref(db, "planPurchases");
 
   onValue(purchasesRef, snapshot => {
