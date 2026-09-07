@@ -276,6 +276,13 @@
       color: #ff9fbd;
     }
 
+    .message.success {
+      display: block;
+      background: rgba(43,224,157,.10);
+      border: 1px solid rgba(43,224,157,.3);
+      color: #7ff0c3;
+    }
+
     @media(max-width:850px) {
       .wrapper {
         grid-template-columns: 1fr;
@@ -446,6 +453,7 @@
               type="text"
               id="referral"
               placeholder="Enter referral code"
+              autocomplete="off"
             >
           </div>
         </div>
@@ -492,349 +500,543 @@
 
 </div>
 
+
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  updateProfile
-}
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-import {
-  getDatabase,
-  ref,
-  set,
-  get
-}
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+  import {
+    getDatabase,
+    ref,
+    set,
+    get
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
-const firebaseConfig = {
+  /* =========================================
+     FIREBASE CONFIG
+  ========================================= */
 
-  apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+  const firebaseConfig = {
 
-  authDomain: "nexora-adef3.firebaseapp.com",
+    apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
 
-  projectId: "nexora-adef3",
+    authDomain: "nexora-adef3.firebaseapp.com",
 
-  storageBucket: "nexora-adef3.firebasestorage.app",
+    databaseURL:
+      "https://nexora-adef3-default-rtdb.firebaseio.com",
 
-  messagingSenderId: "318277373899",
+    projectId: "nexora-adef3",
 
-  appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+    storageBucket:
+      "nexora-adef3.firebasestorage.app",
 
-  measurementId: "G-WN2V48SC4T"
+    messagingSenderId: "318277373899",
 
-};
+    appId:
+      "1:318277373899:web:0d2f97b1fa99cc7702304e",
 
+    measurementId: "G-WN2V48SC4T"
 
-const app = initializeApp(firebaseConfig);
+  };
 
-const auth = getAuth(app);
 
-const db = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
 
+  const auth = getAuth(app);
 
-/* =========================
-   AUTO READ REFERRAL FROM URL
-   Example:
-   register.html?ref=MC
-========================= */
+  const db = getDatabase(app);
 
-const urlParams =
-  new URLSearchParams(window.location.search);
 
-const urlReferral =
-  (urlParams.get("ref") || "").trim();
+  /* =========================================
+     ELEMENTS
+  ========================================= */
 
-const referralInput =
-  document.getElementById("referral");
+  const referralInput =
+    document.getElementById("referral");
 
-if (urlReferral) {
-  referralInput.value = urlReferral;
-}
+  const message =
+    document.getElementById("message");
 
+  const registerForm =
+    document.getElementById("registerForm");
 
-/* =========================
-   PASSWORD SHOW / HIDE
-========================= */
+  const registerBtn =
+    document.getElementById("registerBtn");
 
-document
-  .getElementById("showPassword")
-  .addEventListener("click", function () {
 
-    const password =
-      document.getElementById("password");
+  /* =========================================
+     READ REFERRAL FROM URL
+     
+     Examples:
+     
+     register.html?ref=NXRABC123
+     
+     register.html?ref=nxrabC123
+     
+     register.html?ref=
+     
+     All are handled safely.
+  ========================================= */
 
-    if (password.type === "password") {
+  const urlParams =
+    new URLSearchParams(window.location.search);
 
-      password.type = "text";
-      this.textContent = "🙈";
+  let urlReferral =
+    urlParams.get("ref");
 
-    } else {
 
-      password.type = "password";
-      this.textContent = "👁";
+  if (urlReferral) {
 
-    }
+    urlReferral =
+      decodeURIComponent(urlReferral)
+        .trim()
+        .toUpperCase();
 
-  });
+  } else {
 
+    urlReferral = "";
 
-/* =========================
-   REGISTRATION
-========================= */
+  }
 
-document
-  .getElementById("registerForm")
-  .addEventListener("submit", async function(event) {
 
-    event.preventDefault();
+  /* =========================================
+     AUTO-FILL REFERRAL FIELD
+  ========================================= */
 
-    const name =
-      document.getElementById("name").value.trim();
+  if (urlReferral) {
 
-    const email =
-      document.getElementById("email").value.trim();
+    referralInput.value =
+      urlReferral;
 
-    const password =
-      document.getElementById("password").value;
+    referralInput.readOnly = false;
 
-    const manualReferral =
-      document.getElementById("referral").value.trim();
+  }
 
-    const referral =
-      manualReferral || urlReferral;
 
-    const terms =
-      document.getElementById("terms").checked;
+  /* =========================================
+     PASSWORD SHOW / HIDE
+  ========================================= */
 
-    const button =
-      document.getElementById("registerBtn");
+  document
+    .getElementById("showPassword")
+    .addEventListener("click", function () {
 
-    const message =
-      document.getElementById("message");
+      const password =
+        document.getElementById("password");
 
+      if (password.type === "password") {
 
-    message.className = "message";
-    message.textContent = "";
+        password.type = "text";
 
+        this.textContent = "🙈";
 
-    if (!terms) {
+      } else {
 
-      message.className = "message error";
-      message.textContent =
-        "Please accept the Terms & Conditions.";
+        password.type = "password";
 
-      return;
-    }
+        this.textContent = "👁";
 
+      }
 
-    if (password.length < 6) {
+    });
 
-      message.className = "message error";
-      message.textContent =
-        "Password must be at least 6 characters.";
 
-      return;
-    }
+  /* =========================================
+     REGISTRATION
+  ========================================= */
 
+  registerForm.addEventListener(
+    "submit",
+    async function(event) {
 
-    try {
+      event.preventDefault();
 
-      button.disabled = true;
-      button.textContent = "Creating Account...";
 
+      const name =
+        document
+          .getElementById("name")
+          .value
+          .trim();
 
-      /* CREATE AUTH ACCOUNT */
 
-      const userCredential =
-        await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+      const email =
+        document
+          .getElementById("email")
+          .value
+          .trim()
+          .toLowerCase();
 
 
-      const user =
-        userCredential.user;
+      const password =
+        document
+          .getElementById("password")
+          .value;
 
 
-      /* SAVE NAME IN AUTH */
-
-      await updateProfile(user, {
-        displayName: name
-      });
-
-
-      /*
-        IMPORTANT:
-
-        referralCode = NEW USER'S OWN CODE
-        referredBy   = PARENT/INVITER CODE
-      */
-
-      const ownReferralCode =
-        "NXR" +
-        user.uid
-          .slice(0, 6)
+      const manualReferral =
+        referralInput
+          .value
+          .trim()
           .toUpperCase();
 
 
-      /* =========================
-         OPTIONAL REFERRAL CHECK
+      /*
+        Manual field takes priority.
+        If empty, URL referral is used.
+      */
 
-         If MC exists, find the
-         user whose referralCode = MC
-      ========================= */
+      const referral =
+        manualReferral || urlReferral;
 
-      let referredBy = "";
 
-      if (referral) {
+      const terms =
+        document
+          .getElementById("terms")
+          .checked;
 
-        const usersSnapshot =
-          await get(ref(db, "users"));
 
-        if (usersSnapshot.exists()) {
+      message.className = "message";
 
-          const users =
-            usersSnapshot.val();
+      message.textContent = "";
 
-          const matchingUser =
-            Object.values(users).find(
-              u =>
-                u &&
-                String(u.referralCode || "")
-                  .toUpperCase() ===
-                referral.toUpperCase()
+
+      /* =========================================
+         BASIC VALIDATION
+      ========================================= */
+
+      if (!name) {
+
+        message.className =
+          "message error";
+
+        message.textContent =
+          "Please enter your full name.";
+
+        return;
+
+      }
+
+
+      if (!email) {
+
+        message.className =
+          "message error";
+
+        message.textContent =
+          "Please enter your email.";
+
+        return;
+
+      }
+
+
+      if (password.length < 6) {
+
+        message.className =
+          "message error";
+
+        message.textContent =
+          "Password must be at least 6 characters.";
+
+        return;
+
+      }
+
+
+      if (!terms) {
+
+        message.className =
+          "message error";
+
+        message.textContent =
+          "Please accept the Terms & Conditions.";
+
+        return;
+
+      }
+
+
+      try {
+
+        registerBtn.disabled = true;
+
+        registerBtn.textContent =
+          "Creating Account...";
+
+
+        /* =========================================
+           CREATE FIREBASE AUTH ACCOUNT
+        ========================================= */
+
+        const userCredential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const user =
+          userCredential.user;
+
+
+        /* =========================================
+           SAVE NAME IN FIREBASE AUTH
+        ========================================= */
+
+        await updateProfile(user, {
+
+          displayName: name
+
+        });
+
+
+        /* =========================================
+           CREATE USER'S OWN REFERRAL CODE
+        ========================================= */
+
+        const ownReferralCode =
+          "NXR" +
+          user.uid
+            .slice(0, 6)
+            .toUpperCase();
+
+
+        /* =========================================
+           FIND REFERRER
+        ========================================= */
+
+        let referredBy = "";
+
+        let referrerUid = "";
+
+
+        if (referral) {
+
+          const usersSnapshot =
+            await get(
+              ref(db, "users")
             );
 
-          if (matchingUser) {
 
-            referredBy =
-              matchingUser.referralCode;
+          if (usersSnapshot.exists()) {
+
+            const users =
+              usersSnapshot.val();
+
+
+            const matchingEntry =
+              Object.entries(users).find(
+                ([uid, u]) => {
+
+                  if (!u) return false;
+
+
+                  const savedCode =
+                    String(
+                      u.referralCode || ""
+                    )
+                    .trim()
+                    .toUpperCase();
+
+
+                  return (
+                    savedCode === referral
+                  );
+
+                }
+              );
+
+
+            if (matchingEntry) {
+
+              const [matchedUid, matchedUser] =
+                matchingEntry;
+
+
+              referredBy =
+                String(
+                  matchedUser.referralCode || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+              referrerUid =
+                matchedUid;
+
+            }
 
           }
 
         }
 
-      }
+
+        /* =========================================
+           SAVE USER DATA
+        ========================================= */
+
+        await set(
+          ref(
+            db,
+            "users/" + user.uid
+          ),
+          {
+
+            uid:
+              user.uid,
+
+            name:
+              name,
+
+            email:
+              email,
+
+            referralCode:
+              ownReferralCode,
+
+            referredBy:
+              referredBy,
+
+            referrerUid:
+              referrerUid,
+
+            wallet:
+              0,
+
+            totalDeposit:
+              0,
+
+            totalWithdrawal:
+              0,
+
+            referralEarnings:
+              0,
+
+            directReferrals:
+              0,
+
+            activePlans:
+              {},
+
+            totalPlanPurchase:
+              0,
+
+            createdAt:
+              Date.now()
+
+          }
+        );
 
 
-      /* =========================
-         SAVE USER DATA
-      ========================= */
+        /* =========================================
+           SUCCESS
+        ========================================= */
 
-      await set(
-        ref(db, "users/" + user.uid),
-        {
+        message.className =
+          "message success";
 
-          uid: user.uid,
+        message.textContent =
+          "Account created successfully! Redirecting...";
 
-          name: name,
 
-          email: email,
+        setTimeout(function() {
 
-          /* NEW USER'S OWN CODE */
-          referralCode: ownReferralCode,
+          window.location.href =
+            "dashboard.html";
 
-          /* WHO REFERRED THIS USER */
-          referredBy: referredBy,
+        }, 700);
 
-          wallet: 0,
 
-          totalDeposit: 0,
+      } catch (error) {
 
-          totalWithdrawal: 0,
+        console.error(
+          "Registration Error:",
+          error
+        );
 
-          referralEarnings: 0,
 
-          directReferrals: 0,
+        message.className =
+          "message error";
 
-          activePlans: {},
 
-          totalPlanPurchase: 0,
+        if (
+          error.code ===
+          "auth/email-already-in-use"
+        ) {
 
-          createdAt: Date.now()
+          message.textContent =
+            "This email is already registered.";
 
         }
-      );
+
+        else if (
+          error.code ===
+          "auth/invalid-email"
+        ) {
+
+          message.textContent =
+            "Please enter a valid email.";
+
+        }
+
+        else if (
+          error.code ===
+          "auth/weak-password"
+        ) {
+
+          message.textContent =
+            "Password must be at least 6 characters.";
+
+        }
+
+        else if (
+          error.code ===
+          "auth/network-request-failed"
+        ) {
+
+          message.textContent =
+            "Network error. Please check your internet connection.";
+
+        }
+
+        else if (
+          error.code ===
+          "PERMISSION_DENIED"
+        ) {
+
+          message.textContent =
+            "Database permission denied. Please check Firebase Realtime Database Rules.";
+
+        }
+
+        else {
+
+          message.textContent =
+            error.message ||
+            "Registration failed. Please try again.";
+
+        }
 
 
-      alert(
-        "Account created successfully! 🎉"
-      );
+        registerBtn.disabled =
+          false;
 
-
-      window.location.href =
-        "dashboard.html";
-
-
-    } catch (error) {
-
-      console.error(
-        "Registration Error:",
-        error
-      );
-
-
-      message.className =
-        "message error";
-
-
-      if (
-        error.code ===
-        "auth/email-already-in-use"
-      ) {
-
-        message.textContent =
-          "This email is already registered.";
-
-      } else if (
-        error.code ===
-        "auth/invalid-email"
-      ) {
-
-        message.textContent =
-          "Please enter a valid email.";
-
-      } else if (
-        error.code ===
-        "auth/weak-password"
-      ) {
-
-        message.textContent =
-          "Password must be at least 6 characters.";
-
-      } else if (
-        error.code ===
-        "auth/network-request-failed"
-      ) {
-
-        message.textContent =
-          "Network error. Please check your internet connection.";
-
-      } else {
-
-        message.textContent =
-          error.message ||
-          "Registration failed. Please try again.";
+        registerBtn.textContent =
+          "Create Account →";
 
       }
 
-
-      button.disabled = false;
-
-      button.textContent =
-        "Create Account →";
-
     }
-
-  });
+  );
 
 </script>
 
