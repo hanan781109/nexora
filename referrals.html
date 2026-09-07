@@ -1,540 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexora - Referrals</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora | Register</title>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial,sans-serif;
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
 
-    body{
-      background:#07111f;
-      color:#fff;
-      min-height:100vh;
-    }
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 20%,rgba(0,229,255,.15),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(255,64,129,.15),transparent 30%),
+    #07111f;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+}
 
-    .navbar{
-      height:70px;
-      padding:0 6%;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      background:#081528;
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
+.wrapper{
+  width:100%;
+  max-width:1050px;
+  min-height:650px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border-radius:30px;
+  overflow:hidden;
+  background:rgba(13,26,45,.95);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+}
 
-    .logo{
-      font-size:25px;
-      font-weight:800;
-      background:linear-gradient(90deg,#00eaff,#8b5cf6,#ff3cac);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
+.left{
+  padding:60px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:linear-gradient(
+    145deg,
+    rgba(0,198,255,.14),
+    rgba(124,77,255,.13),
+    rgba(255,64,129,.12)
+  );
+}
 
-    .back{
-      color:#fff;
-      text-decoration:none;
-      background:#16263f;
-      padding:10px 17px;
-      border-radius:9px;
-    }
+.logo{
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:1px;
+  background:linear-gradient(90deg,#00e5ff,#7c4dff,#ff4081);
+  -webkit-background-clip:text;
+  color:transparent;
+  margin-bottom:30px;
+}
 
-    .container{
-      width:90%;
-      max-width:1100px;
-      margin:40px auto;
-    }
+.left h1{
+  font-size:48px;
+  line-height:1.08;
+  margin-bottom:20px;
+}
 
-    .heading{
-      text-align:center;
-      margin-bottom:30px;
-    }
+.gradient{
+  background:linear-gradient(90deg,#00e5ff,#7c4dff,#ff4081);
+  -webkit-background-clip:text;
+  color:transparent;
+}
 
-    .heading h1{
-      font-size:34px;
-      margin-bottom:10px;
-    }
+.left p{
+  color:#a9bbd0;
+  line-height:1.7;
+  max-width:450px;
+  margin-bottom:35px;
+}
 
-    .heading p{
-      color:#94a3b8;
-    }
+.benefits{display:grid;gap:15px}
 
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:18px;
-      margin-bottom:25px;
-    }
+.benefit{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  color:#d7e4f3;
+}
 
-    .card{
-      background:linear-gradient(145deg,#0c1b31,#101e36);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:18px;
-      padding:25px;
-    }
+.benefit-icon{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#00c6ff,#7c4dff);
+  flex-shrink:0;
+}
 
-    .label{
-      color:#94a3b8;
-      font-size:14px;
-      margin-bottom:12px;
-    }
+.right{
+  padding:55px 50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0a1627;
+}
 
-    .value{
-      font-size:28px;
-      font-weight:bold;
-    }
+.form-box{
+  width:100%;
+  max-width:410px;
+}
 
-    .purple{color:#a78bfa;}
-    .green{color:#22c55e;}
-    .pink{color:#ff4fa3;}
+.form-box h2{
+  font-size:34px;
+  margin-bottom:8px;
+}
 
-    .ref-card{
-      background:#0c192d;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:20px;
-      padding:28px;
-      margin-bottom:25px;
-    }
+.subtitle{
+  color:#8499b1;
+  margin-bottom:30px;
+  font-size:14px;
+}
 
-    .ref-card h2{
-      margin-bottom:20px;
-    }
+.input-group{margin-bottom:18px}
 
-    .code-box{
-      display:flex;
-      gap:10px;
-    }
+.input-group label{
+  display:block;
+  margin-bottom:8px;
+  color:#c7d4e3;
+  font-size:14px;
+}
 
-    .code{
-      flex:1;
-      background:#07111f;
-      border:1px solid rgba(255,255,255,.1);
-      padding:15px;
-      border-radius:10px;
-      color:#00eaff;
-      font-weight:bold;
-      font-size:16px;
-    }
+.input-box{position:relative}
 
-    button{
-      border:none;
-      border-radius:10px;
-      padding:0 20px;
-      background:linear-gradient(90deg,#00c6ff,#8b5cf6);
-      color:white;
-      font-weight:bold;
-      cursor:pointer;
-    }
+.input-box>span:first-child{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:17px;
+  opacity:.7;
+}
 
-    .link-box{
-      margin-top:15px;
-      display:flex;
-      gap:10px;
-    }
+input{
+  width:100%;
+  padding:15px 15px 15px 45px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.1);
+  outline:none;
+  background:rgba(255,255,255,.045);
+  color:white;
+  font-size:14px;
+}
 
-    .link{
-      flex:1;
-      background:#07111f;
-      border:1px solid rgba(255,255,255,.1);
-      padding:15px;
-      border-radius:10px;
-      color:#cbd5e1;
-      overflow:hidden;
-      white-space:nowrap;
-    }
+input::placeholder{color:#62758c}
 
-    .notice{
-      color:#94a3b8;
-      font-size:13px;
-      margin-top:12px;
-    }
+input:focus{
+  border-color:#00d9ff;
+  box-shadow:0 0 0 3px rgba(0,217,255,.08);
+}
 
-    .table-wrap{
-      overflow-x:auto;
-    }
+.password-wrap{position:relative}
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-    }
+.password-wrap input{padding-right:48px}
 
-    th,td{
-      padding:14px 10px;
-      text-align:left;
-      border-bottom:1px solid rgba(255,255,255,.07);
-    }
+.show-password{
+  position:absolute!important;
+  right:15px;
+  left:auto!important;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#8094ab;
+  user-select:none;
+  opacity:1!important;
+}
 
-    th{
-      color:#94a3b8;
-      font-size:13px;
-    }
+.terms{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:7px 0 22px;
+  color:#7f94aa;
+  font-size:12px;
+  line-height:1.5;
+}
 
-    td{
-      color:#e2e8f0;
-      font-size:14px;
-    }
+.terms input{
+  width:auto;
+  margin-top:3px;
+  accent-color:#7c4dff;
+}
 
-    .loading{
-      text-align:center;
-      color:#94a3b8;
-      padding:30px;
-    }
+.terms a{color:#00d9ff}
 
-    @media(max-width:700px){
-      .stats{
-        grid-template-columns:1fr;
-      }
+.register-btn{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:13px;
+  cursor:pointer;
+  color:white;
+  font-size:15px;
+  font-weight:800;
+  background:linear-gradient(90deg,#00c6ff,#7c4dff,#ff4081);
+  box-shadow:0 12px 30px rgba(124,77,255,.2);
+}
 
-      .code-box,
-      .link-box{
-        flex-direction:column;
-      }
+.register-btn:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+}
 
-      button{
-        height:45px;
-      }
+.login-text{
+  text-align:center;
+  color:#8094aa;
+  font-size:14px;
+  margin-top:22px;
+}
 
-      .heading h1{
-        font-size:28px;
-      }
-    }
-  </style>
+.login-text a{
+  color:#00d9ff;
+  font-weight:bold;
+}
+
+.back-home{
+  text-align:center;
+  margin-top:18px;
+}
+
+.back-home a{
+  color:#71869d;
+  font-size:13px;
+}
+
+.message{
+  display:none;
+  margin-bottom:18px;
+  padding:12px;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.4;
+}
+
+.message.error{
+  display:block;
+  background:rgba(255,64,129,.12);
+  border:1px solid rgba(255,64,129,.3);
+  color:#ff9fbd;
+}
+
+.message.success{
+  display:block;
+  background:rgba(43,224,157,.10);
+  border:1px solid rgba(43,224,157,.3);
+  color:#7ff0c3;
+}
+
+@media(max-width:850px){
+  .wrapper{grid-template-columns:1fr}
+  .left{padding:40px 30px}
+  .left h1{font-size:38px}
+  .right{padding:40px 30px}
+}
+
+@media(max-width:500px){
+  body{padding:12px}
+  .wrapper{border-radius:22px}
+  .left{padding:35px 22px}
+  .right{padding:35px 22px}
+  .left h1{font-size:32px}
+  .form-box h2{font-size:29px}
+}
+</style>
 </head>
 
 <body>
 
-<nav class="navbar">
+<div class="wrapper">
+
+<div class="left">
   <div class="logo">NEXORA</div>
-  <a href="dashboard.html" class="back">← Dashboard</a>
-</nav>
 
-<main class="container">
+  <h1>
+    Start Your
+    <span class="gradient">Journey.</span>
+  </h1>
 
-  <div class="heading">
-    <h1>Referral Program</h1>
-    <p>Invite users and track your referral activity.</p>
+  <p>
+    Create your Nexora account and access your personal
+    dashboard, plans, transactions and referral tools
+    from one place.
+  </p>
+
+  <div class="benefits">
+    <div class="benefit">
+      <div class="benefit-icon">✓</div>
+      <span>Simple account management</span>
+    </div>
+
+    <div class="benefit">
+      <div class="benefit-icon">⚡</div>
+      <span>Fast and modern dashboard</span>
+    </div>
+
+    <div class="benefit">
+      <div class="benefit-icon">👥</div>
+      <span>Personal referral tools</span>
+    </div>
+
+    <div class="benefit">
+      <div class="benefit-icon">🔐</div>
+      <span>Secure authentication</span>
+    </div>
   </div>
+</div>
 
-  <div class="stats">
+<div class="right">
 
-    <div class="card">
-      <div class="label">Direct Referrals</div>
-      <div class="value purple" id="directCount">0</div>
-    </div>
+<div class="form-box">
 
-    <div class="card">
-      <div class="label">Referral Earnings</div>
-      <div class="value green">$<span id="earnings">0.00</span></div>
-    </div>
+<h2>Create Account</h2>
 
-    <div class="card">
-      <div class="label">Commission</div>
-      <div class="value pink">20%</div>
-    </div>
+<p class="subtitle">
+  Join Nexora by creating your account.
+</p>
 
-  </div>
+<div id="message" class="message"></div>
 
+<form id="registerForm">
 
-  <div class="ref-card">
+<div class="input-group">
+<label>Full Name</label>
 
-    <h2>Your Referral Code</h2>
+<div class="input-box">
+<span>👤</span>
 
-    <div class="code-box">
-      <div class="code" id="refCode">Loading...</div>
-      <button id="copyCode">Copy Code</button>
-    </div>
+<input
+type="text"
+id="name"
+placeholder="Enter your full name"
+required
+>
+</div>
+</div>
 
-    <div class="link-box">
-      <div class="link" id="refLink">Loading...</div>
-      <button id="copyLink">Copy Link</button>
-    </div>
+<div class="input-group">
+<label>Email Address</label>
 
-    <div class="notice">
-      Share your referral link with people you invite to Nexora.
-    </div>
+<div class="input-box">
+<span>✉️</span>
 
-  </div>
+<input
+type="email"
+id="email"
+placeholder="Enter your email"
+required
+>
+</div>
+</div>
 
+<div class="input-group">
+<label>Password</label>
 
-  <div class="ref-card">
+<div class="input-box password-wrap">
 
-    <h2>My Direct Referrals</h2>
+<span>🔒</span>
 
-    <div class="table-wrap">
+<input
+type="password"
+id="password"
+placeholder="Create a password"
+minlength="6"
+required
+>
 
-      <table>
+<span class="show-password" id="showPassword">👁</span>
 
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+</div>
+</div>
 
-        <tbody id="referralsTable">
-          <tr>
-            <td colspan="3" class="loading">
-              Loading referrals...
-            </td>
-          </tr>
-        </tbody>
+<div class="input-group">
 
-      </table>
+<label>
+Referral Code <small>(Optional)</small>
+</label>
 
-    </div>
+<div class="input-box">
 
-  </div>
+<span>🔗</span>
 
-</main>
+<input
+type="text"
+id="referral"
+placeholder="Enter referral code"
+autocomplete="off"
+>
 
+</div>
+</div>
+
+<label class="terms">
+
+<input
+type="checkbox"
+id="terms"
+required
+>
+
+<span>
+I agree to the
+<a href="#">Terms & Conditions</a>
+and
+<a href="#">Privacy Policy</a>.
+</span>
+
+</label>
+
+<button
+type="submit"
+class="register-btn"
+id="registerBtn"
+>
+Create Account →
+</button>
+
+</form>
+
+<div class="login-text">
+Already have an account?
+<a href="login.html">Login</a>
+</div>
+
+<div class="back-home">
+<a href="index.html">← Back to Home</a>
+</div>
+
+</div>
+</div>
+
+</div>
 
 <script type="module">
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+getAuth,
+createUserWithEmailAndPassword,
+updateProfile
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
-  getDatabase,
-  ref,
-  get
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+getDatabase,
+ref,
+get,
+set,
+update
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+apiKey:"AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
 
-  authDomain: "nexora-adef3.firebaseapp.com",
+authDomain:"nexora-adef3.firebaseapp.com",
 
-  projectId: "nexora-adef3",
+databaseURL:
+"https://nexora-adef3-default-rtdb.firebaseio.com",
 
-  storageBucket: "nexora-adef3.firebasestorage.app",
+projectId:"nexora-adef3",
 
-  messagingSenderId: "318277373899",
+storageBucket:
+"nexora-adef3.firebasestorage.app",
 
-  appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+messagingSenderId:"318277373899",
 
-  measurementId: "G-WN2V48SC4T"
+appId:
+"1:318277373899:web:0d2f97b1fa99cc7702304e",
+
+measurementId:"G-WN2V48SC4T"
 
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getDatabase(app);
 
-const auth = getAuth(app);
 
-const db = getDatabase(app);
+const form=document.getElementById("registerForm");
+const referralInput=document.getElementById("referral");
+const message=document.getElementById("message");
+const registerBtn=document.getElementById("registerBtn");
 
 
-onAuthStateChanged(auth, async (user) => {
+/* ===============================
+   REFERRAL FROM URL
+================================ */
 
-  if (!user) {
+const params=new URLSearchParams(window.location.search);
 
-    window.location.href = "login.html";
+const urlReferral=(params.get("ref") || "")
+.trim()
+.toUpperCase();
 
-    return;
+if(urlReferral){
+  referralInput.value=urlReferral;
+}
 
-  }
 
+/* ===============================
+   PASSWORD SHOW/HIDE
+================================ */
 
-  try {
+document.getElementById("showPassword")
+.addEventListener("click",function(){
 
-    const currentUserRef =
-      ref(db, "users/" + user.uid);
+const password=document.getElementById("password");
 
-    const currentSnapshot =
-      await get(currentUserRef);
-
-
-    if (!currentSnapshot.exists()) {
-
-      alert("User data not found.");
-
-      return;
-
-    }
-
-
-    const currentData =
-      currentSnapshot.val();
-
-
-    const referralCode =
-      currentData.referralCode || "";
-
-
-    const referralEarnings =
-      Number(currentData.referralEarnings || 0);
-
-
-    document.getElementById("refCode")
-      .textContent = referralCode;
-
-
-    document.getElementById("earnings")
-      .textContent =
-      referralEarnings.toFixed(2);
-
-
-    const referralLink =
-      window.location.origin +
-      window.location.pathname
-        .replace("referrals.html", "register.html") +
-      "?ref=" +
-      encodeURIComponent(referralCode);
-
-
-    document.getElementById("refLink")
-      .textContent = referralLink;
-
-
-    /*
-      Load all users and find users whose
-      referredBy matches this user's code.
-    */
-
-    const usersRef = ref(db, "users");
-
-    const usersSnapshot = await get(usersRef);
-
-    const table =
-      document.getElementById("referralsTable");
-
-    table.innerHTML = "";
-
-
-    let count = 0;
-
-
-    if (usersSnapshot.exists()) {
-
-      const users =
-        usersSnapshot.val();
-
-
-      Object.values(users).forEach((u) => {
-
-        if (
-          u &&
-          u.referredBy === referralCode
-        ) {
-
-          count++;
-
-
-          const row =
-            document.createElement("tr");
-
-
-          row.innerHTML = `
-            <td>${escapeHtml(u.name || "User")}</td>
-            <td>${escapeHtml(u.email || "-")}</td>
-            <td>Active</td>
-          `;
-
-
-          table.appendChild(row);
-
-        }
-
-      });
-
-    }
-
-
-    if (count === 0) {
-
-      table.innerHTML = `
-        <tr>
-          <td colspan="3" class="loading">
-            No direct referrals yet.
-          </td>
-        </tr>
-      `;
-
-    }
-
-
-    document.getElementById("directCount")
-      .textContent = count;
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    document.getElementById("referralsTable")
-      .innerHTML = `
-        <tr>
-          <td colspan="3" class="loading">
-            Unable to load referrals.
-          </td>
-        </tr>
-      `;
-
-  }
+if(password.type==="password"){
+password.type="text";
+this.textContent="🙈";
+}else{
+password.type="password";
+this.textContent="👁";
+}
 
 });
 
 
-function escapeHtml(value) {
+/* ===============================
+   REGISTER
+================================ */
 
-  return String(value)
+form.addEventListener("submit",async(e)=>{
 
-    .replaceAll("&", "&amp;")
+e.preventDefault();
 
-    .replaceAll("<", "&lt;")
+const name=document.getElementById("name")
+.value.trim();
 
-    .replaceAll(">", "&gt;")
+const email=document.getElementById("email")
+.value.trim()
+.toLowerCase();
 
-    .replaceAll('"', "&quot;")
+const password=document.getElementById("password").value;
 
-    .replaceAll("'", "&#039;");
+const referral=(referralInput.value.trim() || urlReferral)
+.toUpperCase();
+
+const terms=document.getElementById("terms").checked;
+
+
+message.className="message";
+message.textContent="";
+
+
+if(!name){
+showError("Please enter your full name.");
+return;
+}
+
+if(!email){
+showError("Please enter your email.");
+return;
+}
+
+if(password.length<6){
+showError("Password must be at least 6 characters.");
+return;
+}
+
+if(!terms){
+showError("Please accept the Terms & Conditions.");
+return;
+}
+
+
+try{
+
+registerBtn.disabled=true;
+registerBtn.textContent="Creating Account...";
+
+
+/* ===============================
+   CREATE AUTH ACCOUNT
+================================ */
+
+const credential=
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+const user=credential.user;
+
+
+await updateProfile(user,{
+displayName:name
+});
+
+
+/* ===============================
+   OWN REFERRAL CODE
+================================ */
+
+const ownReferralCode=
+"NXR"+user.uid.slice(0,6).toUpperCase();
+
+
+/* ===============================
+   FIND REFERRER
+================================ */
+
+let referredBy="";
+let referrerUid="";
+
+
+if(referral){
+
+const snapshot=
+await get(ref(db,"users"));
+
+if(snapshot.exists()){
+
+const users=snapshot.val();
+
+for(const [uid,data] of Object.entries(users)){
+
+if(!data) continue;
+
+const savedCode=
+String(data.referralCode || "")
+.trim()
+.toUpperCase();
+
+if(savedCode===referral){
+
+referredBy=savedCode;
+referrerUid=uid;
+
+break;
+}
+
+}
+
+}
 
 }
 
 
-document.getElementById("copyCode")
-  .addEventListener("click", async () => {
+/* ===============================
+   SAVE NEW USER
+================================ */
 
-    const code =
-      document.getElementById("refCode").textContent;
+const newUser={
 
-    if (!code || code === "Loading...") return;
+uid:user.uid,
 
-    await navigator.clipboard.writeText(code);
+name:name,
 
-    alert("Referral code copied!");
+email:email,
 
-  });
+referralCode:ownReferralCode,
+
+referredBy:referredBy,
+
+referrerUid:referrerUid,
+
+wallet:0,
+
+totalDeposit:0,
+
+totalWithdrawal:0,
+
+referralEarnings:0,
+
+directReferrals:0,
+
+activePlans:{},
+
+totalPlanPurchase:0,
+
+createdAt:Date.now(),
+
+updatedAt:Date.now()
+
+};
 
 
-document.getElementById("copyLink")
-  .addEventListener("click", async () => {
+await set(
+ref(db,"users/"+user.uid),
+newUser
+);
 
-    const link =
-      document.getElementById("refLink").textContent;
 
-    if (!link || link === "Loading...") return;
+/* ===============================
+   UPDATE REFERRER
+================================ */
 
-    await navigator.clipboard.writeText(link);
+if(referrerUid){
 
-    alert("Referral link copied!");
+const referrerRef=
+ref(db,"users/"+referrerUid);
 
-  });
+const referrerSnapshot=
+await get(referrerRef);
+
+if(referrerSnapshot.exists()){
+
+const referrerData=
+referrerSnapshot.val();
+
+const oldCount=
+Number(referrerData.directReferrals || 0);
+
+await update(referrerRef,{
+
+directReferrals:oldCount+1,
+
+updatedAt:Date.now()
+
+});
+
+}
+
+}
+
+
+/* ===============================
+   SUCCESS
+================================ */
+
+message.className="message success";
+
+message.textContent=
+"Account created successfully! Redirecting...";
+
+
+setTimeout(()=>{
+
+window.location.href="dashboard.html";
+
+},800);
+
+
+}catch(error){
+
+console.error("Registration Error:",error);
+
+message.className="message error";
+
+if(error.code==="auth/email-already-in-use"){
+
+message.textContent=
+"This email is already registered.";
+
+}else if(error.code==="auth/invalid-email"){
+
+message.textContent=
+"Please enter a valid email.";
+
+}else if(error.code==="auth/weak-password"){
+
+message.textContent=
+"Password must be at least 6 characters.";
+
+}else if(
+error.code==="PERMISSION_DENIED" ||
+error.code==="permission-denied"
+){
+
+message.textContent=
+"Firebase permission denied. Check your Database Rules.";
+
+}else{
+
+message.textContent=
+error.message ||
+"Registration failed. Please try again.";
+
+}
+
+registerBtn.disabled=false;
+registerBtn.textContent="Create Account →";
+
+}
+
+});
+
+
+function showError(text){
+
+message.className="message error";
+message.textContent=text;
+
+}
 
 </script>
 
