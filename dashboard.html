@@ -119,6 +119,11 @@ body{
   border-color:#42e8ff;
 }
 
+.card.highlight-card{
+  border:1px solid #42e8ff;
+  background:linear-gradient(145deg,#0e2744,#103863);
+}
+
 .card h3{
   color:#9fb0c9;
   font-size:14px;
@@ -248,20 +253,6 @@ body{
   margin-bottom:12px;
 }
 
-.timer-label{
-  color:#9fb0c9;
-  font-size:12px;
-  margin-bottom:5px;
-}
-
-.timer{
-  font-size:22px;
-  font-weight:800;
-  color:#42e8ff;
-  letter-spacing:1px;
-  margin-bottom:12px;
-}
-
 .expiry-label{
   color:#9fb0c9;
   font-size:12px;
@@ -273,27 +264,6 @@ body{
   font-weight:800;
   color:#8b5cf6;
   margin-bottom:14px;
-}
-
-.earning-btn{
-  width:100%;
-  border:none;
-  padding:11px;
-  border-radius:10px;
-  background:linear-gradient(90deg,#00c6ff,#8b5cf6);
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.earning-btn:hover{
-  opacity:.9;
-}
-
-.earning-btn.expired{
-  background:#263044;
-  color:#9fb0c9;
-  cursor:not-allowed;
 }
 
 .no-plans{
@@ -509,10 +479,10 @@ body{
 
     <div class="cards">
 
-      <div class="card">
+      <div class="card highlight-card">
         <h3>Available Balance</h3>
         <div class="amount">
-          $<span id="wallet">0.00</span>
+          $<span id="wallet">0.0000</span>
         </div>
       </div>
 
@@ -536,7 +506,7 @@ body{
           $<span id="earnings">0.00</span>
         </div>
         <div class="earning-sub">
-          Cumulative Plan Earnings
+          Total Earned from Plans
         </div>
       </div>
 
@@ -566,19 +536,19 @@ body{
     <section class="earnings-section">
 
       <div class="section-title">
-        <h2>My Plans & Earnings</h2>
+        <h2>My Active Plans</h2>
         <span id="activePlanCount">0 Active Plans</span>
       </div>
 
       <div class="total-daily">
         <div class="total-daily-label">
-          Total Daily Earning Rate (6%)
+          Daily Profit Rate (6%)
         </div>
         <div class="total-daily-value">
-          $<span id="totalDailyEarning">0.00</span>
+          $<span id="totalDailyEarning">0.00</span> / Day
         </div>
         <div class="total-daily-note">
-          Daily profit gets added automatically to your Available Balance
+          ● Live profits are directly streaming into your Available Balance
         </div>
       </div>
 
@@ -597,7 +567,7 @@ body{
 
     <div class="status">
       <div class="status-title">Account Status</div>
-      <div class="online">● Account Connected</div>
+      <div class="online">● Live System Active</div>
     </div>
 
   </div>
@@ -629,7 +599,6 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
-
 /* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
@@ -652,41 +621,17 @@ const message = document.getElementById("message");
 const plansList = document.getElementById("plansList");
 const totalDailyEarningEl = document.getElementById("totalDailyEarning");
 
-let timerIds = [];
-const DAILY_RATE = 0.06; // 6% Daily Profit Rate
+const DAILY_RATE = 0.06; // 6% Daily Return Rate
+let liveSyncInterval = null;
+let currentPurchases = [];
+let userDataBase = null;
 
-function money(value){
+function money(value, decimals = 2){
   const number = Number(value);
   if(!Number.isFinite(number)){
     return "0.00";
   }
-  return number.toFixed(2);
-}
-
-function showMessage(text){
-  message.textContent = text;
-  message.classList.add("show");
-  setTimeout(() => {
-    message.classList.remove("show");
-  },3500);
-}
-
-function clearTimers(){
-  timerIds.forEach(timer => clearInterval(timer));
-  timerIds = [];
-}
-
-function formatTime(milliseconds){
-  if(milliseconds <= 0) return "00:00:00";
-  const totalSeconds = Math.floor(milliseconds / 1000);
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return (
-    String(hours).padStart(2,"0") + ":" +
-    String(minutes).padStart(2,"0") + ":" +
-    String(seconds).padStart(2,"0")
-  );
+  return number.toFixed(decimals);
 }
 
 function formatDays(milliseconds){
@@ -695,101 +640,84 @@ function formatDays(milliseconds){
   const days = Math.floor(totalSeconds / 86400);
   const hours = Math.floor((totalSeconds % 86400) / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-  return (
-    days + "d " +
-    String(hours).padStart(2,"0") + ":" +
-    String(minutes).padStart(2,"0") + ":" +
-    String(seconds).padStart(2,"0")
-  );
+  return days + "d " + String(hours).padStart(2,"0") + "h " + String(minutes).padStart(2,"0") + "m";
 }
 
-/* AUTOMATIC REAL-TIME PLAN EARNING PROCESSOR */
-/* HAR ACTIVE PLAN KI ACTUAL EARNING AUTOMATICALLY AVAILABLE BALANCE MEIN DALEGI */
-async function syncPlanEarningsToAvailableBalance(uid) {
-  try {
-    const purchasesRef = ref(db, "planPurchases");
-    const snapshot = await get(purchasesRef);
+/* REAL-TIME ENGINE: CALCULATES LIVE EARNINGS FROM ACTIVE PLANS DIRECTLY INTO AVAILABLE BALANCE */
+function startLiveBalanceEngine(uid) {
+  if(liveSyncInterval) clearInterval(liveSyncInterval);
 
-    if (!snapshot.exists()) return;
+  liveSyncInterval = setInterval(async () => {
+    if (!userDataBase || !currentPurchases.length) return;
 
-    const raw = snapshot.val() || {};
     const now = Date.now();
     const DAY_MS = 24 * 60 * 60 * 1000;
     const EXPIRY_MS = 30 * DAY_MS;
 
-    let totalNewProfit = 0;
-    let dbUpdates = {};
+    let newlyCalculatedProfit = 0;
+    let updates = {};
+    let activePlanFound = false;
 
-    Object.keys(raw).forEach(key => {
-      const item = raw[key];
-
-      // Kevol current logged-in user ke active plans check honge
-      if (item && item.uid === uid && (item.status === "active" || !item.status)) {
+    currentPurchases.forEach(item => {
+      if (item && item.uid === uid && item.status !== "expired") {
         const createdAt = Number(item.createdAt || now);
         const expiresAt = Number(item.expiresAt || (createdAt + EXPIRY_MS));
-        const lastClaimed = Number(item.lastClaimedAt || createdAt);
+        const lastSync = Number(item.lastSyncAt || createdAt);
 
-        if (now <= expiresAt || lastClaimed < expiresAt) {
-          const effectiveNow = Math.min(now, expiresAt);
-          const timeElapsed = effectiveNow - lastClaimed;
-          const cyclesEarned = Math.floor(timeElapsed / DAY_MS);
-
-          if (cyclesEarned > 0) {
+        if (now <= expiresAt) {
+          activePlanFound = true;
+          const timePassedMs = now - lastSync;
+          
+          if (timePassedMs > 0) {
             const planAmount = Number(item.planAmount || 0);
-            const profitPerDay = planAmount * DAILY_RATE;
-            const cycleProfit = profitPerDay * cyclesEarned;
+            // Daily Rate = 6%. Calculate profit per millisecond
+            const profitPerMs = (planAmount * DAILY_RATE) / DAY_MS;
+            const earnedInChunk = profitPerMs * timePassedMs;
 
-            totalNewProfit += cycleProfit;
-
-            const updatedLastClaim = lastClaimed + (cyclesEarned * DAY_MS);
-            dbUpdates[`planPurchases/${key}/lastClaimedAt`] = updatedLastClaim;
-
-            if (updatedLastClaim >= expiresAt) {
-              dbUpdates[`planPurchases/${key}/status`] = "expired";
-            }
+            newlyCalculatedProfit += earnedInChunk;
+            updates[`planPurchases/${item.key}/lastSyncAt`] = now;
           }
+        } else {
+          updates[`planPurchases/${item.key}/status`] = "expired";
         }
       }
     });
 
-    // Agar active plan se koi earning banti hai, to direct Available Balance (`wallet`) mein add hogi
-    if (totalNewProfit > 0) {
-      const userRef = ref(db, "users/" + uid);
-      const userSnapshot = await get(userRef);
-      if (userSnapshot.exists()) {
-        const userData = userSnapshot.val();
-        const currentWallet = Number(userData.wallet || 0);
-        const currentEarnings = Number(userData.earnings || 0);
+    if (newlyCalculatedProfit > 0 && activePlanFound) {
+      const newWalletBalance = Number(userDataBase.wallet || 0) + newlyCalculatedProfit;
+      const newTotalEarnings = Number(userDataBase.earnings || 0) + newlyCalculatedProfit;
 
-        dbUpdates[`users/${uid}/wallet`] = currentWallet + totalNewProfit;
-        dbUpdates[`users/${uid}/earnings`] = currentEarnings + totalNewProfit;
+      userDataBase.wallet = newWalletBalance;
+      userDataBase.earnings = newTotalEarnings;
 
-        await update(ref(db), dbUpdates);
-        showMessage(`+$${money(totalNewProfit)} Plan Earning Credited to Available Balance!`);
+      // Update UI Available Balance in Real-Time
+      document.getElementById("wallet").textContent = money(newWalletBalance, 4);
+      document.getElementById("earnings").textContent = money(newTotalEarnings, 2);
+
+      // Push updates to Firebase DB
+      updates[`users/${uid}/wallet`] = newWalletBalance;
+      updates[`users/${uid}/earnings`] = newTotalEarnings;
+
+      try {
+        await update(ref(db), updates);
+      } catch(e) {
+        console.error("Balance sync error:", e);
       }
     }
-  } catch (err) {
-    console.error("Error syncing plan earnings:", err);
-  }
+  }, 2000); // Syncs every 2 seconds live
 }
 
-/* RENDER ACTIVE PLANS SECTION */
+/* RENDER ACTIVE PLANS AT BOTTOM */
 function renderActivePlans(purchases){
-  clearTimers();
   plansList.innerHTML = "";
   totalDailyEarningEl.textContent = "0.00";
 
   const now = Date.now();
 
   const activePlans = purchases.filter(purchase => {
-    if(!purchase) return false;
-    if(purchase.status === "expired") return false;
-
+    if(!purchase || purchase.status === "expired") return false;
     const createdAt = Number(purchase.createdAt || 0);
-    const savedExpiry = Number(purchase.expiresAt || 0);
-    const expiry = savedExpiry || (createdAt + 30 * 24 * 60 * 60 * 1000);
-
+    const expiry = Number(purchase.expiresAt || (createdAt + 30 * 24 * 60 * 60 * 1000));
     return expiry > now;
   });
 
@@ -799,7 +727,7 @@ function renderActivePlans(purchases){
   if(activePlans.length === 0){
     plansList.innerHTML = `
       <div class="no-plans">
-        No active plans yet. Go to Plans page to activate one.
+        No active plans. Purchase a plan to start earning 6% daily to your Available Balance.
       </div>
     `;
     return;
@@ -807,20 +735,12 @@ function renderActivePlans(purchases){
 
   let totalDaily = 0;
 
-  activePlans.forEach(purchase => {
-    const amount = Number(purchase.planAmount || 0);
-    if(Number.isFinite(amount)){
-      totalDaily += amount * DAILY_RATE;
-    }
-  });
-
-  totalDailyEarningEl.textContent = money(totalDaily);
-
   activePlans.forEach((purchase, index) => {
     const amount = Number(purchase.planAmount || 0);
     const createdAt = Number(purchase.createdAt || Date.now());
     const expiry = Number(purchase.expiresAt || (createdAt + 30 * 24 * 60 * 60 * 1000));
     const dailyEarning = amount * DAILY_RATE;
+    totalDaily += dailyEarning;
 
     const card = document.createElement("div");
     card.className = "earning-plan";
@@ -828,72 +748,20 @@ function renderActivePlans(purchases){
     card.innerHTML = `
       <div class="earning-plan-top">
         <div class="plan-name">Plan #${index + 1}</div>
-        <div class="active-badge">ACTIVE ✓</div>
+        <div class="active-badge">ACTIVE (6% Daily) ✓</div>
       </div>
 
-      <div class="plan-value">Plan Value: $${money(amount)} USDT</div>
-      <div class="rate">Daily Earning (6%): $${money(dailyEarning)}</div>
+      <div class="plan-value">Purchased Amount: $${money(amount)} USDT</div>
+      <div class="rate">Daily Profit Added: $${money(dailyEarning)} / Day</div>
 
-      <div class="timer-label">24-hour cycle status</div>
-      <div class="timer" id="cycle-${index}">24:00:00</div>
-
-      <div class="expiry-label">30-day plan remaining</div>
-      <div class="expiry-timer" id="expiry-${index}">Calculating...</div>
-
-      <button class="earning-btn" id="earning-${index}">
-        View Details
-      </button>
+      <div class="expiry-label">Plan Expiry Remaining</div>
+      <div class="expiry-timer">${formatDays(expiry - now)}</div>
     `;
 
     plansList.appendChild(card);
-
-    const cycleEl = card.querySelector(`#cycle-${index}`);
-    const expiryEl = card.querySelector(`#expiry-${index}`);
-    const earningBtn = card.querySelector(`#earning-${index}`);
-
-    function updatePlan(){
-      const currentTime = Date.now();
-      const cycle = 24 * 60 * 60 * 1000;
-      const elapsed = currentTime - createdAt;
-
-      let cycleRemaining = cycle - (elapsed % cycle);
-      if(cycleRemaining <= 0) cycleRemaining = cycle;
-
-      cycleEl.textContent = formatTime(cycleRemaining);
-
-      const remaining = expiry - currentTime;
-
-      if(remaining <= 0){
-        expiryEl.textContent = "Expired";
-        cycleEl.textContent = "00:00:00";
-        earningBtn.textContent = "Plan Expired";
-        earningBtn.classList.add("expired");
-        earningBtn.disabled = true;
-        return false;
-      }
-
-      expiryEl.textContent = formatDays(remaining);
-      return true;
-    }
-
-    updatePlan();
-
-    const timerId = setInterval(() => {
-      const active = updatePlan();
-      if(!active) clearInterval(timerId);
-    }, 1000);
-
-    timerIds.push(timerId);
-
-    earningBtn.addEventListener("click", () => {
-      const remaining = expiry - Date.now();
-      if(remaining <= 0){
-        showMessage("This plan has expired.");
-        return;
-      }
-      showMessage(`Plan $${money(amount)} yields $${money(dailyEarning)} daily directly to Available Balance.`);
-    });
   });
+
+  totalDailyEarningEl.textContent = money(totalDaily);
 }
 
 /* AUTH & DATABASE LISTENERS */
@@ -906,33 +774,30 @@ onAuthStateChanged(auth, user => {
 
   document.getElementById("userEmail").textContent = user.email || "User";
 
-  // Check and Sync Plan Earnings to Available Balance
-  syncPlanEarningsToAvailableBalance(user.uid);
-
   const userRef = ref(db, "users/" + user.uid);
 
-  /* USER DATA LISTEN */
+  /* LISTEN USER DATA */
   onValue(userRef, snapshot => {
 
     if(!snapshot.exists()){
       loading.style.display = "none";
       dashboardContent.style.display = "none";
       errorBox.style.display = "block";
-      errorBox.textContent = "User data not found in Firebase.";
+      errorBox.textContent = "User record not found in database.";
       return;
     }
 
-    const data = snapshot.val() || {};
+    userDataBase = snapshot.val() || {};
 
-    // Available Balance
-    document.getElementById("wallet").textContent = money(data.wallet);
-    document.getElementById("totalDeposit").textContent = money(data.totalDeposit);
-    document.getElementById("totalWithdrawal").textContent = money(data.totalWithdrawal);
-    document.getElementById("earnings").textContent = money(data.earnings);
-    document.getElementById("referralEarnings").textContent = money(data.referralEarnings);
-    document.getElementById("directReferrals").textContent = Number(data.directReferrals || 0);
-    document.getElementById("totalPlanPurchase").textContent = money(data.totalPlanPurchase);
-    document.getElementById("referralCode").textContent = data.referralCode || "---";
+    // Available Balance is displayed with 4 decimals for live earnings tracking
+    document.getElementById("wallet").textContent = money(userDataBase.wallet || 0, 4);
+    document.getElementById("totalDeposit").textContent = money(userDataBase.totalDeposit || 0);
+    document.getElementById("totalWithdrawal").textContent = money(userDataBase.totalWithdrawal || 0);
+    document.getElementById("earnings").textContent = money(userDataBase.earnings || 0);
+    document.getElementById("referralEarnings").textContent = money(userDataBase.referralEarnings || 0);
+    document.getElementById("directReferrals").textContent = Number(userDataBase.directReferrals || 0);
+    document.getElementById("totalPlanPurchase").textContent = money(userDataBase.totalPlanPurchase || 0);
+    document.getElementById("referralCode").textContent = userDataBase.referralCode || "---";
 
     loading.style.display = "none";
     dashboardContent.style.display = "block";
@@ -945,20 +810,26 @@ onAuthStateChanged(auth, user => {
     errorBox.textContent = "Database error: " + error.message;
   });
 
-  /* PURCHASES LISTEN */
+  /* LISTEN PURCHASES DATA */
   const purchasesRef = ref(db, "planPurchases");
 
   onValue(purchasesRef, snapshot => {
 
     if(!snapshot.exists()){
+      currentPurchases = [];
       renderActivePlans([]);
       return;
     }
 
     const raw = snapshot.val() || {};
-    const purchases = Object.values(raw).filter(purchase => purchase && purchase.uid === user.uid);
+    currentPurchases = Object.keys(raw)
+      .map(key => ({ key, ...raw[key] }))
+      .filter(item => item && item.uid === user.uid);
 
-    renderActivePlans(purchases);
+    renderActivePlans(currentPurchases);
+    
+    // Start Live Balance Engine
+    startLiveBalanceEngine(user.uid);
 
   }, error => {
     console.error("Plan loading error:", error);
@@ -969,6 +840,7 @@ onAuthStateChanged(auth, user => {
 /* LOGOUT */
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   try {
+    if(liveSyncInterval) clearInterval(liveSyncInterval);
     await signOut(auth);
     window.location.href = "login.html";
   } catch(error) {
