@@ -131,6 +131,179 @@ body{
   color:#42e8ff;
 }
 
+.earning-card{
+  background:linear-gradient(135deg,#24154b,#182b55);
+  border:1px solid #6546a8;
+}
+
+.earning-card .amount{
+  color:#ff6fa5;
+}
+
+.earning-sub{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-top:8px;
+}
+
+/* EARNINGS SECTION */
+.earnings-section{
+  margin-top:22px;
+  background:linear-gradient(135deg,#102c32,#123a45);
+  border:1px solid #236878;
+  border-radius:18px;
+  padding:22px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.section-title h2{
+  font-size:20px;
+}
+
+.section-title span{
+  color:#42e8ff;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.total-daily{
+  margin-bottom:18px;
+  padding:18px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#24154b,#182b55);
+  border:1px solid #6546a8;
+}
+
+.total-daily-label{
+  color:#9fb0c9;
+  font-size:13px;
+  margin-bottom:7px;
+}
+
+.total-daily-value{
+  color:#ff6fa5;
+  font-size:30px;
+  font-weight:800;
+}
+
+.total-daily-note{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-top:6px;
+}
+
+.plans-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
+
+.earning-plan{
+  background:rgba(7,17,31,.55);
+  border:1px solid rgba(66,232,255,.18);
+  border-radius:15px;
+  padding:18px;
+}
+
+.earning-plan-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.plan-name{
+  font-size:16px;
+  font-weight:bold;
+}
+
+.active-badge{
+  background:rgba(34,197,94,.12);
+  border:1px solid rgba(34,197,94,.3);
+  color:#22c55e;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.plan-value{
+  color:#9fb0c9;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.rate{
+  color:#ff6fa5;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+.timer-label{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.timer{
+  font-size:22px;
+  font-weight:800;
+  color:#42e8ff;
+  letter-spacing:1px;
+  margin-bottom:12px;
+}
+
+.expiry-label{
+  color:#9fb0c9;
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.expiry-timer{
+  font-size:18px;
+  font-weight:800;
+  color:#8b5cf6;
+  margin-bottom:14px;
+}
+
+.earning-btn{
+  width:100%;
+  border:none;
+  padding:11px;
+  border-radius:10px;
+  background:linear-gradient(90deg,#00c6ff,#8b5cf6);
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.earning-btn:hover{
+  opacity:.9;
+}
+
+.earning-btn.expired{
+  background:#263044;
+  color:#9fb0c9;
+  cursor:not-allowed;
+}
+
+.no-plans{
+  text-align:center;
+  color:#9fb0c9;
+  padding:20px;
+  border:1px dashed #263b63;
+  border-radius:12px;
+}
+
 /* REFERRAL */
 .ref{
   margin-top:22px;
@@ -271,6 +444,14 @@ body{
   .amount{
     font-size:25px;
   }
+
+  .plans-list{
+    grid-template-columns:1fr;
+  }
+
+  .total-daily-value{
+    font-size:26px;
+  }
 }
 </style>
 </head>
@@ -319,12 +500,8 @@ body{
 <main class="main">
 
   <div class="topbar">
-    <h1>
-      Welcome Back 👋
-    </h1>
-    <p id="userEmail">
-      Loading account...
-    </p>
+    <h1>Welcome Back 👋</h1>
+    <p id="userEmail">Loading account...</p>
   </div>
 
   <div id="loading" class="loading">
@@ -357,6 +534,16 @@ body{
         </div>
       </div>
 
+      <div class="card earning-card">
+        <h3>Earnings</h3>
+        <div class="amount">
+          $<span id="earnings">0.00</span>
+        </div>
+        <div class="earning-sub">
+          Total Plan Earnings
+        </div>
+      </div>
+
       <div class="card">
         <h3>Referral Earnings</h3>
         <div class="amount">
@@ -380,24 +567,45 @@ body{
 
     </div>
 
+    <!-- EARNINGS / ACTIVE PLANS -->
+    <section class="earnings-section">
+
+      <div class="section-title">
+        <h2>My Plans & Earnings</h2>
+        <span id="activePlanCount">0 Active Plans</span>
+      </div>
+
+      <!-- TOTAL DAILY EARNING -->
+      <div class="total-daily">
+        <div class="total-daily-label">
+          Total Daily Earning (6%)
+        </div>
+        <div class="total-daily-value">
+          $<span id="totalDailyEarning">0.00</span>
+        </div>
+        <div class="total-daily-note">
+          Automatically credited to your Available Balance every 24 hours
+        </div>
+      </div>
+
+      <div class="plans-list" id="plansList">
+        <div class="no-plans">
+          No active plans yet.
+        </div>
+      </div>
+
+    </section>
+
     <!-- REFERRAL -->
     <div class="ref">
-      <h3>
-        Your Referral Code
-      </h3>
-      <div class="ref-code" id="referralCode">
-        ---
-      </div>
+      <h3>Your Referral Code</h3>
+      <div class="ref-code" id="referralCode">---</div>
     </div>
 
     <!-- STATUS -->
     <div class="status">
-      <div class="status-title">
-        Account Status
-      </div>
-      <div class="online">
-        ● Account Connected
-      </div>
+      <div class="status-title">Account Status</div>
+      <div class="online">● Account Connected</div>
     </div>
 
   </div>
@@ -425,8 +633,8 @@ import {
   getDatabase,
   ref,
   onValue,
-  update,
-  get
+  get,
+  update
 }
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
@@ -450,7 +658,10 @@ const loading = document.getElementById("loading");
 const dashboardContent = document.getElementById("dashboardContent");
 const errorBox = document.getElementById("errorBox");
 const message = document.getElementById("message");
+const plansList = document.getElementById("plansList");
+const totalDailyEarningEl = document.getElementById("totalDailyEarning");
 
+let timerIds = [];
 const DAILY_RATE = 0.06; // 6% Daily Return
 
 /* MONEY FORMATTER */
@@ -469,6 +680,42 @@ function showMessage(text){
   setTimeout(() => {
     message.classList.remove("show");
   },3500);
+}
+
+/* CLEAR TIMERS */
+function clearTimers(){
+  timerIds.forEach(timer => clearInterval(timer));
+  timerIds = [];
+}
+
+/* FORMAT TIME (HH:MM:SS) */
+function formatTime(milliseconds){
+  if(milliseconds <= 0) return "00:00:00";
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return (
+    String(hours).padStart(2,"0") + ":" +
+    String(minutes).padStart(2,"0") + ":" +
+    String(seconds).padStart(2,"0")
+  );
+}
+
+/* FORMAT 30 DAYS REMAINING */
+function formatDays(milliseconds){
+  if(milliseconds <= 0) return "Expired";
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return (
+    days + "d " +
+    String(hours).padStart(2,"0") + ":" +
+    String(minutes).padStart(2,"0") + ":" +
+    String(seconds).padStart(2,"0")
+  );
 }
 
 /* AUTOMATIC 6% DAILY RETURN PROCESSOR */
@@ -490,12 +737,11 @@ async function processDailyEarnings(uid) {
     Object.keys(raw).forEach(key => {
       const purchase = raw[key];
 
-      if (purchase && purchase.uid === uid && purchase.status === "active") {
+      if (purchase && purchase.uid === uid && (purchase.status === "active" || !purchase.status)) {
         const createdAt = Number(purchase.createdAt || now);
         const expiresAt = Number(purchase.expiresAt || (createdAt + EXPIRY_MS));
         const lastClaimed = Number(purchase.lastClaimedAt || createdAt);
 
-        // Check if plan is still valid
         if (now <= expiresAt || lastClaimed < expiresAt) {
           const effectiveNow = Math.min(now, expiresAt);
           const timeElapsed = effectiveNow - lastClaimed;
@@ -508,11 +754,9 @@ async function processDailyEarnings(uid) {
 
             totalNewEarnings += cycleProfit;
 
-            // Track last claimed timestamp for this purchase
             const newLastClaimed = lastClaimed + (cyclesEarned * DAY_MS);
             updates[`planPurchases/${key}/lastClaimedAt`] = newLastClaimed;
 
-            // Mark expired if lifetime complete
             if (newLastClaimed >= expiresAt) {
               updates[`planPurchases/${key}/status`] = "expired";
             }
@@ -521,7 +765,6 @@ async function processDailyEarnings(uid) {
       }
     });
 
-    // Update Firebase Wallet & Earnings if there are new profits
     if (totalNewEarnings > 0) {
       const userRef = ref(db, "users/" + uid);
       const userSnapshot = await get(userRef);
@@ -534,7 +777,7 @@ async function processDailyEarnings(uid) {
         updates[`users/${uid}/earnings`] = currentEarnings + totalNewEarnings;
 
         await update(ref(db), updates);
-        showMessage(`+$${money(totalNewEarnings)} Daily Earning Credited!`);
+        showMessage(`+$${money(totalNewEarnings)} 6% Daily Earning Credited to Wallet!`);
       }
     }
   } catch (err) {
@@ -542,8 +785,129 @@ async function processDailyEarnings(uid) {
   }
 }
 
+/* RENDER ACTIVE PLANS SECTION */
+function renderActivePlans(purchases){
+  clearTimers();
+  plansList.innerHTML = "";
+  totalDailyEarningEl.textContent = "0.00";
 
-/* AUTH & REALTIME LISTENERS */
+  const now = Date.now();
+
+  const activePlans = purchases.filter(purchase => {
+    if(!purchase) return false;
+    if(purchase.status === "expired") return false;
+
+    const createdAt = Number(purchase.createdAt || 0);
+    const savedExpiry = Number(purchase.expiresAt || 0);
+    const expiry = savedExpiry || (createdAt + 30 * 24 * 60 * 60 * 1000);
+
+    return expiry > now;
+  });
+
+  document.getElementById("activePlanCount").textContent =
+    `${activePlans.length} Active Plan${activePlans.length === 1 ? "" : "s"}`;
+
+  if(activePlans.length === 0){
+    plansList.innerHTML = `
+      <div class="no-plans">
+        No active plans yet. Go to Plans to purchase one.
+      </div>
+    `;
+    return;
+  }
+
+  let totalDaily = 0;
+
+  activePlans.forEach(purchase => {
+    const amount = Number(purchase.planAmount || 0);
+    if(Number.isFinite(amount)){
+      totalDaily += amount * DAILY_RATE;
+    }
+  });
+
+  totalDailyEarningEl.textContent = money(totalDaily);
+
+  activePlans.forEach((purchase, index) => {
+    const amount = Number(purchase.planAmount || 0);
+    const createdAt = Number(purchase.createdAt || Date.now());
+    const expiry = Number(purchase.expiresAt || (createdAt + 30 * 24 * 60 * 60 * 1000));
+    const dailyEarning = amount * DAILY_RATE;
+
+    const card = document.createElement("div");
+    card.className = "earning-plan";
+
+    card.innerHTML = `
+      <div class="earning-plan-top">
+        <div class="plan-name">Plan #${index + 1}</div>
+        <div class="active-badge">ACTIVE ✓</div>
+      </div>
+
+      <div class="plan-value">Plan Value: $${money(amount)} USDT</div>
+      <div class="rate">Daily Earning (6%): $${money(dailyEarning)}</div>
+
+      <div class="timer-label">24-hour cycle status</div>
+      <div class="timer" id="cycle-${index}">24:00:00</div>
+
+      <div class="expiry-label">30-day plan remaining</div>
+      <div class="expiry-timer" id="expiry-${index}">Calculating...</div>
+
+      <button class="earning-btn" id="earning-${index}">
+        Earning Status
+      </button>
+    `;
+
+    plansList.appendChild(card);
+
+    const cycleEl = card.querySelector(`#cycle-${index}`);
+    const expiryEl = card.querySelector(`#expiry-${index}`);
+    const earningBtn = card.querySelector(`#earning-${index}`);
+
+    function updatePlan(){
+      const currentTime = Date.now();
+      const cycle = 24 * 60 * 60 * 1000;
+      const elapsed = currentTime - createdAt;
+
+      let cycleRemaining = cycle - (elapsed % cycle);
+      if(cycleRemaining <= 0) cycleRemaining = cycle;
+
+      cycleEl.textContent = formatTime(cycleRemaining);
+
+      const remaining = expiry - currentTime;
+
+      if(remaining <= 0){
+        expiryEl.textContent = "Expired";
+        cycleEl.textContent = "00:00:00";
+        earningBtn.textContent = "Plan Expired";
+        earningBtn.classList.add("expired");
+        earningBtn.disabled = true;
+        return false;
+      }
+
+      expiryEl.textContent = formatDays(remaining);
+      return true;
+    }
+
+    updatePlan();
+
+    const timerId = setInterval(() => {
+      const active = updatePlan();
+      if(!active) clearInterval(timerId);
+    }, 1000);
+
+    timerIds.push(timerId);
+
+    earningBtn.addEventListener("click", () => {
+      const remaining = expiry - Date.now();
+      if(remaining <= 0){
+        showMessage("This plan has expired.");
+        return;
+      }
+      showMessage(`Plan $${money(amount)} yields $${money(dailyEarning)} daily to your Available Balance.`);
+    });
+  });
+}
+
+/* AUTH & DATABASE LISTENERS */
 onAuthStateChanged(auth, user => {
 
   if(!user){
@@ -553,12 +917,12 @@ onAuthStateChanged(auth, user => {
 
   document.getElementById("userEmail").textContent = user.email || "User";
 
-  // Process Daily Returns once authenticated
+  // Calculate & add daily returns to Firebase Available Balance
   processDailyEarnings(user.uid);
 
   const userRef = ref(db, "users/" + user.uid);
 
-  /* USER DATA LISTEN */
+  /* USER DATA */
   onValue(userRef, snapshot => {
 
     if(!snapshot.exists()){
@@ -574,6 +938,7 @@ onAuthStateChanged(auth, user => {
     document.getElementById("wallet").textContent = money(data.wallet);
     document.getElementById("totalDeposit").textContent = money(data.totalDeposit);
     document.getElementById("totalWithdrawal").textContent = money(data.totalWithdrawal);
+    document.getElementById("earnings").textContent = money(data.earnings);
     document.getElementById("referralEarnings").textContent = money(data.referralEarnings);
     document.getElementById("directReferrals").textContent = Number(data.directReferrals || 0);
     document.getElementById("totalPlanPurchase").textContent = money(data.totalPlanPurchase);
@@ -590,8 +955,26 @@ onAuthStateChanged(auth, user => {
     errorBox.textContent = "Database error: " + error.message;
   });
 
-});
+  /* PURCHASES DATA */
+  const purchasesRef = ref(db, "planPurchases");
 
+  onValue(purchasesRef, snapshot => {
+
+    if(!snapshot.exists()){
+      renderActivePlans([]);
+      return;
+    }
+
+    const raw = snapshot.val() || {};
+    const purchases = Object.values(raw).filter(purchase => purchase && purchase.uid === user.uid);
+
+    renderActivePlans(purchases);
+
+  }, error => {
+    console.error("Plan loading error:", error);
+  });
+
+});
 
 /* LOGOUT */
 document.getElementById("logoutBtn").addEventListener("click", async () => {
@@ -602,7 +985,6 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     alert("Logout failed: " + error.message);
   }
 });
-
 
 /* MOBILE MENU */
 const menuBtn = document.getElementById("menuBtn");
