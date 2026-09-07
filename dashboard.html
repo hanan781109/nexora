@@ -458,13 +458,11 @@ body{
 
 <body>
 
-<!-- MOBILE HEADER -->
 <div class="mobile-header">
   <h2>NEXORA</h2>
   <button class="menu-btn" id="menuBtn">☰</button>
 </div>
 
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="logo">
     NEXORA
@@ -496,7 +494,6 @@ body{
   </button>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
 
   <div class="topbar">
@@ -510,7 +507,6 @@ body{
 
   <div id="dashboardContent" style="display:none;">
 
-    <!-- MAIN CARDS -->
     <div class="cards">
 
       <div class="card">
@@ -535,12 +531,12 @@ body{
       </div>
 
       <div class="card earning-card">
-        <h3>Earnings</h3>
+        <h3>Total Plan Earnings</h3>
         <div class="amount">
           $<span id="earnings">0.00</span>
         </div>
         <div class="earning-sub">
-          Total Plan Earnings
+          Cumulative Plan Earnings
         </div>
       </div>
 
@@ -567,7 +563,6 @@ body{
 
     </div>
 
-    <!-- EARNINGS / ACTIVE PLANS -->
     <section class="earnings-section">
 
       <div class="section-title">
@@ -575,16 +570,15 @@ body{
         <span id="activePlanCount">0 Active Plans</span>
       </div>
 
-      <!-- TOTAL DAILY EARNING -->
       <div class="total-daily">
         <div class="total-daily-label">
-          Total Daily Earning (6%)
+          Total Daily Earning Rate (6%)
         </div>
         <div class="total-daily-value">
           $<span id="totalDailyEarning">0.00</span>
         </div>
         <div class="total-daily-note">
-          Calculated from your active plans
+          Daily profit gets added automatically to your Available Balance
         </div>
       </div>
 
@@ -596,13 +590,11 @@ body{
 
     </section>
 
-    <!-- REFERRAL -->
     <div class="ref">
       <h3>Your Referral Code</h3>
       <div class="ref-code" id="referralCode">---</div>
     </div>
 
-    <!-- STATUS -->
     <div class="status">
       <div class="status-title">Account Status</div>
       <div class="online">● Account Connected</div>
@@ -616,7 +608,6 @@ body{
 
 <div class="message" id="message"></div>
 
-<!-- FIREBASE -->
 <script type="module">
 
 import { initializeApp }
@@ -662,7 +653,7 @@ const plansList = document.getElementById("plansList");
 const totalDailyEarningEl = document.getElementById("totalDailyEarning");
 
 let timerIds = [];
-const DAILY_RATE = 0.06;
+const DAILY_RATE = 0.06; // 6% Daily Profit Rate
 
 function money(value){
   const number = Number(value);
@@ -713,35 +704,77 @@ function formatDays(milliseconds){
   );
 }
 
-/* DIRECTLY ADD $30 TO AVAILABLE BALANCE IN FIREBASE */
-async function addThirtyToAvailableBalance(uid) {
+/* AUTOMATIC REAL-TIME PLAN EARNING PROCESSOR */
+/* HAR ACTIVE PLAN KI ACTUAL EARNING AUTOMATICALLY AVAILABLE BALANCE MEIN DALEGI */
+async function syncPlanEarningsToAvailableBalance(uid) {
   try {
-    const userRef = ref(db, "users/" + uid);
-    const userSnapshot = await get(userRef);
+    const purchasesRef = ref(db, "planPurchases");
+    const snapshot = await get(purchasesRef);
 
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.val();
-      
-      // Check if $30 bonus was already added once
-      if (!userData.bonusAdded30) {
+    if (!snapshot.exists()) return;
+
+    const raw = snapshot.val() || {};
+    const now = Date.now();
+    const DAY_MS = 24 * 60 * 60 * 1000;
+    const EXPIRY_MS = 30 * DAY_MS;
+
+    let totalNewProfit = 0;
+    let dbUpdates = {};
+
+    Object.keys(raw).forEach(key => {
+      const item = raw[key];
+
+      // Kevol current logged-in user ke active plans check honge
+      if (item && item.uid === uid && (item.status === "active" || !item.status)) {
+        const createdAt = Number(item.createdAt || now);
+        const expiresAt = Number(item.expiresAt || (createdAt + EXPIRY_MS));
+        const lastClaimed = Number(item.lastClaimedAt || createdAt);
+
+        if (now <= expiresAt || lastClaimed < expiresAt) {
+          const effectiveNow = Math.min(now, expiresAt);
+          const timeElapsed = effectiveNow - lastClaimed;
+          const cyclesEarned = Math.floor(timeElapsed / DAY_MS);
+
+          if (cyclesEarned > 0) {
+            const planAmount = Number(item.planAmount || 0);
+            const profitPerDay = planAmount * DAILY_RATE;
+            const cycleProfit = profitPerDay * cyclesEarned;
+
+            totalNewProfit += cycleProfit;
+
+            const updatedLastClaim = lastClaimed + (cyclesEarned * DAY_MS);
+            dbUpdates[`planPurchases/${key}/lastClaimedAt`] = updatedLastClaim;
+
+            if (updatedLastClaim >= expiresAt) {
+              dbUpdates[`planPurchases/${key}/status`] = "expired";
+            }
+          }
+        }
+      }
+    });
+
+    // Agar active plan se koi earning banti hai, to direct Available Balance (`wallet`) mein add hogi
+    if (totalNewProfit > 0) {
+      const userRef = ref(db, "users/" + uid);
+      const userSnapshot = await get(userRef);
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.val();
         const currentWallet = Number(userData.wallet || 0);
         const currentEarnings = Number(userData.earnings || 0);
 
-        await update(userRef, {
-          wallet: currentWallet + 30, // Direct update in Available Balance
-          earnings: currentEarnings + 30,
-          bonusAdded30: true // Prevent double add on refresh
-        });
+        dbUpdates[`users/${uid}/wallet`] = currentWallet + totalNewProfit;
+        dbUpdates[`users/${uid}/earnings`] = currentEarnings + totalNewProfit;
 
-        showMessage("+$30.00 Added Directly to Available Balance!");
+        await update(ref(db), dbUpdates);
+        showMessage(`+$${money(totalNewProfit)} Plan Earning Credited to Available Balance!`);
       }
     }
   } catch (err) {
-    console.error("Error updating available balance:", err);
+    console.error("Error syncing plan earnings:", err);
   }
 }
 
-/* RENDER PLANS SECTION */
+/* RENDER ACTIVE PLANS SECTION */
 function renderActivePlans(purchases){
   clearTimers();
   plansList.innerHTML = "";
@@ -766,7 +799,7 @@ function renderActivePlans(purchases){
   if(activePlans.length === 0){
     plansList.innerHTML = `
       <div class="no-plans">
-        No active plans yet. Go to Plans to purchase one.
+        No active plans yet. Go to Plans page to activate one.
       </div>
     `;
     return;
@@ -808,7 +841,7 @@ function renderActivePlans(purchases){
       <div class="expiry-timer" id="expiry-${index}">Calculating...</div>
 
       <button class="earning-btn" id="earning-${index}">
-        Earning Status
+        View Details
       </button>
     `;
 
@@ -858,7 +891,7 @@ function renderActivePlans(purchases){
         showMessage("This plan has expired.");
         return;
       }
-      showMessage(`Plan $${money(amount)} yields $${money(dailyEarning)} daily.`);
+      showMessage(`Plan $${money(amount)} yields $${money(dailyEarning)} daily directly to Available Balance.`);
     });
   });
 }
@@ -873,8 +906,8 @@ onAuthStateChanged(auth, user => {
 
   document.getElementById("userEmail").textContent = user.email || "User";
 
-  // Directly update Available Balance with +$30 in Firebase
-  addThirtyToAvailableBalance(user.uid);
+  // Check and Sync Plan Earnings to Available Balance
+  syncPlanEarningsToAvailableBalance(user.uid);
 
   const userRef = ref(db, "users/" + user.uid);
 
@@ -891,7 +924,7 @@ onAuthStateChanged(auth, user => {
 
     const data = snapshot.val() || {};
 
-    // THIS WALLET VALUE IS USED ON WITHDRAW PAGE
+    // Available Balance
     document.getElementById("wallet").textContent = money(data.wallet);
     document.getElementById("totalDeposit").textContent = money(data.totalDeposit);
     document.getElementById("totalWithdrawal").textContent = money(data.totalWithdrawal);
