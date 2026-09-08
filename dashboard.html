@@ -59,6 +59,19 @@ body{
   color:#42e8ff;
 }
 
+.nav a.whatsapp-nav{
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #fff;
+  text-align: center;
+  margin-top: 15px;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.nav a.whatsapp-nav:hover{
+  opacity: 0.9;
+  color: #fff;
+}
+
 .logout{
   position:absolute;
   bottom:25px;
@@ -294,6 +307,48 @@ body{
   word-break:break-all;
 }
 
+/* WHATSAPP CARD */
+.whatsapp-card{
+  margin-top:22px;
+  background:linear-gradient(135deg,#0d3822,#124e31);
+  border:1px solid #25D366;
+  border-radius:18px;
+  padding:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+.whatsapp-card h3{
+  font-size:18px;
+  color:#fff;
+  margin-bottom:5px;
+}
+
+.whatsapp-card p{
+  color:#a3e0be;
+  font-size:13px;
+}
+
+.whatsapp-btn{
+  background:#25D366;
+  color:#000;
+  padding:12px 20px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:14px;
+  transition:.2s;
+  display:inline-block;
+}
+
+.whatsapp-btn:hover{
+  background:#20ba5a;
+  transform:scale(1.02);
+}
+
 /* STATUS */
 .status{
   margin-top:22px;
@@ -422,6 +477,16 @@ body{
   .total-daily-value{
     font-size:26px;
   }
+
+  .whatsapp-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .whatsapp-btn{
+    width:100%;
+    text-align:center;
+  }
 }
 </style>
 </head>
@@ -456,6 +521,9 @@ body{
     </a>
     <a href="history.html">
       📜 History
+    </a>
+    <a href="https://chat.whatsapp.com/JSXDS7QAZfjC70T7tj14t0" target="_blank" class="whatsapp-nav">
+      💬 WhatsApp Group
     </a>
   </nav>
 
@@ -563,6 +631,17 @@ body{
     <div class="ref">
       <h3>Your Referral Code</h3>
       <div class="ref-code" id="referralCode">---</div>
+    </div>
+
+    <!-- WHATSAPP COMMUNITY SECTION -->
+    <div class="whatsapp-card">
+      <div>
+        <h3>Join Our WhatsApp Community</h3>
+        <p>Stay updated with latest news, support & community discussions.</p>
+      </div>
+      <a href="https://chat.whatsapp.com/JSXDS7QAZfjC70T7tj14t0" target="_blank" class="whatsapp-btn">
+        Join Group Now 💬
+      </a>
     </div>
 
     <div class="status">
