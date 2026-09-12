@@ -308,14 +308,13 @@ const messageEl = document.getElementById("message");
 let currentUser = null;
 let userData = null;
 let wallet = 0;
-let directReferrals = 0;
 
 const RATE = 280;
 const FEE = 2;
 
 
 // -----------------------------
-// AUTH CHECK
+// AUTH CHECK & 2X REFERRAL LOGIC
 // -----------------------------
 
 onAuthStateChanged(auth, async (user) => {
@@ -337,123 +336,81 @@ onAuthStateChanged(auth, async (user) => {
         }
 
         userData = userSnap.val();
-
         wallet = Number(userData.wallet || 0);
-
         walletEl.textContent = "$" + wallet.toFixed(2);
 
-        // Count direct referrals
+
+        // 1. CHECK HIGHEST ACTIVE PLAN OF USER
+        const activePlans = userData.activePlans || {};
+        const planList = Object.values(activePlans);
+
+        if(planList.length === 0){
+            requirementsEl.innerHTML =
+                "🔒 Withdrawal Locked to Referral Required.<br><br>" +
+                "You need to purchase an active plan first before unlocking withdrawals.";
+            return;
+        }
+
+        let userHighestPlan = 0;
+        planList.forEach(plan => {
+            const val = Number(plan.amountUSDT || plan.amount || plan.price || 0);
+            if(val > userHighestPlan){
+                userHighestPlan = val;
+            }
+        });
+
+        // 2X Target Calculation (e.g. $5 -> $10, $50 -> $100, $500 -> $1000)
+        const requiredReferralInvestment = userHighestPlan * 2;
+
+
+        // 2. CALCULATE TOTAL INVESTMENT MADE BY DIRECT REFERRALS
         const usersSnap = await get(ref(db, "users"));
+        let totalReferralInvestment = 0;
 
         if(usersSnap.exists()){
+            const allUsers = usersSnap.val();
 
-            const users = usersSnap.val();
+            Object.values(allUsers).forEach(u => {
 
-            Object.values(users).forEach(u => {
-
+                // Check if this user was referred by current user
                 if(
                     u.referredBy &&
                     userData.referralCode &&
                     u.referredBy === userData.referralCode
                 ){
-                    directReferrals++;
+                    // Sum up all active plan investments of this referral
+                    const refActivePlans = u.activePlans || {};
+                    Object.values(refActivePlans).forEach(rp => {
+                        const rVal = Number(rp.amountUSDT || rp.amount || rp.price || 0);
+                        totalReferralInvestment += rVal;
+                    });
                 }
-
             });
         }
 
 
-        // -----------------------------------
-        // CHECK PLAN PURCHASE
-        // -----------------------------------
-
-        const activePlans = userData.activePlans || {};
-        const hasPlan = Object.keys(activePlans).length > 0;
-
-
-        if(!hasPlan){
-
+        // 3. CHECK LOCK / UNLOCK CONDITION
+        if(totalReferralInvestment < requiredReferralInvestment){
             requirementsEl.innerHTML =
-                "🔒 Withdrawal is locked.<br><br>" +
-                "You need to purchase a plan before withdrawal becomes available.";
-
+                "🔒 <strong>Withdrawal Locked: Referral Required.</strong><br><br>" +
+                "Your Active Plan: <strong>$" + userHighestPlan.toFixed(2) + "</strong><br>" +
+                "Required Total Referral Investment (2X): <strong>$" + requiredReferralInvestment.toFixed(2) + "</strong><br><br>" +
+                "Current Referral Investment Achieved: <strong>$" + totalReferralInvestment.toFixed(2) + " / $" + requiredReferralInvestment.toFixed(2) + "</strong>";
             return;
         }
 
 
-        // -----------------------------------
-        // CHECK DIRECT REFERRALS
-        // -----------------------------------
-
-        if(directReferrals < 2){
-
-            requirementsEl.innerHTML =
-                "🔒 Withdrawal is locked.<br><br>" +
-                "You need at least <strong>2 direct referrals</strong>.";
-
-            return;
-        }
-
-
-        // -----------------------------------
-        // PLAN 2X REQUIREMENT
-        // -----------------------------------
-
-        let qualifyingRequired = 0;
-
-        Object.values(activePlans).forEach(plan => {
-
-            const planAmount = Number(
-                plan.amountUSDT ||
-                plan.amount ||
-                plan.price ||
-                0
-            );
-
-            qualifyingRequired += planAmount * 2;
-        });
-
-
-        const totalDeposits = Number(userData.totalDeposit || 0);
-
-
-        if(
-            qualifyingRequired > 0 &&
-            totalDeposits < qualifyingRequired
-        ){
-
-            requirementsEl.innerHTML =
-                "🔒 Withdrawal is locked.<br><br>" +
-                "Required qualifying purchases: <strong>$" +
-                qualifyingRequired.toFixed(2) +
-                "</strong><br>" +
-                "Current qualifying deposits: <strong>$" +
-                totalDeposits.toFixed(2) +
-                "</strong>";
-
-            return;
-        }
-
-
-        // -----------------------------------
-        // UNLOCK
-        // -----------------------------------
-
+        // UNLOCK WITHDRAWAL CARD
         requirementsEl.classList.add("success");
-
         requirementsEl.innerHTML =
-            "✅ Withdrawal requirements completed.<br>" +
-            "You can now submit a withdrawal request.";
+            "✅ <strong>Withdrawal Unlocked!</strong><br>" +
+            "You have achieved your 2X referral investment target ($" + totalReferralInvestment.toFixed(2) + " / $" + requiredReferralInvestment.toFixed(2) + ").";
 
         withdrawCard.classList.remove("hidden");
 
     }catch(error){
-
         console.error(error);
-
-        requirementsEl.innerHTML =
-            "Unable to load withdrawal information.";
-
+        requirementsEl.innerHTML = "Unable to load withdrawal information.";
     }
 
 });
@@ -464,7 +421,6 @@ onAuthStateChanged(auth, async (user) => {
 // -----------------------------
 
 amountEl.addEventListener("input", () => {
-
     let amount = Number(amountEl.value || 0);
 
     if(amount < 0){
@@ -474,15 +430,9 @@ amountEl.addEventListener("input", () => {
     const pkr = amount * RATE;
     const total = amount + FEE;
 
-    usdtAmountEl.textContent =
-        "$" + amount.toFixed(2);
-
-    pkrAmountEl.textContent =
-        "PKR " + pkr.toLocaleString();
-
-    totalDeductionEl.textContent =
-        "$" + total.toFixed(2);
-
+    usdtAmountEl.textContent = "$" + amount.toFixed(2);
+    pkrAmountEl.textContent = "PKR " + pkr.toLocaleString();
+    totalDeductionEl.textContent = "$" + total.toFixed(2);
 });
 
 
@@ -492,18 +442,10 @@ amountEl.addEventListener("input", () => {
 
 withdrawBtn.addEventListener("click", async () => {
 
-    const method =
-        document.getElementById("method").value;
-
-    const accountNumber =
-        document.getElementById("accountNumber").value.trim();
-
-    const accountName =
-        document.getElementById("accountName").value.trim();
-
-    const amount =
-        Number(amountEl.value);
-
+    const method = document.getElementById("method").value;
+    const accountNumber = document.getElementById("accountNumber").value.trim();
+    const accountName = document.getElementById("accountName").value.trim();
+    const amount = Number(amountEl.value);
 
     if(!accountNumber){
         showError("Please enter your account number.");
@@ -520,92 +462,56 @@ withdrawBtn.addEventListener("click", async () => {
         return;
     }
 
-
     const totalDeduction = amount + FEE;
 
-
     if(totalDeduction > wallet){
-
         showError(
             "Insufficient wallet balance. " +
             "Your withdrawal amount + $2 fee cannot exceed your wallet."
         );
-
         return;
     }
-
 
     withdrawBtn.disabled = true;
     withdrawBtn.textContent = "Submitting...";
 
-
     try{
 
-        const withdrawalRef =
-            push(ref(db, "withdrawals"));
+        const withdrawalRef = push(ref(db, "withdrawals"));
 
         await set(withdrawalRef, {
-
             id: withdrawalRef.key,
-
             uid: currentUser.uid,
-
             email: currentUser.email,
-
             name: userData.name || currentUser.displayName || "",
-
             method: method,
-
             accountNumber: accountNumber,
-
             accountName: accountName,
-
             amountUSDT: amount,
-
             amountPKR: amount * RATE,
-
             exchangeRate: RATE,
-
             feeUSDT: FEE,
-
             totalDeductionUSDT: totalDeduction,
-
             status: "pending",
-
             createdAt: Date.now()
-
         });
-
 
         showSuccess(
             "Withdrawal request submitted successfully. " +
             "It is now pending admin approval."
         );
 
-
         amountEl.value = "";
-
         document.getElementById("accountNumber").value = "";
-
         document.getElementById("accountName").value = "";
-
         usdtAmountEl.textContent = "$0.00";
-
         pkrAmountEl.textContent = "PKR 0";
-
         totalDeductionEl.textContent = "$0.00";
 
-
     }catch(error){
-
         console.error(error);
-
-        showError(
-            "Withdrawal request failed. Please try again."
-        );
-
+        showError("Withdrawal request failed. Please try again.");
     }
-
 
     withdrawBtn.disabled = false;
     withdrawBtn.textContent = "Submit Withdrawal";
@@ -618,26 +524,17 @@ withdrawBtn.addEventListener("click", async () => {
 // -----------------------------
 
 function showError(text){
-
     messageEl.classList.remove("hidden");
     messageEl.classList.remove("success");
-
     messageEl.classList.add("error");
-
     messageEl.textContent = text;
-
 }
 
-
 function showSuccess(text){
-
     messageEl.classList.remove("hidden");
     messageEl.classList.remove("error");
-
     messageEl.classList.add("success");
-
     messageEl.textContent = text;
-
 }
 
 </script>
