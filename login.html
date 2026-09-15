@@ -279,6 +279,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
       authDomain: "nexora-adef3.firebaseapp.com",
+      databaseURL: "https://nexora-adef3-default-rtdb.firebaseio.com",
       projectId: "nexora-adef3",
       storageBucket: "nexora-adef3.firebasestorage.app",
       messagingSenderId: "318277373899",
@@ -346,7 +347,7 @@
 
 
     // =========================
-    // PASSWORD SHOW/HIDE
+    // PASSWORD SHOW / HIDE
     // =========================
 
     togglePassword.addEventListener("click", () => {
@@ -401,6 +402,7 @@
 
       message.className =
         "message";
+
 
       try {
 
@@ -460,6 +462,7 @@
           }, 500);
 
           return;
+
         }
 
 
@@ -503,9 +506,7 @@
             adminError
           );
 
-          // Agar normal user hai aur
-          // admins read permission na ho,
-          // to normal dashboard par bhej do.
+          // Normal user ko dashboard par bhej denge.
 
         }
 
@@ -627,6 +628,7 @@
             auth,
             email
           );
+
 
           showMessage(
             "Password reset email sent. Check your inbox.",
