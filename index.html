@@ -25,7 +25,6 @@
       color: inherit;
     }
 
-    /* NAVBAR */
     .navbar {
       width: 100%;
       padding: 18px 7%;
@@ -46,6 +45,7 @@
       letter-spacing: 1px;
       background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
       -webkit-background-clip: text;
+      background-clip: text;
       color: transparent;
     }
 
@@ -77,9 +77,9 @@
       display: none;
       font-size: 28px;
       cursor: pointer;
+      user-select: none;
     }
 
-    /* HERO */
     .hero {
       min-height: 88vh;
       display: flex;
@@ -142,6 +142,7 @@
     .gradient-text {
       background: linear-gradient(90deg, #00e5ff, #7c4dff, #ff4081);
       -webkit-background-clip: text;
+      background-clip: text;
       color: transparent;
     }
 
@@ -181,7 +182,6 @@
       transform: translateY(-3px);
     }
 
-    /* HERO CARD */
     .hero-card {
       width: 390px;
       min-height: 400px;
@@ -236,7 +236,6 @@
       font-size: 19px;
     }
 
-    /* FEATURES */
     .section {
       padding: 90px 7%;
     }
@@ -244,8 +243,7 @@
     .section-title {
       text-align: center;
       max-width: 700px;
-      margin: auto;
-      margin-bottom: 55px;
+      margin: 0 auto 55px;
     }
 
     .section-title span {
@@ -308,7 +306,6 @@
       font-size: 14px;
     }
 
-    /* PLANS */
     .plans {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -374,7 +371,6 @@
       font-weight: bold;
     }
 
-    /* CTA */
     .cta {
       margin: 20px 7% 90px;
       padding: 70px 30px;
@@ -401,7 +397,6 @@
       margin-bottom: 28px;
     }
 
-    /* FOOTER */
     footer {
       padding: 35px 7%;
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -423,7 +418,6 @@
       font-size: 13px;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 1000px) {
       .hero {
         flex-direction: column;
@@ -446,10 +440,14 @@
     }
 
     @media (max-width: 700px) {
+      .navbar {
+        padding: 16px 5%;
+      }
+
       .nav-links {
         display: none;
         position: absolute;
-        top: 72px;
+        top: 70px;
         left: 0;
         width: 100%;
         padding: 25px;
@@ -467,7 +465,7 @@
       }
 
       .hero {
-        padding-top: 55px;
+        padding: 55px 5%;
       }
 
       .hero-card {
@@ -479,6 +477,10 @@
         grid-template-columns: 1fr;
       }
 
+      .section {
+        padding: 70px 5%;
+      }
+
       .section-title h2,
       .cta h2 {
         font-size: 32px;
@@ -487,6 +489,11 @@
       footer {
         flex-direction: column;
         text-align: center;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
       }
     }
   </style>
@@ -497,21 +504,33 @@
   <!-- NAVBAR -->
   <header class="navbar">
 
-    <a href="index.html" class="logo">NEXORA</a>
+    <a href="./index.html" class="logo">NEXORA</a>
 
     <nav class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="plans.html">Plans</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
 
-      <!-- FIXED LOGIN LINK -->
-      <a href="login.html">Login</a>
+      <a href="./index.html">Home</a>
 
-      <a href="register.html" class="nav-btn">Register</a>
+      <a href="./plans.html">Plans</a>
+
+      <a href="./deposit.html">Deposit</a>
+
+      <a href="./withdraw.html">Withdraw</a>
+
+      <!-- LOGIN: ALWAYS login.html -->
+      <a href="./login.html" onclick="closeMenu()">Login</a>
+
+      <a href="./register.html" class="nav-btn">Register</a>
+
     </nav>
 
-    <div class="menu" onclick="toggleMenu()">☰</div>
+    <div
+      class="menu"
+      id="menuButton"
+      onclick="toggleMenu()"
+      aria-label="Open menu"
+    >
+      ☰
+    </div>
 
   </header>
 
@@ -535,11 +554,11 @@
 
       <div class="hero-buttons">
 
-        <a href="register.html" class="btn btn-primary">
+        <a href="./register.html" class="btn btn-primary">
           Create Account →
         </a>
 
-        <a href="plans.html" class="btn btn-secondary">
+        <a href="./plans.html" class="btn btn-secondary">
           Explore Plans
         </a>
 
@@ -556,6 +575,7 @@
       </div>
 
       <div class="balance-label">Account Balance</div>
+
       <div class="balance">$0.00</div>
 
       <div class="mini-grid">
@@ -591,6 +611,7 @@
   <section class="section">
 
     <div class="section-title">
+
       <span>Why Nexora</span>
 
       <h2>Everything in One Place</h2>
@@ -599,6 +620,7 @@
         Manage your account, plans, transactions and referrals
         through a simple and modern dashboard.
       </p>
+
     </div>
 
 
@@ -678,7 +700,9 @@
     <div class="plans">
 
       <div class="plan">
+
         <h3>Starter</h3>
+
         <div class="price">$5</div>
 
         <ul>
@@ -687,14 +711,17 @@
           <li>Transaction tracking</li>
         </ul>
 
-        <a href="plans.html" class="plan-btn">
+        <a href="./plans.html" class="plan-btn">
           View Plan
         </a>
+
       </div>
 
 
       <div class="plan">
+
         <h3>Basic</h3>
+
         <div class="price">$10</div>
 
         <ul>
@@ -703,14 +730,17 @@
           <li>Referral tools</li>
         </ul>
 
-        <a href="plans.html" class="plan-btn">
+        <a href="./plans.html" class="plan-btn">
           View Plan
         </a>
+
       </div>
 
 
       <div class="plan">
+
         <h3>Growth</h3>
+
         <div class="price">$20</div>
 
         <ul>
@@ -719,14 +749,17 @@
           <li>Transaction tracking</li>
         </ul>
 
-        <a href="plans.html" class="plan-btn">
+        <a href="./plans.html" class="plan-btn">
           View Plan
         </a>
+
       </div>
 
 
       <div class="plan">
+
         <h3>Premium</h3>
+
         <div class="price">$50</div>
 
         <ul>
@@ -735,9 +768,10 @@
           <li>Referral tools</li>
         </ul>
 
-        <a href="plans.html" class="plan-btn">
+        <a href="./plans.html" class="plan-btn">
           View Plan
         </a>
+
       </div>
 
     </div>
@@ -754,7 +788,7 @@
       Create your account and explore the platform.
     </p>
 
-    <a href="register.html" class="btn btn-primary">
+    <a href="./register.html" class="btn btn-primary">
       Get Started →
     </a>
 
@@ -768,13 +802,13 @@
 
     <div class="footer-links">
 
-      <a href="index.html">Home</a>
-      <a href="plans.html">Plans</a>
+      <a href="./index.html">Home</a>
 
-      <!-- LOGIN LINK -->
-      <a href="login.html">Login</a>
+      <a href="./plans.html">Plans</a>
 
-      <a href="register.html">Register</a>
+      <a href="./login.html">Login</a>
+
+      <a href="./register.html">Register</a>
 
     </div>
 
@@ -786,6 +820,12 @@
       document
         .getElementById("navLinks")
         .classList.toggle("active");
+    }
+
+    function closeMenu() {
+      document
+        .getElementById("navLinks")
+        .classList.remove("active");
     }
   </script>
 
