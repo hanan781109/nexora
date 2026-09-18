@@ -6,207 +6,240 @@
   <title>Nexora - Plans</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,Helvetica,sans-serif;
     }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #07111f;
-      color: #fff;
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top left,#263b8f 0%,transparent 35%),
+        radial-gradient(circle at top right,#7026a8 0%,transparent 35%),
+        linear-gradient(135deg,#070b1d,#111936 55%,#090d20);
+      color:#fff;
     }
 
-    nav {
-      min-height: 70px;
-      padding: 0 6%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      background: #081528;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      padding:18px 6%;
+      background:rgba(7,11,29,.88);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,.1);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
     }
 
-    .logo {
-      font-size: 25px;
-      font-weight: 800;
-      background: linear-gradient(90deg,#00eaff,#8b5cf6,#ff3cac);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .logo{
+      font-size:26px;
+      font-weight:800;
+      letter-spacing:1px;
+      background:linear-gradient(90deg,#00eaff,#a855f7,#ff4ecd);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 10px;
+    .back{
+      text-decoration:none;
+      color:#fff;
+      padding:10px 18px;
+      border-radius:12px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
     }
 
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 9px;
-      background: #16263f;
-      font-size: 14px;
+    .container{
+      width:92%;
+      max-width:1200px;
+      margin:35px auto 60px;
     }
 
-    .nav-links a:first-child {
-      background: linear-gradient(90deg,#00c6ff,#8b5cf6);
+    .top-box{
+      text-align:center;
+      margin-bottom:30px;
     }
 
-    main {
-      width: min(1200px, 92%);
-      margin: 40px auto;
+    .top-box h1{
+      font-size:38px;
+      margin-bottom:10px;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 25px;
+    .top-box p{
+      color:#b9c2df;
+      font-size:15px;
     }
 
-    header h1 {
-      margin: 0 0 10px;
-      font-size: clamp(28px, 5vw, 38px);
+    .wallet{
+      margin:25px auto 35px;
+      max-width:500px;
+      padding:20px;
+      border-radius:20px;
+      background:linear-gradient(
+        135deg,
+        rgba(0,234,255,.12),
+        rgba(168,85,247,.14)
+      );
+      border:1px solid rgba(255,255,255,.12);
+      text-align:center;
+      box-shadow:0 15px 40px rgba(0,0,0,.25);
     }
 
-    header p {
-      margin: 0;
-      color: #94a3b8;
+    .wallet small{
+      color:#aeb8d7;
+      display:block;
+      margin-bottom:8px;
     }
 
-    .wallet {
-      max-width: 480px;
-      margin: 0 auto 35px;
-      padding: 22px;
-      text-align: center;
-      border: 1px solid rgba(0,234,255,.2);
-      border-radius: 18px;
-      background: linear-gradient(145deg,#0c1b31,#101e36);
+    .wallet strong{
+      font-size:32px;
+      color:#fff;
     }
 
-    .wallet small {
-      color: #94a3b8;
+    .plans{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:20px;
     }
 
-    #walletBalance {
-      margin-top: 8px;
-      font-size: 34px;
-      font-weight: 800;
+    .plan{
+      position:relative;
+      padding:25px;
+      border-radius:22px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 15px 45px rgba(0,0,0,.25);
+      transition:.25s;
+      overflow:hidden;
     }
 
-    .plans {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 18px;
+    .plan:hover{
+      transform:translateY(-5px);
+      border-color:rgba(0,234,255,.45);
     }
 
-    .plan {
-      padding: 24px;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 18px;
-      background: linear-gradient(145deg,#0c1b31,#101e36);
-      box-shadow: 0 12px 35px rgba(0,0,0,.25);
+    .plan.purchased{
+      border-color:rgba(0,255,170,.5);
+      box-shadow:0 0 25px rgba(0,255,170,.08);
     }
 
-    .plan:hover {
-      border-color: #00eaff;
-      transform: translateY(-3px);
-      transition: .2s;
+    .plan h2{
+      font-size:25px;
+      margin-bottom:8px;
     }
 
-    .plan h2 {
-      margin: 0 0 14px;
-      color: #cbd5e1;
-      font-size: 19px;
+    .price{
+      font-size:36px;
+      font-weight:800;
+      margin:12px 0;
+      background:linear-gradient(90deg,#00eaff,#a855f7);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    .price {
-      font-size: 36px;
-      font-weight: 800;
-      margin-bottom: 8px;
+    .details{
+      color:#c1c9e3;
+      line-height:1.8;
+      font-size:14px;
+      margin-bottom:18px;
     }
 
-    .rate {
-      color: #22c55e;
-      font-weight: bold;
-      font-size: 14px;
-      margin-bottom: 18px;
+    button{
+      width:100%;
+      border:none;
+      padding:13px;
+      border-radius:13px;
+      cursor:pointer;
+      color:#fff;
+      font-size:15px;
+      font-weight:700;
+      background:linear-gradient(90deg,#00a8ff,#7c3aed,#d946ef);
+      transition:.2s;
     }
 
-    .detail {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 0;
-      border-top: 1px solid rgba(255,255,255,.08);
-      color: #94a3b8;
-      font-size: 13px;
+    button:hover{
+      transform:scale(1.02);
     }
 
-    .detail strong {
-      color: #fff;
+    button:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+      transform:none;
     }
 
-    button {
-      width: 100%;
-      margin-top: 16px;
-      padding: 12px;
-      border: 0;
-      border-radius: 10px;
-      color: #fff;
-      cursor: pointer;
-      font-weight: bold;
-      background: linear-gradient(90deg,#00c6ff,#8b5cf6);
+    .purchased-btn{
+      background:linear-gradient(90deg,#00a86b,#00c98a);
+      cursor:default;
     }
 
-    button:disabled {
-      opacity: .55;
-      cursor: not-allowed;
+    .expired-btn{
+      background:rgba(255,255,255,.1);
+      cursor:default;
     }
 
-    #message {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      transform: translateX(-50%);
-      width: min(90%, 460px);
-      display: none;
-      padding: 14px 18px;
-      text-align: center;
-      border-radius: 12px;
-      background: #13243b;
-      border: 1px solid rgba(255,255,255,.14);
-      z-index: 10;
+    .status{
+      display:inline-block;
+      margin-bottom:12px;
+      padding:6px 11px;
+      border-radius:20px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.5px;
     }
 
-    #message.show {
-      display: block;
+    .status.active{
+      background:rgba(0,255,170,.12);
+      color:#45ffc2;
+      border:1px solid rgba(0,255,170,.25);
     }
 
-    #message.error {
-      border-color: #ef4444;
-      color: #fecaca;
+    .status.expired{
+      background:rgba(255,180,0,.1);
+      color:#ffc857;
+      border:1px solid rgba(255,180,0,.2);
     }
 
-    @media (max-width: 900px) {
-      .plans {
-        grid-template-columns: repeat(2, 1fr);
+    .message{
+      display:none;
+      max-width:650px;
+      margin:0 auto 25px;
+      padding:14px 18px;
+      border-radius:13px;
+      text-align:center;
+      font-size:14px;
+    }
+
+    .message.show{
+      display:block;
+    }
+
+    .message.success{
+      background:rgba(0,255,170,.1);
+      border:1px solid rgba(0,255,170,.25);
+      color:#55ffc7;
+    }
+
+    .message.error{
+      background:rgba(255,70,100,.1);
+      border:1px solid rgba(255,70,100,.25);
+      color:#ff8da0;
+    }
+
+    @media(max-width:600px){
+      .top-box h1{
+        font-size:30px;
       }
-    }
 
-    @media (max-width: 520px) {
-      nav {
-        padding: 12px 4%;
+      .wallet strong{
+        font-size:27px;
       }
 
-      .plans {
-        grid-template-columns: 1fr;
-      }
-
-      .nav-links a {
-        padding: 8px 10px;
-        font-size: 12px;
+      header{
+        padding:15px 4%;
       }
     }
   </style>
@@ -214,788 +247,792 @@
 
 <body>
 
-  <nav>
-    <div class="logo">NEXORA</div>
+<header>
+  <div class="logo">NEXORA</div>
+  <a class="back" href="dashboard.html">Dashboard</a>
+</header>
 
-    <div class="nav-links">
-      <a href="deposit.html">+ Deposit</a>
-      <a href="dashboard.html">Dashboard</a>
-    </div>
-  </nav>
+<div class="container">
 
-  <main>
+  <div class="top-box">
+    <h1>Choose Your Plan</h1>
+    <p>Activate a package and manage it from your dashboard.</p>
+  </div>
 
-    <header>
-      <h1>Choose Your Plan</h1>
-      <p>Plans are purchased from your available USDT wallet balance.</p>
-    </header>
+  <div class="wallet">
+    <small>Available Wallet Balance</small>
+    <strong id="wallet">$0.00 USDT</strong>
+  </div>
 
-    <section class="wallet">
-      <small>Available Wallet Balance</small>
-      <div id="walletBalance">$0.00 USDT</div>
-    </section>
+  <div id="message" class="message"></div>
 
-    <section class="plans" id="plans"></section>
+  <div id="plans" class="plans"></div>
 
-  </main>
+</div>
 
-  <div id="message"></div>
+<script type="module">
 
-  <script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-    import {
-      getAuth,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import {
+    getDatabase,
+    ref,
+    get,
+    update
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
-    import {
-      getDatabase,
-      ref,
-      get,
-      push,
-      update
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
+  /* =========================
+     FIREBASE
+  ========================= */
 
-    /* =========================
-       FIREBASE
-    ========================= */
+  const firebaseConfig = {
+    apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
+    authDomain: "nexora-adef3.firebaseapp.com",
+    databaseURL: "https://nexora-adef3-default-rtdb.firebaseio.com",
+    projectId: "nexora-adef3",
+    storageBucket: "nexora-adef3.firebasestorage.app",
+    messagingSenderId: "318277373899",
+    appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
+    measurementId: "G-WN2V48SC4T"
+  };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBr-z5-7I8_WEy-XuQX8Z5dXa9XtCxXba0",
-      authDomain: "nexora-adef3.firebaseapp.com",
-      databaseURL: "https://nexora-adef3-default-rtdb.firebaseio.com",
-      projectId: "nexora-adef3",
-      storageBucket: "nexora-adef3.firebasestorage.app",
-      messagingSenderId: "318277373899",
-      appId: "1:318277373899:web:0d2f97b1fa99cc7702304e",
-      measurementId: "G-WN2V48SC4T"
-    };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
 
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
+  /* =========================
+     PLANS
+  ========================= */
 
+  const plans = [
+    5,
+    10,
+    20,
+    50,
+    100,
+    200,
+    500
+  ];
 
-    /* =========================
-       SETTINGS
-    ========================= */
+  const PLAN_DURATION =
+    30 * 24 * 60 * 60 * 1000;
 
-    const plans = [5, 10, 20, 50, 100, 200, 500];
 
-    const planNames = {
-      5: "Starter",
-      10: "Basic",
-      20: "Growth",
-      50: "Pro",
-      100: "Premium",
-      200: "Business",
-      500: "Elite"
-    };
+  let currentUser = null;
+  let currentProfile = {};
+  let activePlans = [];
 
-    const commissionRate = 0.20;
 
-    let currentUser = null;
-    let currentProfile = null;
+  /* =========================
+     HELPERS
+  ========================= */
 
+  function money(value){
+    return Number(value || 0).toFixed(2);
+  }
 
-    const plansEl = document.getElementById("plans");
-    const walletBalanceEl = document.getElementById("walletBalance");
-    const messageEl = document.getElementById("message");
 
+  function showMessage(text,type="success"){
+    const box = document.getElementById("message");
 
-    /* =========================
-       HELPERS
-    ========================= */
+    box.textContent = text;
+    box.className = "message show " + type;
 
-    function money(value) {
-      const number = Number(value);
+    setTimeout(()=>{
+      box.className = "message";
+    },5000);
+  }
 
-      if (!Number.isFinite(number)) {
-        return "0.00";
-      }
 
-      return number.toFixed(2);
-    }
+  function getActivePlanForAmount(amount){
 
+    const now = Date.now();
 
-    function showMessage(text, isError = false) {
+    const matches = activePlans.filter(plan => {
 
-      messageEl.textContent = text;
+      const planAmount =
+        Number(plan.amount || 0);
 
-      messageEl.className = isError
-        ? "show error"
-        : "show";
+      const expiresAt =
+        Number(plan.expiresAt || 0);
 
-      clearTimeout(showMessage.timer);
-
-      showMessage.timer = setTimeout(() => {
-        messageEl.className = "";
-      }, 4500);
-    }
-
-
-    function setButtonsDisabled(disabled) {
-
-      document
-        .querySelectorAll("[data-plan]")
-        .forEach(button => {
-          button.disabled = disabled;
-        });
-    }
-
-
-    /* =========================
-       RENDER PLANS
-    ========================= */
-
-    function renderPlans() {
-
-      plansEl.innerHTML = plans.map(amount => `
-
-        <article class="plan">
-
-          <h2>${planNames[amount]}</h2>
-
-          <div class="price">$${amount}</div>
-
-          <div class="rate">
-            30 Days Package
-          </div>
-
-          <div class="detail">
-            <span>Plan value</span>
-            <strong>$${amount}</strong>
-          </div>
-
-          <div class="detail">
-            <span>Duration</span>
-            <strong>30 days</strong>
-          </div>
-
-          <div class="detail">
-            <span>Referral</span>
-            <strong>20%</strong>
-          </div>
-
-          <button data-plan="${amount}">
-            Buy Plan
-          </button>
-
-        </article>
-
-      `).join("");
-
-
-      document
-        .querySelectorAll("[data-plan]")
-        .forEach(button => {
-
-          button.addEventListener("click", () => {
-
-            const amount = Number(button.dataset.plan);
-
-            buyPlan(amount);
-
-          });
-
-        });
-    }
-
-
-    /* =========================
-       LOAD PROFILE
-    ========================= */
-
-    async function loadProfile() {
-
-      if (!currentUser) {
-        return null;
-      }
-
-      const userRef = ref(
-        db,
-        `users/${currentUser.uid}`
+      return (
+        planAmount === Number(amount) &&
+        expiresAt > now &&
+        plan.status !== "expired"
       );
 
-      const snapshot = await get(userRef);
+    });
 
-
-      if (!snapshot.exists()) {
-
-        currentProfile = null;
-
-        walletBalanceEl.textContent =
-          "$0.00 USDT";
-
-        showMessage(
-          "Your user profile was not found.",
-          true
-        );
-
-        return null;
-      }
-
-
-      currentProfile = snapshot.val();
-
-
-      const wallet = Number(
-        currentProfile.wallet
-      );
-
-
-      walletBalanceEl.textContent =
-        `$${money(wallet)} USDT`;
-
-
-      return currentProfile;
+    if(matches.length === 0){
+      return null;
     }
 
+    matches.sort((a,b) =>
+      Number(b.createdAt || 0) -
+      Number(a.createdAt || 0)
+    );
 
-    /* =========================
-       BUY PLAN
-    ========================= */
+    return matches[0];
+  }
 
-    async function buyPlan(planAmount) {
 
-      if (!currentUser) {
+  function formatDate(timestamp){
 
-        window.location.href = "login.html";
+    if(!timestamp) return "-";
 
-        return;
+    return new Date(timestamp).toLocaleDateString(
+      "en-US",
+      {
+        year:"numeric",
+        month:"short",
+        day:"numeric"
       }
+    );
+  }
 
 
-      if (
-        !Number.isFinite(planAmount) ||
-        planAmount <= 0
-      ) {
+  /* =========================
+     LOAD USER PROFILE
+  ========================= */
 
-        showMessage(
-          "Invalid plan.",
-          true
-        );
+  async function loadProfile(){
 
-        return;
-      }
+    if(!currentUser) return;
 
+    try{
 
-      setButtonsDisabled(true);
+      const userRef =
+        ref(db,"users/" + currentUser.uid);
 
+      const snap = await get(userRef);
 
-      try {
+      if(!snap.exists()){
 
-        const now = Date.now();
-
-
-        /*
-          Create purchase ID first.
-        */
-
-        const purchaseRef =
-          push(ref(db, "planPurchases"));
-
-        const purchaseId =
-          purchaseRef.key;
-
-
-        if (!purchaseId) {
-
-          throw new Error(
-            "Unable to create purchase ID."
-          );
-        }
-
-
-        /*
-          Read current wallet directly
-          from Firebase.
-        */
-
-        const buyerRef =
-          ref(
-            db,
-            `users/${currentUser.uid}`
-          );
-
-
-        const buyerSnapshot =
-          await get(buyerRef);
-
-
-        if (!buyerSnapshot.exists()) {
-
-          showMessage(
-            "Your user profile was not found.",
-            true
-          );
-
-          return;
-        }
-
-
-        const buyer =
-          buyerSnapshot.val();
-
-
-        /*
-          Wallet is expected to be numeric.
-        */
-
-        const wallet =
-          Number(buyer.wallet);
-
-
-        if (!Number.isFinite(wallet)) {
-
-          showMessage(
-            "Your wallet balance is invalid.",
-            true
-          );
-
-          console.error(
-            "Invalid wallet value:",
-            buyer.wallet
-          );
-
-          return;
-        }
-
-
-        /*
-          REAL BALANCE CHECK
-        */
-
-        if (wallet < planAmount) {
-
-          showMessage(
-            `Insufficient balance. You need $${money(planAmount)} USDT.`,
-            true
-          );
-
-          return;
-        }
-
-
-        /*
-          Calculate new wallet.
-        */
-
-        const newWallet =
-          Number(
-            (wallet - planAmount)
-              .toFixed(8)
-          );
-
-
-        /*
-          Existing active plans.
-        */
-
-        const activePlans =
-          buyer.activePlans &&
-          typeof buyer.activePlans === "object"
-            ? { ...buyer.activePlans }
-            : {};
-
-
-        /*
-          30-day package.
-        */
-
-        activePlans[purchaseId] = {
-
-          id: purchaseId,
-
-          amount: planAmount,
-
-          status: "active",
-
-          startedAt: now,
-
-          expiresAt:
-            now +
-            (30 * 24 * 60 * 60 * 1000)
-
+        currentProfile = {
+          wallet:0,
+          activePlans:[],
+          totalPlanPurchase:0
         };
 
+      }else{
 
-        /*
-          Existing total plan purchase.
-        */
+        currentProfile = snap.val() || {};
 
-        const oldTotal =
-          Number(
-            buyer.totalPlanPurchase || 0
+      }
+
+      const wallet =
+        Number(currentProfile.wallet || 0);
+
+      document.getElementById("wallet").textContent =
+        "$" + money(wallet) + " USDT";
+
+
+      activePlans =
+        Array.isArray(currentProfile.activePlans)
+          ? currentProfile.activePlans
+          : [];
+
+
+      renderPlans();
+
+    }catch(error){
+
+      console.error("Profile error:",error);
+
+      showMessage(
+        "Unable to load your profile.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     RENDER PLANS
+  ========================= */
+
+  function renderPlans(){
+
+    const container =
+      document.getElementById("plans");
+
+    container.innerHTML = "";
+
+    plans.forEach(amount => {
+
+      const activePlan =
+        getActivePlanForAmount(amount);
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "plan" +
+        (activePlan ? " purchased" : "");
+
+
+      let statusHTML = "";
+      let buttonHTML = "";
+
+
+      if(activePlan){
+
+        statusHTML = `
+          <div class="status active">
+            PLAN PURCHASED
+          </div>
+        `;
+
+        buttonHTML = `
+          <button
+            class="purchased-btn"
+            disabled
+          >
+            ACTIVE UNTIL ${formatDate(activePlan.expiresAt)}
+          </button>
+        `;
+
+      }else{
+
+        statusHTML = `
+          <div class="status expired">
+            30 DAYS PACKAGE
+          </div>
+        `;
+
+        buttonHTML = `
+          <button
+            class="buy-btn"
+            data-amount="${amount}"
+          >
+            Buy Plan
+          </button>
+        `;
+      }
+
+
+      card.innerHTML = `
+
+        ${statusHTML}
+
+        <h2>$${amount} Plan</h2>
+
+        <div class="price">
+          $${amount}
+        </div>
+
+        <div class="details">
+          <div>Package Value: $${amount} USDT</div>
+          <div>Duration: 30 Days</div>
+          <div>Status: ${activePlan ? "Active" : "Available"}</div>
+        </div>
+
+        ${buttonHTML}
+
+      `;
+
+
+      container.appendChild(card);
+
+    });
+
+
+    document.querySelectorAll(".buy-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const amount =
+              Number(button.dataset.amount);
+
+            buyPlan(amount,button);
+
+          }
+        );
+
+      });
+
+  }
+
+
+  /* =========================
+     BUY PLAN
+  ========================= */
+
+  async function buyPlan(amount,button){
+
+    if(!currentUser){
+
+      showMessage(
+        "Please login first.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    button.disabled = true;
+    button.textContent = "Processing...";
+
+
+    try{
+
+      /* -------------------------
+         READ USER
+      ------------------------- */
+
+      const userRef =
+        ref(db,"users/" + currentUser.uid);
+
+      const userSnap =
+        await get(userRef);
+
+
+      if(!userSnap.exists()){
+
+        throw new Error(
+          "User profile was not found."
+        );
+
+      }
+
+
+      const buyer =
+        userSnap.val() || {};
+
+
+      const wallet =
+        Number(buyer.wallet || 0);
+
+
+      if(!Number.isFinite(wallet)){
+
+        throw new Error(
+          "Wallet balance is invalid."
+        );
+
+      }
+
+
+      if(wallet < amount){
+
+        throw new Error(
+          `Insufficient balance. You need $${money(amount)} USDT.`
+        );
+
+      }
+
+
+      /* -------------------------
+         CHECK EXISTING PLAN
+      ------------------------- */
+
+      const existingPlan =
+        getActivePlanForAmount(amount);
+
+      if(existingPlan){
+
+        showMessage(
+          "This plan is already active.",
+          "error"
+        );
+
+        button.disabled = true;
+        button.textContent =
+          "PLAN ALREADY PURCHASED";
+
+        return;
+
+      }
+
+
+      /* -------------------------
+         CREATE PURCHASE
+      ------------------------- */
+
+      const now =
+        Date.now();
+
+      const expiresAt =
+        now + PLAN_DURATION;
+
+
+      const purchaseId =
+        currentUser.uid +
+        "_" +
+        now +
+        "_" +
+        amount;
+
+
+      const purchase = {
+
+        purchaseId: purchaseId,
+
+        uid: currentUser.uid,
+
+        email:
+          currentUser.email || "",
+
+        amount: amount,
+
+        amountUSDT: amount,
+
+        status: "active",
+
+        durationDays: 30,
+
+        createdAt: now,
+
+        expiresAt: expiresAt
+
+      };
+
+
+      /* -------------------------
+         NEW ACTIVE PLAN
+      ------------------------- */
+
+      const oldActivePlans =
+        Array.isArray(buyer.activePlans)
+          ? buyer.activePlans
+          : [];
+
+
+      const newPlan = {
+
+        purchaseId: purchaseId,
+
+        amount: amount,
+
+        status: "active",
+
+        durationDays: 30,
+
+        createdAt: now,
+
+        expiresAt: expiresAt
+
+      };
+
+
+      const newActivePlans =
+        [
+          ...oldActivePlans,
+          newPlan
+        ];
+
+
+      const newWallet =
+        wallet - amount;
+
+
+      const oldTotal =
+        Number(buyer.totalPlanPurchase || 0);
+
+
+      const newTotal =
+        oldTotal + amount;
+
+
+      /* -------------------------
+         REFERRAL
+      ------------------------- */
+
+      let referrerUid = null;
+      let referralCommission = 0;
+      let referrerNewWallet = null;
+
+
+      if(buyer.referrerUid){
+
+        referrerUid =
+          buyer.referrerUid;
+
+      }else if(buyer.referredBy){
+
+        const usersSnap =
+          await get(ref(db,"users"));
+
+        if(usersSnap.exists()){
+
+          const users =
+            usersSnap.val() || {};
+
+          for(const uid in users){
+
+            const u =
+              users[uid] || {};
+
+            if(
+              String(u.referralCode || "")
+                .toLowerCase() ===
+              String(buyer.referredBy || "")
+                .toLowerCase()
+            ){
+
+              referrerUid = uid;
+              break;
+
+            }
+
+          }
+
+        }
+
+      }
+
+
+      /*
+        Referral commission:
+        20% of the plan amount.
+      */
+
+      if(
+        referrerUid &&
+        referrerUid !== currentUser.uid
+      ){
+
+        const referrerSnap =
+          await get(
+            ref(db,"users/" + referrerUid)
           );
 
 
-        const newTotal =
-          Number(
-            (oldTotal + planAmount)
-              .toFixed(8)
-          );
+        if(referrerSnap.exists()){
+
+          const referrer =
+            referrerSnap.val() || {};
+
+          const referrerWallet =
+            Number(referrer.wallet || 0);
 
 
-        /*
-          Referral commission.
-        */
-
-        const referrerUid =
-          String(
-            buyer.referrerUid || ""
-          ).trim();
+          referralCommission =
+            Number(
+              (amount * 0.20).toFixed(2)
+            );
 
 
-        const commission =
+          referrerNewWallet =
+            Number(
+              (
+                referrerWallet +
+                referralCommission
+              ).toFixed(2)
+            );
+
+        }
+
+      }
+
+
+      /* -------------------------
+         ATOMIC FIREBASE UPDATE
+      ------------------------- */
+
+      const updates = {};
+
+
+      /* Buyer wallet */
+
+      updates[
+        "users/" +
+        currentUser.uid +
+        "/wallet"
+      ] = newWallet;
+
+
+      /* Buyer active plans */
+
+      updates[
+        "users/" +
+        currentUser.uid +
+        "/activePlans"
+      ] = newActivePlans;
+
+
+      /* Total plan purchase */
+
+      updates[
+        "users/" +
+        currentUser.uid +
+        "/totalPlanPurchase"
+      ] = newTotal;
+
+
+      /* Last purchase */
+
+      updates[
+        "users/" +
+        currentUser.uid +
+        "/lastPlanPurchase"
+      ] = amount;
+
+
+      updates[
+        "users/" +
+        currentUser.uid +
+        "/lastPlanPurchaseAt"
+      ] = now;
+
+
+      /* Purchase record */
+
+      updates[
+        "planPurchases/" +
+        purchaseId
+      ] = purchase;
+
+
+      /* Referral commission */
+
+      if(
+        referrerUid &&
+        referrerNewWallet !== null
+      ){
+
+        updates[
+          "users/" +
+          referrerUid +
+          "/wallet"
+        ] = referrerNewWallet;
+
+
+        updates[
+          "users/" +
+          referrerUid +
+          "/referralEarnings"
+        ] =
           Number(
             (
-              planAmount *
-              commissionRate
-            ).toFixed(8)
+              Number(
+                (
+                  await get(
+                    ref(
+                      db,
+                      "users/" +
+                      referrerUid +
+                      "/referralEarnings"
+                    )
+                  )
+                ).val() || 0
+              ) +
+              referralCommission
+            ).toFixed(2)
           );
 
 
-        /*
-          Prepare all updates together.
-        */
-
-        const updates = {};
-
-
         updates[
-          `users/${currentUser.uid}/wallet`
-        ] = newWallet;
-
-
-        updates[
-          `users/${currentUser.uid}/activePlans`
-        ] = activePlans;
-
-
-        updates[
-          `users/${currentUser.uid}/totalPlanPurchase`
-        ] = newTotal;
-
-
-        updates[
-          `users/${currentUser.uid}/lastPlanPurchase`
-        ] = planAmount;
-
-
-        updates[
-          `users/${currentUser.uid}/lastPlanPurchaseAt`
-        ] = now;
-
-
-        updates[
-          `users/${currentUser.uid}/updatedAt`
-        ] = now;
-
-
-        /*
-          Save plan purchase.
-        */
-
-        updates[
-          `planPurchases/${purchaseId}`
+          "referralCommissions/" +
+          purchaseId
         ] = {
 
-          id: purchaseId,
+          purchaseId: purchaseId,
 
-          uid: currentUser.uid,
+          fromUid: currentUser.uid,
 
-          email: currentUser.email || "",
+          toUid: referrerUid,
 
-          planAmount: planAmount,
+          amount: referralCommission,
 
-          currency: "USDT",
-
-          status: "active",
-
-          source: "wallet",
+          percent: 20,
 
           createdAt: now,
 
-          commissionStatus:
-            (
-              referrerUid &&
-              referrerUid !== currentUser.uid
-            )
-              ? "pending"
-              : "not-applicable"
+          status: "credited"
 
         };
 
-
-        /*
-          Apply wallet + plan
-          in one Firebase update.
-        */
-
-        await update(
-          ref(db),
-          updates
-        );
-
-
-        /*
-          Referral commission.
-        */
-
-        if (
-          referrerUid &&
-          referrerUid !== currentUser.uid
-        ) {
-
-          const referrerRef =
-            ref(
-              db,
-              `users/${referrerUid}`
-            );
-
-
-          const referrerSnapshot =
-            await get(referrerRef);
-
-
-          if (
-            referrerSnapshot.exists()
-          ) {
-
-            const referrer =
-              referrerSnapshot.val();
-
-
-            const referrerWallet =
-              Number(
-                referrer.wallet || 0
-              );
-
-
-            const oldReferralEarnings =
-              Number(
-                referrer.referralEarnings || 0
-              );
-
-
-            const newReferrerWallet =
-              Number(
-                (
-                  referrerWallet +
-                  commission
-                ).toFixed(8)
-              );
-
-
-            const newReferralEarnings =
-              Number(
-                (
-                  oldReferralEarnings +
-                  commission
-                ).toFixed(8)
-              );
-
-
-            const referralUpdates = {};
-
-
-            referralUpdates[
-              `users/${referrerUid}/wallet`
-            ] = newReferrerWallet;
-
-
-            referralUpdates[
-              `users/${referrerUid}/referralEarnings`
-            ] = newReferralEarnings;
-
-
-            referralUpdates[
-              `users/${referrerUid}/lastReferralCommission`
-            ] = commission;
-
-
-            referralUpdates[
-              `users/${referrerUid}/lastReferralCommissionAt`
-            ] = now;
-
-
-            referralUpdates[
-              `users/${referrerUid}/updatedAt`
-            ] = now;
-
-
-            referralUpdates[
-              `referralCommissions/${purchaseId}`
-            ] = {
-
-              id: purchaseId,
-
-              purchaseId: purchaseId,
-
-              referrerUid: referrerUid,
-
-              referredUserUid:
-                currentUser.uid,
-
-              referredUserEmail:
-                currentUser.email || "",
-
-              planAmount: planAmount,
-
-              rate: 20,
-
-              commission: commission,
-
-              currency: "USDT",
-
-              createdAt: now
-
-            };
-
-
-            referralUpdates[
-              `planPurchases/${purchaseId}/commissionStatus`
-            ] = "paid";
-
-
-            referralUpdates[
-              `planPurchases/${purchaseId}/commission`
-            ] = commission;
-
-
-            referralUpdates[
-              `planPurchases/${purchaseId}/commissionRate`
-            ] = 20;
-
-
-            referralUpdates[
-              `planPurchases/${purchaseId}/referrerUid`
-            ] = referrerUid;
-
-
-            referralUpdates[
-              `planPurchases/${purchaseId}/commissionPaidAt`
-            ] = now;
-
-
-            await update(
-              ref(db),
-              referralUpdates
-            );
-
-
-            showMessage(
-              `$${money(planAmount)} plan purchased. $${money(commission)} referral commission added.`
-            );
-
-          } else {
-
-            await update(
-              ref(
-                db,
-                `planPurchases/${purchaseId}`
-              ),
-              {
-                commissionStatus: "failed"
-              }
-            );
-
-
-            showMessage(
-              `$${money(planAmount)} plan purchased successfully, but referral commission could not be credited.`,
-              true
-            );
-          }
-
-        } else {
-
-          showMessage(
-            `$${money(planAmount)} plan purchased successfully.`
-          );
-        }
-
-
-        /*
-          Refresh wallet display.
-        */
-
-        await loadProfile();
-
-
-      } catch (error) {
-
-        console.error(
-          "Plan purchase error:",
-          error
-        );
-
-
-        showMessage(
-          error.message ||
-          "Plan purchase failed. Please try again.",
-          true
-        );
-
-      } finally {
-
-        setButtonsDisabled(false);
-
       }
+
+
+      await update(
+        ref(db),
+        updates
+      );
+
+
+      /* -------------------------
+         SUCCESS
+      ------------------------- */
+
+      showMessage(
+        `$${money(amount)} plan purchased successfully.`,
+        "success"
+      );
+
+
+      await loadProfile();
+
+
+    }catch(error){
+
+      console.error(
+        "PLAN PURCHASE ERROR:",
+        error
+      );
+
+      console.error(
+        "Firebase error code:",
+        error.code
+      );
+
+      showMessage(
+        error.message ||
+        "Plan purchase failed.",
+        "error"
+      );
+
+
+      button.disabled = false;
+      button.textContent = "Buy Plan";
 
     }
 
-
-    /* =========================
-       AUTH
-    ========================= */
-
-    onAuthStateChanged(
-      auth,
-      async user => {
-
-        if (!user) {
-
-          window.location.href =
-            "login.html";
-
-          return;
-        }
+  }
 
 
-        currentUser = user;
+  /* =========================
+     AUTH
+  ========================= */
 
+  onAuthStateChanged(
+    auth,
+    async user => {
 
-        renderPlans();
+      if(!user){
 
+        window.location.href =
+          "login.html";
 
-        try {
-
-          await loadProfile();
-
-        } catch (error) {
-
-          console.error(
-            "Profile loading error:",
-            error
-          );
-
-          showMessage(
-            "Unable to load your wallet.",
-            true
-          );
-
-        }
+        return;
 
       }
-    );
 
-  </script>
+
+      currentUser = user;
+
+      await loadProfile();
+
+    }
+  );
+
+</script>
 
 </body>
 </html>
