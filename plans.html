@@ -359,14 +359,17 @@
     const matches = activePlans.filter(plan => {
 
       const planAmount =
-        Number(plan.amount || 0);
+        Number(plan.amount || plan.amountUSDT || plan.price || plan.planAmount || 0);
 
       const expiresAt =
         Number(plan.expiresAt || 0);
 
+      // Agar expiration date na miley, tab bhi active samjha jaye (Purane users ke case mein)
+      const isExpired = expiresAt > 0 ? (expiresAt < now) : false;
+
       return (
         planAmount === Number(amount) &&
-        expiresAt > now &&
+        !isExpired &&
         plan.status !== "expired"
       );
 
@@ -387,7 +390,7 @@
 
   function formatDate(timestamp){
 
-    if(!timestamp) return "-";
+    if(!timestamp) return "Active";
 
     return new Date(timestamp).toLocaleDateString(
       "en-US",
@@ -436,11 +439,53 @@
         "$" + money(wallet) + " USDT";
 
 
-      activePlans =
-        Array.isArray(currentProfile.activePlans)
-          ? currentProfile.activePlans
-          : [];
+      // --- NAYA FLEXIBLE BACKWARD COMPATIBLE LOGIC ---
+      let parsedPlans = [];
 
+      // 1. Agar Array format mein mile
+      if (Array.isArray(currentProfile.activePlans)) {
+        parsedPlans = currentProfile.activePlans;
+      } 
+      // 2. Agar Object format mein save ho gaya tha
+      else if (currentProfile.activePlans && typeof currentProfile.activePlans === 'object') {
+        parsedPlans = Object.values(currentProfile.activePlans);
+      }
+      // 3. Agar 'plans' object exist karta ho
+      else if (currentProfile.plans && typeof currentProfile.plans === 'object') {
+        parsedPlans = Object.values(currentProfile.plans);
+      }
+
+      // 4. FALLBACK FOR OLD USERS (Agar koi activePlans field nahi bani thi pehle)
+      if (parsedPlans.length === 0) {
+        const oldAmount = Number(
+          currentProfile.lastPlanPurchase || 
+          currentProfile.planAmount || 
+          currentProfile.planPrice || 
+          currentProfile.currentPlan || 0
+        );
+
+        if (oldAmount > 0) {
+          const createdAt = Number(currentProfile.lastPlanPurchaseAt || Date.now());
+          parsedPlans.push({
+            purchaseId: currentUser.uid + "_legacy_" + oldAmount,
+            amount: oldAmount,
+            amountUSDT: oldAmount,
+            status: "active",
+            durationDays: 30,
+            createdAt: createdAt,
+            expiresAt: createdAt + PLAN_DURATION
+          });
+
+          // System background mein user profile sync/repair kar dega
+          try {
+            await update(ref(db, "users/" + currentUser.uid), {
+              activePlans: parsedPlans
+            });
+          } catch(e) { console.log("Legacy sync skipped", e); }
+        }
+      }
+
+      activePlans = parsedPlans;
 
       renderPlans();
 
@@ -592,7 +637,7 @@
     try{
 
       /* -------------------------
-         READ USER
+          READ USER
       ------------------------- */
 
       const userRef =
@@ -638,7 +683,7 @@
 
 
       /* -------------------------
-         CHECK EXISTING PLAN
+          CHECK EXISTING PLAN
       ------------------------- */
 
       const existingPlan =
@@ -661,7 +706,7 @@
 
 
       /* -------------------------
-         CREATE PURCHASE
+          CREATE PURCHASE
       ------------------------- */
 
       const now =
@@ -704,20 +749,18 @@
 
 
       /* -------------------------
-         NEW ACTIVE PLAN
+          NEW ACTIVE PLAN
       ------------------------- */
 
-      const oldActivePlans =
-        Array.isArray(buyer.activePlans)
-          ? buyer.activePlans
-          : [];
-
+      const oldActivePlans = activePlans;
 
       const newPlan = {
 
         purchaseId: purchaseId,
 
         amount: amount,
+
+        amountUSDT: amount,
 
         status: "active",
 
@@ -750,7 +793,7 @@
 
 
       /* -------------------------
-         REFERRAL
+          REFERRAL
       ------------------------- */
 
       let referrerUid = null;
@@ -842,7 +885,7 @@
 
 
       /* -------------------------
-         ATOMIC FIREBASE UPDATE
+          ATOMIC FIREBASE UPDATE
       ------------------------- */
 
       const updates = {};
@@ -968,7 +1011,7 @@
 
 
       /* -------------------------
-         SUCCESS
+          SUCCESS
       ------------------------- */
 
       showMessage(
