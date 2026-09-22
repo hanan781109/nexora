@@ -331,7 +331,7 @@ onAuthStateChanged(auth, async (user) => {
         const userSnap = await get(ref(db, "users/" + user.uid));
 
         if(!userSnap.exists()){
-            showError("User account data not found.");
+            showRequirementError("User account data not found.");
             return;
         }
 
@@ -344,10 +344,13 @@ onAuthStateChanged(auth, async (user) => {
         const activePlans = userData.activePlans || {};
         const planList = Object.values(activePlans);
 
+        // NEW USER WITHOUT ANY ACTIVE PLAN
         if(planList.length === 0){
-            requirementsEl.innerHTML =
-                "🔒 Withdrawal Locked to Referral Required.<br><br>" +
-                "You need to purchase an active plan first before unlocking withdrawals.";
+            showRequirementError(
+                "🔒 <strong>Withdrawal Locked: Plan Required</strong><br><br>" +
+                "First you activate the plan, then you will get withdraw requirement details."
+            );
+            withdrawCard.classList.add("hidden");
             return;
         }
 
@@ -359,7 +362,16 @@ onAuthStateChanged(auth, async (user) => {
             }
         });
 
-        // 2X Target Calculation (e.g. $5 -> $10, $50 -> $100, $500 -> $1000)
+        if(userHighestPlan === 0){
+            showRequirementError(
+                "🔒 <strong>Withdrawal Locked: Plan Required</strong><br><br>" +
+                "First you activate the plan, then you will get withdraw requirement details."
+            );
+            withdrawCard.classList.add("hidden");
+            return;
+        }
+
+        // 2X Referral Target Volume (e.g. $5 -> $10, $10 -> $20, $50 -> $100, $100 -> $200)
         const requiredReferralInvestment = userHighestPlan * 2;
 
 
@@ -391,26 +403,31 @@ onAuthStateChanged(auth, async (user) => {
 
         // 3. CHECK LOCK / UNLOCK CONDITION
         if(totalReferralInvestment < requiredReferralInvestment){
-            requirementsEl.innerHTML =
+            showRequirementNotice(
                 "🔒 <strong>Withdrawal Locked: Referral Required.</strong><br><br>" +
                 "Your Active Plan: <strong>$" + userHighestPlan.toFixed(2) + "</strong><br>" +
-                "Required Total Referral Investment (2X): <strong>$" + requiredReferralInvestment.toFixed(2) + "</strong><br><br>" +
-                "Current Referral Investment Achieved: <strong>$" + totalReferralInvestment.toFixed(2) + " / $" + requiredReferralInvestment.toFixed(2) + "</strong>";
+                "Required Total Referral Investment: <strong>$" + requiredReferralInvestment.toFixed(2) + "</strong><br><br>" +
+                "Two referral required then you will withdraw.<br>" +
+                "Current Referral Investment Achieved: <strong>$" + totalReferralInvestment.toFixed(2) + " / $" + requiredReferralInvestment.toFixed(2) + "</strong>"
+            );
+            withdrawCard.classList.add("hidden");
             return;
         }
 
 
-        // UNLOCK WITHDRAWAL CARD
-        requirementsEl.classList.add("success");
-        requirementsEl.innerHTML =
-            "✅ <strong>Withdrawal Unlocked!</strong><br>" +
-            "You have achieved your 2X referral investment target ($" + totalReferralInvestment.toFixed(2) + " / $" + requiredReferralInvestment.toFixed(2) + ").";
+        // UNLOCK WITHDRAWAL CARD (GREEN NOTICE)
+        showRequirementSuccess(
+            "✅ <strong>Withdrawal Unlocked!</strong><br><br>" +
+            "Two referral investment target completed.<br>" +
+            "Total achieved: <strong>$" + totalReferralInvestment.toFixed(2) + " / $" + requiredReferralInvestment.toFixed(2) + "</strong>"
+        );
 
         withdrawCard.classList.remove("hidden");
 
     }catch(error){
         console.error(error);
-        requirementsEl.innerHTML = "Unable to load withdrawal information.";
+        showRequirementError("Unable to load withdrawal information.");
+        withdrawCard.classList.add("hidden");
     }
 
 });
@@ -448,24 +465,24 @@ withdrawBtn.addEventListener("click", async () => {
     const amount = Number(amountEl.value);
 
     if(!accountNumber){
-        showError("Please enter your account number.");
+        showFormError("Please enter your account number.");
         return;
     }
 
     if(!accountName){
-        showError("Please enter your account name.");
+        showFormError("Please enter your account name.");
         return;
     }
 
     if(!amount || amount <= 0){
-        showError("Please enter a valid withdrawal amount.");
+        showFormError("Please enter a valid withdrawal amount.");
         return;
     }
 
     const totalDeduction = amount + FEE;
 
     if(totalDeduction > wallet){
-        showError(
+        showFormError(
             "Insufficient wallet balance. " +
             "Your withdrawal amount + $2 fee cannot exceed your wallet."
         );
@@ -496,7 +513,7 @@ withdrawBtn.addEventListener("click", async () => {
             createdAt: Date.now()
         });
 
-        showSuccess(
+        showFormSuccess(
             "Withdrawal request submitted successfully. " +
             "It is now pending admin approval."
         );
@@ -510,7 +527,7 @@ withdrawBtn.addEventListener("click", async () => {
 
     }catch(error){
         console.error(error);
-        showError("Withdrawal request failed. Please try again.");
+        showFormError("Withdrawal request failed. Please try again.");
     }
 
     withdrawBtn.disabled = false;
@@ -520,17 +537,32 @@ withdrawBtn.addEventListener("click", async () => {
 
 
 // -----------------------------
-// MESSAGE FUNCTIONS
+// HELPER DISPLAY FUNCTIONS
 // -----------------------------
 
-function showError(text){
+function showRequirementNotice(html){
+    requirementsEl.className = "notice";
+    requirementsEl.innerHTML = html;
+}
+
+function showRequirementError(html){
+    requirementsEl.className = "notice error";
+    requirementsEl.innerHTML = html;
+}
+
+function showRequirementSuccess(html){
+    requirementsEl.className = "notice success";
+    requirementsEl.innerHTML = html;
+}
+
+function showFormError(text){
     messageEl.classList.remove("hidden");
     messageEl.classList.remove("success");
     messageEl.classList.add("error");
     messageEl.textContent = text;
 }
 
-function showSuccess(text){
+function showFormSuccess(text){
     messageEl.classList.remove("hidden");
     messageEl.classList.remove("error");
     messageEl.classList.add("success");
